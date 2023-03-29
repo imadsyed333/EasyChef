@@ -1,12 +1,12 @@
 import MenuBar from "../components/MenuBar";
 
-const HomePage = () => {
+const ShoppingList = () => {
     return (
         <div>
             <MenuBar/>
-            <h1>Welcome to EasyChef</h1>
+            This is the shopping list
         </div>
     )
 }
 
-export default HomePage
+export default ShoppingList

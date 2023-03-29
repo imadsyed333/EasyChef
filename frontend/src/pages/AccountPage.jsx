@@ -1,8 +1,8 @@
-import SearchBar from "../components/SearchBar";
+import MenuBar from "../components/MenuBar";
 const AccountPage = () => {
     return (
         <div>
-            <SearchBar/>
+            <MenuBar/>
             <h1>This is the account page</h1>
         </div>
     )
