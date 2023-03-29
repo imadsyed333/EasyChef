@@ -1,0 +1,1038 @@
+{
+	"info": {
+		"_postman_id": "eab5f6b5-95ed-473f-94a9-6dda8125e07f",
+		"name": "P2 APIs Copy",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26032374"
+	},
+	"item": [
+		{
+			"name": "Signup",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "email",
+							"value": "user@gmail.com",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "password234",
+							"type": "text"
+						},
+						{
+							"key": "password2",
+							"value": "password234",
+							"type": "text"
+						},
+						{
+							"key": "first_name",
+							"value": "John",
+							"type": "text"
+						},
+						{
+							"key": "last_name",
+							"value": "Doe",
+							"type": "text"
+						},
+						{
+							"key": "phone_number",
+							"value": "123456789",
+							"type": "text"
+						},
+						{
+							"key": "avatar",
+							"type": "file",
+							"src": "/C:/Users/Imad/Desktop/Blender Projects/logo.png"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/accounts/signup/",
+					"host": [
+						"http://127.0.0.1:8000/accounts"
+					],
+					"path": [
+						"signup",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Inspired by https://iroshandu.medium.com/set-bearer-token-as-environment-variable-in-postman-for-all-apis-13277e3ebd78\r",
+							"var jsonData = JSON.parse(responseBody)\r",
+							"var token = jsonData['access']\r",
+							"pm.environment.set(\"token\", token);\r",
+							"\r",
+							"// Inspired by https://django-rest-framework-simplejwt.readthedocs.io/en/latest/blacklist_app.html\r",
+							"var refresh_token = jsonData['refresh']\r",
+							"pm.environment.set(\"refresh\", refresh_token)\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "email",
+							"value": "user@gmail.com",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "password234",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/accounts/login/",
+					"host": [
+						"http://127.0.0.1:8000/accounts"
+					],
+					"path": [
+						"login",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "View Profile",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/accounts/profile/view/",
+					"host": [
+						"http://127.0.0.1:8000/accounts"
+					],
+					"path": [
+						"profile",
+						"view",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Profile",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "first_name",
+							"value": "Jane",
+							"type": "text"
+						},
+						{
+							"key": "last_name",
+							"value": "Smith",
+							"type": "text"
+						},
+						{
+							"key": "phone_number",
+							"value": "987654321",
+							"type": "text"
+						},
+						{
+							"key": "avatar",
+							"value": "",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/accounts/profile/edit/",
+					"host": [
+						"http://127.0.0.1:8000/accounts"
+					],
+					"path": [
+						"profile",
+						"edit",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Diet",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "vegetarian",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/recipes/diets/add/",
+					"host": [
+						"http://127.0.0.1:8000/recipes"
+					],
+					"path": [
+						"diets",
+						"add",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Ingredient",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{Token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "salt",
+							"type": "text"
+						},
+						{
+							"key": "amount",
+							"value": "100",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/recipes/ingredients/add/",
+					"host": [
+						"http://127.0.0.1:8000/recipes"
+					],
+					"path": [
+						"ingredients",
+						"add",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Cuisine",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "middle east",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/recipes/cuisines/add/",
+					"host": [
+						"http://127.0.0.1:8000/recipes"
+					],
+					"path": [
+						"cuisines",
+						"add",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Recipe",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":\"pizza\",\r\n    \"diet_ids\":[1],\r\n    \"ingredient_ids\":[1],\r\n    \"cuisine_ids\":[1],\r\n    \"prep_time\": 10,\r\n    \"cooking_time\": 10,\r\n    \"servings\": 1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/recipes/add/",
+					"host": [
+						"http://127.0.0.1:8000/recipes"
+					],
+					"path": [
+						"add",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Recipe Image",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "image",
+							"type": "file",
+							"src": "/C:/Users/Imad/Desktop/Blender Projects/logo.png"
+						},
+						{
+							"key": "recipe",
+							"value": "1",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/recipes/images/add/",
+					"host": [
+						"http://127.0.0.1:8000/recipes"
+					],
+					"path": [
+						"images",
+						"add",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Step",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "content",
+							"value": "shake salt",
+							"description": "Content of step",
+							"type": "text"
+						},
+						{
+							"key": "prep_time",
+							"value": "10",
+							"description": "prep time of step",
+							"type": "text"
+						},
+						{
+							"key": "cooking_time",
+							"value": "10",
+							"description": "cooking time of step",
+							"type": "text"
+						},
+						{
+							"key": "recipe",
+							"value": "1",
+							"description": "recipe whom the step belongs to",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/recipes/steps/add/",
+					"host": [
+						"http://127.0.0.1:8000/recipes"
+					],
+					"path": [
+						"steps",
+						"add",
+						""
+					]
+				},
+				"description": "Adds step with content \"content\", prep time \"prep_time\", and cooking time \"cooking_time\" to the recipe with id \"recipe\""
+			},
+			"response": []
+		},
+		{
+			"name": "Create Step Image",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "image",
+							"description": "image being added to step",
+							"type": "file",
+							"src": "/C:/Users/Imad/Desktop/Blender Projects/logo.png"
+						},
+						{
+							"key": "step",
+							"value": "1",
+							"description": "the step which the image is being added to",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/recipes/steps/image/add/",
+					"host": [
+						"http://127.0.0.1:8000/recipes"
+					],
+					"path": [
+						"steps",
+						"image",
+						"add",
+						""
+					]
+				},
+				"description": "Adds \"image\" to step with id \"step\""
+			},
+			"response": []
+		},
+		{
+			"name": "Create Comment",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "poster",
+							"value": "1",
+							"description": "id of the account commenting",
+							"type": "text"
+						},
+						{
+							"key": "content",
+							"value": "yum",
+							"description": "content of the comment",
+							"type": "text"
+						},
+						{
+							"key": "recipe",
+							"value": "1",
+							"description": "id of the recipe being commented on",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/recipes/comments/add/",
+					"host": [
+						"http://127.0.0.1:8000/recipes"
+					],
+					"path": [
+						"comments",
+						"add",
+						""
+					]
+				},
+				"description": "Adds comment with content \"content\" to the recipe with id \"recipe\""
+			},
+			"response": []
+		},
+		{
+			"name": "Create Comment Image",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "comment",
+							"value": "1",
+							"description": "id of comment",
+							"type": "text"
+						},
+						{
+							"key": "image",
+							"description": "image to be added to comment ",
+							"type": "file",
+							"src": "/C:/Users/Imad/Desktop/Blender Projects/logo.png"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/recipes/comments/image/add/",
+					"host": [
+						"http://127.0.0.1:8000/recipes"
+					],
+					"path": [
+						"comments",
+						"image",
+						"add",
+						""
+					]
+				},
+				"description": "Add \"image\" to comment with id \"comment\""
+			},
+			"response": []
+		},
+		{
+			"name": "View Comments",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/recipes/comments/all/",
+					"host": [
+						"http://127.0.0.1:8000/recipes"
+					],
+					"path": [
+						"comments",
+						"all",
+						""
+					]
+				},
+				"description": "Retrieves all comments in existence"
+			},
+			"response": []
+		},
+		{
+			"name": "Favourite Recipe",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "recipe",
+							"value": "1",
+							"description": "recipe being favourited",
+							"type": "text"
+						},
+						{
+							"key": "poster",
+							"value": "1",
+							"description": "account that is favouriting",
+							"type": "text"
+						},
+						{
+							"key": "favourite",
+							"value": "true",
+							"description": "is favouriting?",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/recipes/favourites/add/",
+					"host": [
+						"http://127.0.0.1:8000/recipes"
+					],
+					"path": [
+						"favourites",
+						"add",
+						""
+					]
+				},
+				"description": "Favourites recipe with id \"recipe\""
+			},
+			"response": []
+		},
+		{
+			"name": "Create Recipe Rating",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "recipe",
+							"value": "1",
+							"description": "recipe being rated",
+							"type": "text"
+						},
+						{
+							"key": "poster",
+							"value": "1",
+							"description": "account doing the rating",
+							"type": "text"
+						},
+						{
+							"key": "value",
+							"value": "4",
+							"description": "the value of the rating",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/recipes/ratings/add/",
+					"host": [
+						"http://127.0.0.1:8000/recipes"
+					],
+					"path": [
+						"ratings",
+						"add",
+						""
+					]
+				},
+				"description": "StartFragment\n\nAdds rating with value \"value\" to the recipe with id \"recipe\", with the poster being the current user\n\nEndFragmen"
+			},
+			"response": []
+		},
+		{
+			"name": "Update Recipe Rating",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "recipe",
+							"value": "1",
+							"description": "recipe being rated",
+							"type": "text"
+						},
+						{
+							"key": "poster",
+							"value": "1",
+							"description": "account doing the rating",
+							"type": "text"
+						},
+						{
+							"key": "value",
+							"value": "5",
+							"description": "new value of the rating",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/recipes/ratings/add/",
+					"host": [
+						"http://127.0.0.1:8000/recipes"
+					],
+					"path": [
+						"ratings",
+						"add",
+						""
+					]
+				},
+				"description": "Updates rating with value \"value\" to the recipe with id \"recipe\", with the poster being the current user"
+			},
+			"response": []
+		},
+		{
+			"name": "Popular Recipes (Most Favourited)",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/recipes/favourites/all/",
+					"host": [
+						"http://127.0.0.1:8000/recipes"
+					],
+					"path": [
+						"favourites",
+						"all",
+						""
+					]
+				},
+				"description": "Retrieves recipes in descending order based on number of favourites"
+			},
+			"response": []
+		},
+		{
+			"name": "Popular Recipes (Highest Rating)",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/recipes/ratings/all/",
+					"host": [
+						"http://127.0.0.1:8000/recipes"
+					],
+					"path": [
+						"ratings",
+						"all",
+						""
+					]
+				},
+				"description": "Retrieves recipes in descending order based on rating"
+			},
+			"response": []
+		},
+		{
+			"name": "Unfavourite Recipe",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "recipe",
+							"value": "1",
+							"description": "recipe being unfavourited",
+							"type": "text"
+						},
+						{
+							"key": "poster",
+							"value": "1",
+							"description": "account doing the unfavouriting",
+							"type": "text"
+						},
+						{
+							"key": "favourite",
+							"value": "false",
+							"description": "is favouriting?",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/recipes/favourites/add/",
+					"host": [
+						"http://127.0.0.1:8000/recipes"
+					],
+					"path": [
+						"favourites",
+						"add",
+						""
+					]
+				},
+				"description": "Using the same endpoint as favouriting, if the recipe with id \"recipe\" is favourited by the current user, then the recipe is unfavourited"
+			},
+			"response": []
+		},
+		{
+			"name": "All Recipes",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/recipes/all/",
+					"host": [
+						"http://127.0.0.1:8000/recipes"
+					],
+					"path": [
+						"all",
+						""
+					]
+				},
+				"description": "Retrieves all recipes in existence"
+			},
+			"response": []
+		},
+		{
+			"name": "My Favourites",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/recipes/favourites/",
+					"host": [
+						"http://127.0.0.1:8000/recipes"
+					],
+					"path": [
+						"favourites",
+						""
+					]
+				},
+				"description": "Retrieves the recipes that the current user favourited"
+			},
+			"response": []
+		},
+		{
+			"name": "My Interactions",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/recipes/interactions/",
+					"host": [
+						"http://127.0.0.1:8000/recipes"
+					],
+					"path": [
+						"interactions",
+						""
+					]
+				},
+				"description": "Retrieves recipes where the current user has created, liked, commented, or rated"
+			},
+			"response": []
+		},
+		{
+			"name": "Logout",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "",
+						"value": "",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "refresh",
+							"value": "{{refresh}}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/accounts/logout/",
+					"host": [
+						"http://127.0.0.1:8000/accounts"
+					],
+					"path": [
+						"logout",
+						""
+					]
+				},
+				"description": "Logs out the current user"
+			},
+			"response": []
+		}
+	]
+}

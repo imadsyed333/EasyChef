@@ -9,13 +9,13 @@ const MenuBar = () => {
                 <button> Account </button>
             </a>
             <a href="/login/">
-                <button>Login</button>
+                <button> Login </button>
             </a>
             <a href="/cart/">
-                <button>Shopping List</button>
+                <button> Shopping List </button>
             </a>
             <a href="/myrecipes/">
-                <button>My Recipes</button>
+                <button> My Recipes </button>
             </a>
         </div>
     )
