@@ -26,6 +26,8 @@ SECRET_KEY = 'django-insecure-%f^igks4h2cs+c@y3mxehn7&no_i6ao2m)*qk*9kxk@ors*9__
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+CORS_ORIGIN_ALLOW_ALL = DEBUG
+
 ALLOWED_HOSTS = []
 
 
@@ -44,8 +46,7 @@ INSTALLED_APPS = [
     'recipes',
     'rest_framework_simplejwt.token_blacklist',
     'django_filters',
-    'rest_framework_swagger',# swagger stuff
-    # 'social_media'
+    'corsheaders'
 ]
 
 AUTH_USER_MODEL = 'accounts.Account'
@@ -54,6 +55,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
