@@ -7,12 +7,17 @@ import ShoppingList from "./pages/ShoppingList";
 import LoginPage from "./pages/LoginPage";
 import MyRecipes from "./pages/MyRecipes";
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+import RecipeDetailsPage from "./pages/RecipeDetailsPage";
+import MenuBar from "./components/MenuBar/MenuBar";
 
 function App() {
   return (
       <BrowserRouter>
         <Routes>
-            <Route path="/">
+            <Route path="/" element={<MenuBar/>}>
+                <Route path={"recipe/"}>
+                    <Route path={":id"} element={<RecipeDetailsPage/>}/>
+                </Route>
                 <Route path="myrecipes" element={<MyRecipes/>}/>
                 <Route path="login" element={<LoginPage/>}/>
                 <Route path="cart" element={<ShoppingList/>}/>
