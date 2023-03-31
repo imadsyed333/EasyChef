@@ -1,4 +1,4 @@
-import MenuBar from "../components/MenuBar";
+import MenuBar from "../components/MenuBar/MenuBar";
 
 const ShoppingList = () => {
     return (
