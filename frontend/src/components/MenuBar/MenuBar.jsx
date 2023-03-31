@@ -1,4 +1,4 @@
-import {Link} from "react-router-dom";
+import {Link, Outlet} from "react-router-dom";
 
 import {Container, Nav, Navbar} from "react-bootstrap";
 
@@ -9,7 +9,7 @@ const MenuBar = () => {
     }
 
     return (
-        <div>
+        <>
             <Navbar bg="light" variant="light">
                 <Container>
                   <Navbar.Brand as={Link} to={"/"}>
@@ -22,7 +22,8 @@ const MenuBar = () => {
                   </Nav>
                 </Container>
             </Navbar>
-        </div>
+            <Outlet/>
+        </>
     )
 }
 
