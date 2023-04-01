@@ -53,44 +53,6 @@ class IngredientSerializer(serializers.ModelSerializer):
         model = Ingredient
         fields = ["id", "name", "amount"]
 
-class RecipeSerializer(serializers.ModelSerializer):
-    diets = DietSerializer(many=True, required=False)
-    diet_ids = serializers.PrimaryKeyRelatedField(many=True, write_only=True, queryset=Diet.objects.all())
-
-    ingredients = IngredientSerializer(many=True, required=False)
-    ingredient_ids = serializers.PrimaryKeyRelatedField(many=True, write_only=True, queryset=Ingredient.objects.all())
-
-    cuisines = CuisineSerializer(many=True, required=False)
-    cuisine_ids = serializers.PrimaryKeyRelatedField(many=True, write_only=True, queryset=Cuisine.objects.all())
-
-    steps = StepSerializer(many=True, required=False)
-
-    images = RecipeImageSerializer(many=True, required=False)
-
-    class Meta:
-        model = Recipe
-        fields = ["id", 'name', 'images', 'diets', 'diet_ids', 'cuisines', 'cuisine_ids', 'ingredients', 'ingredient_ids', 'prep_time', 'cooking_time', 'steps', 'servings']
-
-    def create(self, validated_data):
-        diets = validated_data.pop('diet_ids', None)
-        ingredients = validated_data.pop('ingredient_ids', None)
-        cuisines = validated_data.pop('cuisine_ids', None)
-
-        print("Diets: ", diets)
-        print("Cuisines: ", cuisines)
-        
-        print(self.context['request'].user)
-
-        validated_data['creator'] = self.context['request'].user
-        recipe = Recipe.objects.create(**validated_data)
-        if diets:
-            recipe.diets.set(diets)
-        if ingredients:
-            recipe.ingredients.set(ingredients)
-        if cuisines:
-            recipe.cuisines.set(cuisines)
-        return recipe
-
 class CommentImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = CommentImage
@@ -122,6 +84,47 @@ class CommentSerializer(serializers.ModelSerializer):
         if recipe not in account.interactions.all():
             account.interactions.add(recipe)
         return comment
+
+class RecipeSerializer(serializers.ModelSerializer):
+    diets = DietSerializer(many=True, required=False)
+    diet_ids = serializers.PrimaryKeyRelatedField(many=True, write_only=True, queryset=Diet.objects.all())
+
+    ingredients = IngredientSerializer(many=True, required=False)
+    ingredient_ids = serializers.PrimaryKeyRelatedField(many=True, write_only=True, queryset=Ingredient.objects.all())
+
+    cuisines = CuisineSerializer(many=True, required=False)
+    cuisine_ids = serializers.PrimaryKeyRelatedField(many=True, write_only=True, queryset=Cuisine.objects.all())
+
+    steps = StepSerializer(many=True, required=False)
+
+    images = RecipeImageSerializer(many=True, required=False)
+
+    comments = CommentSerializer(many=True, required=False)
+
+    class Meta:
+        model = Recipe
+        fields = ["id", 'name', 'images', 'diets', 'diet_ids', 'cuisines', 'cuisine_ids', 'ingredients', 'ingredient_ids', 'prep_time', 'cooking_time', 'steps', 'servings', 'comments']
+
+    def create(self, validated_data):
+        diets = validated_data.pop('diet_ids', None)
+        ingredients = validated_data.pop('ingredient_ids', None)
+        cuisines = validated_data.pop('cuisine_ids', None)
+
+        print("Diets: ", diets)
+        print("Cuisines: ", cuisines)
+        
+        print(self.context['request'].user)
+
+        validated_data['creator'] = self.context['request'].user
+        recipe = Recipe.objects.create(**validated_data)
+        if diets:
+            recipe.diets.set(diets)
+        if ingredients:
+            recipe.ingredients.set(ingredients)
+        if cuisines:
+            recipe.cuisines.set(cuisines)
+        return recipe
+
 
 class RatingSerializer(serializers.ModelSerializer):
     
