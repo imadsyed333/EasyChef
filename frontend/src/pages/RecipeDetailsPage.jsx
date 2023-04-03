@@ -1,9 +1,12 @@
 import {useParams} from "react-router-dom";
 import Button from "react-bootstrap/Button";
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
+import AccountContext from "../contexts/AccountContext";
 
 
 const RecipeDetailsPage = () => {
+
+    const {token} = useContext(AccountContext)
 
     let {id} = useParams()
     const [recipe, setRecipe] = useState({
@@ -30,6 +33,7 @@ const RecipeDetailsPage = () => {
     }
 
     const sendComment = () => {
+        console.log("token:", token)
         const data = {
             poster: 1,
             content: comment,
@@ -38,7 +42,8 @@ const RecipeDetailsPage = () => {
         console.log("I am being called")
         fetch("http://localhost:8000/recipes/comments/add/", {method: "POST",
         headers: {
-            "Content-type": "application/json"
+            "Content-type": "application/json",
+            "Authorization": "Bearer " + token
         },
         body: JSON.stringify(data)}).then(response => response.json()).then(data => {console.log("Success:", data)
         fetchRecipeDetails()}).catch(error => {
@@ -71,7 +76,7 @@ const RecipeDetailsPage = () => {
             </ol>
             <h2>Comments Section</h2>
             {recipe.comments.map(comment => (
-                <li>{comment.content}</li>
+                <li key={comment.id}>{comment.content}</li>
             ))}
             <textarea value={comment} onChange={(e) => setComment(e.target.value)}/>
             <Button onClick={sendComment}>comment</Button>
