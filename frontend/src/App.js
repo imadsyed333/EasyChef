@@ -9,10 +9,13 @@ import MyRecipes from "./pages/MyRecipes";
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import RecipeDetailsPage from "./pages/RecipeDetailsPage";
 import MenuBar from "./components/MenuBar/MenuBar";
+import AccountContext, {useAccountContext} from "./contexts/AccountContext";
 
 function App() {
   return (
       <BrowserRouter>
+          <AccountContext.Provider value={useAccountContext()}>
+
         <Routes>
             <Route path="/" element={<MenuBar/>}>
                 <Route path={"recipe/"}>
@@ -25,6 +28,7 @@ function App() {
                 <Route index element={<HomePage/>}/>
             </Route>
         </Routes>
+          </AccountContext.Provider>
       </BrowserRouter>
   );
 }
