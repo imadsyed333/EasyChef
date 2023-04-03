@@ -8,7 +8,7 @@ const RecipeList = (props) => {
         <div>
             <h2> Here are your recipes! </h2>
             {props.recipes.map(recipe => (
-                <RecipeCard name={recipe.name} cooking_time={recipe.cooking_time} id={recipe.id}/>
+                <RecipeCard key={recipe.id} name={recipe.name} cooking_time={recipe.cooking_time} id={recipe.id}/>
             ))}
         </div>
     )
