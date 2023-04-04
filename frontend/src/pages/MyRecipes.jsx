@@ -11,7 +11,6 @@ const MyRecipes = () => {
     const [myinteractions, setMyInteractions] = useState([])
     const [myfavourites, setMyFavourites] = useState([])
 
-    
     useEffect(() => {
         // i want to fetch all my recipes and display them as cards.
         // have 3 fetch calls for each endpoint, set each state and render separately 
