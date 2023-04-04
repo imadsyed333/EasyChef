@@ -40,11 +40,12 @@ class Comment(models.Model):
     poster = models.ForeignKey(to=Account, on_delete=models.CASCADE, related_name='comments')
     # comment_image = models.ImageField(null=True, blank=True, upload_to="comment_images/")
     '''---From Foreign Key---'''
-    '''images'''
+    '''media'''
 
-class CommentImage(models.Model):
-    comment = models.ForeignKey(to=Comment, on_delete=models.CASCADE, related_name='images')
-    image = models.ImageField(null=True, blank=True, upload_to="comment_images/")
+class CommentMedia(models.Model):
+    comment = models.ForeignKey(to=Comment, on_delete=models.CASCADE, related_name='media')
+    media = models.FileField(null=True, blank=True, upload_to="comment_images/",
+                             validators=[FileExtensionValidator(allowed_extensions=['MOV','avi','mp4','webm','mkv', 'jpeg', 'jpg', 'png'])])
 
 class Step(models.Model):
     recipe = models.ForeignKey(to=Recipe, on_delete=models.CASCADE, related_name='steps')
@@ -61,7 +62,7 @@ class Rating(models.Model):
     poster = models.ForeignKey(to=Account, on_delete=models.CASCADE, related_name='ratings')
 
 class RecipeMedia(models.Model):
-    recipe = models.ForeignKey(to=Recipe, on_delete=models.CASCADE, related_name='images')
+    recipe = models.ForeignKey(to=Recipe, on_delete=models.CASCADE, related_name='media')
     media = models.FileField(null=True, blank=True, upload_to="recipe_images/", 
                               validators=[FileExtensionValidator(allowed_extensions=['MOV','avi','mp4','webm','mkv', 'jpeg', 'jpg', 'png'])])
 
