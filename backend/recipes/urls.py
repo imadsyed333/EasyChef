@@ -4,7 +4,7 @@ from rest_framework import routers
 
 from recipes.views import RecipeViewSet, DietViewSet, CommentViewSet, \
     RatingViewSet, CuisineViewSet, IngredientViewSet, \
-    SearchAPIView, StepViewSet, StepImageViewSet, RecipeImageViewSet, \
+    SearchAPIView, StepViewSet, StepImageViewSet, RecipeMediaViewSet, \
     FavouriteViewSet, MostFavouritedViewSet, OverallRatingViewSet, \
     LikeViewSet, MostLikedViewSet, MyFavouritesView, MyInteractionsView, \
     MyRecipesView, CommentImageViewSet
@@ -18,8 +18,9 @@ urlpatterns = [
     path('diets/add/', DietViewSet.as_view({'post': 'create'})),
     path('ingredients/add/', IngredientViewSet.as_view({'post':'create'})),
     path('cuisines/add/', CuisineViewSet.as_view({'post': 'create'})),
+    path('cuisines/all/', CuisineViewSet.as_view({'get': 'list'})),
 
-    path('images/add/', RecipeImageViewSet.as_view({'post':'create'})),
+    path('images/add/', RecipeMediaViewSet.as_view({'post':'create'})),
 
     path('steps/add/', StepViewSet.as_view({'post':'create'})),
     path('steps/image/add/', StepImageViewSet.as_view({'post':'create'})),
