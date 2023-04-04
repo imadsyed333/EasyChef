@@ -6,7 +6,7 @@ import AccountContext from "../contexts/AccountContext";
 
 const RecipeDetailsPage = () => {
 
-    const {token} = useContext(AccountContext)
+    const {token, refreshToken} = useContext(AccountContext)
 
     let {id} = useParams()
     const [recipe, setRecipe] = useState({
@@ -33,7 +33,7 @@ const RecipeDetailsPage = () => {
     }
 
     const sendComment = () => {
-        console.log("token:", token)
+        console.log("token:", refreshToken)
         const data = {
             poster: 1,
             content: comment,
@@ -43,7 +43,7 @@ const RecipeDetailsPage = () => {
         fetch("http://localhost:8000/recipes/comments/add/", {method: "POST",
         headers: {
             "Content-type": "application/json",
-            "Authorization": "Bearer " + token
+            "Authorization": "Bearer " + refreshToken
         },
         body: JSON.stringify(data)}).then(response => response.json()).then(data => {console.log("Success:", data)
         fetchRecipeDetails()}).catch(error => {
@@ -76,8 +76,16 @@ const RecipeDetailsPage = () => {
             </ol>
             <h2>Comments Section</h2>
             {recipe.comments.map(comment => (
-                <li key={comment.id}>{comment.content}</li>
+                <div key={comment.id}>
+                    {/* {console.log(comment.media)} */}
+                    {comment.media.map(img => (<embed src={img.media} width="130px"></embed>))}
+                    <br></br>
+                    {comment.content}
+                </div>
+                // <li key={comment.id}>{comment.content}</li>
             ))}
+            {/* {recipe.comments.map((f) => {(<img key={f.id} src={f.media}></img>); console.log(f.id, f.media)})}   */}
+            {/* {<img></img>} */}
             <textarea value={comment} onChange={(e) => setComment(e.target.value)}/>
             <Button onClick={sendComment}>comment</Button>
         </div>
