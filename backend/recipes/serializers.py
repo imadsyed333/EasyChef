@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 
 from accounts.models import Account
-from recipes.models import Recipe, Diet, Step, Cuisine, Ingredient, RecipeMedia, StepImage, Comment, Rating, Favourite, Like, CommentImage
+from recipes.models import Recipe, Diet, Step, Cuisine, Ingredient, RecipeMedia, StepImage, Comment, Rating, Favourite, Like, CommentMedia
 
 from rest_framework.fields import CurrentUserDefault
 
@@ -53,31 +53,31 @@ class IngredientSerializer(serializers.ModelSerializer):
         model = Ingredient
         fields = ["id", "name", "amount"]
 
-class CommentImageSerializer(serializers.ModelSerializer):
+class CommentMediaSerializer(serializers.ModelSerializer):
     class Meta:
-        model = CommentImage
-        fields = ["id", 'comment', "image"]
+        model = CommentMedia
+        fields = ["id", 'comment', "media"]
 
     def create(self, validated_data):
-        image = CommentImage.objects.create(comment=validated_data['comment'],
-                                         image=validated_data['image'])
-        return image
+        media = CommentMedia.objects.create(comment=validated_data['comment'],
+                                         media=validated_data['media'])
+        return media
 
 
 class CommentSerializer(serializers.ModelSerializer):
-    images = CommentImageSerializer(many=True, required=False)
+    media = CommentMediaSerializer(many=True, required=False)
 
     class Meta:
         model = Comment
         # fields = ["recipe", "content"]
-        fields = ["id", "recipe", "content", "images"]
+        fields = ["id", "recipe", "content", "media"]
 
     def create(self, validated_data):
         comment = Comment.objects.create(content=validated_data['content'],
                                   poster=self.context['request'].user,
                                   recipe=validated_data['recipe'])
         # comment.save()
-        print(comment.content, comment.poster, comment.recipe, comment.images)
+        print(comment.content, comment.poster, comment.recipe, comment.media)
         # comment = Comment.objects.create(**validated_data)
         account = self.context['request'].user
         recipe = validated_data['recipe']
@@ -103,7 +103,7 @@ class RecipeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Recipe
-        fields = ["id", 'name', 'images', 'diets', 'diet_ids', 'cuisines', 'cuisine_ids', 'ingredients', 'ingredient_ids', 'prep_time', 'cooking_time', 'steps', 'servings', 'comments']
+        fields = ["id", 'name', 'media', 'diets', 'diet_ids', 'cuisines', 'cuisine_ids', 'ingredients', 'ingredient_ids', 'prep_time', 'cooking_time', 'steps', 'servings', 'comments']
 
     def create(self, validated_data):
         diets = validated_data.pop('diet_ids', None)

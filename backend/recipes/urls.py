@@ -7,7 +7,7 @@ from recipes.views import RecipeViewSet, DietViewSet, CommentViewSet, \
     SearchAPIView, StepViewSet, StepImageViewSet, RecipeMediaViewSet, \
     FavouriteViewSet, MostFavouritedViewSet, OverallRatingViewSet, \
     LikeViewSet, MostLikedViewSet, MyFavouritesView, MyInteractionsView, \
-    MyRecipesView, CommentImageViewSet
+    MyRecipesView, CommentMediaViewSet
 
 urlpatterns = [
     path('add/', RecipeViewSet.as_view({'post': 'create'})),
@@ -26,7 +26,7 @@ urlpatterns = [
     path('steps/image/add/', StepImageViewSet.as_view({'post':'create'})),
 
     path('comments/add/', CommentViewSet.as_view({'post': 'create'})),
-    path('comments/image/add/', CommentImageViewSet.as_view({'post': 'create'})),
+    path('comments/image/add/', CommentMediaViewSet.as_view({'post': 'create'})),
     path('comments/all/', CommentViewSet.as_view({'get': 'list'})),
 
     path('ratings/add/', RatingViewSet.as_view({'post': 'create'})),

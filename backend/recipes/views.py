@@ -8,10 +8,10 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.response import Response
 
 
-from recipes.models import Recipe, Diet, Comment, Rating, Cuisine, Ingredient, Step, StepImage, RecipeMedia, Favourite, Like, CommentImage
+from recipes.models import Recipe, Diet, Comment, Rating, Cuisine, Ingredient, Step, StepImage, RecipeMedia, Favourite, Like, CommentMedia
 from recipes.serializers import RecipeSerializer, DietSerializer, CommentSerializer, RatingSerializer, \
     CuisineSerializer, IngredientSerializer, StepSerializer, StepImageSerializer, RecipeMediaSerializer, \
-        FavouriteSerializer, OverallRatingSerializer, LikeSerializer, CommentImageSerializer
+        FavouriteSerializer, OverallRatingSerializer, LikeSerializer, CommentMediaSerializer
 
 from rest_framework import filters
 # Create your views here.
@@ -36,9 +36,9 @@ class RecipeMediaViewSet(viewsets.ModelViewSet):
     serializer_class = RecipeMediaSerializer
     permission_classes = [IsAuthenticated]
 
-class CommentImageViewSet(viewsets.ModelViewSet):
-    queryset = CommentImage.objects.all()
-    serializer_class = CommentImageSerializer
+class CommentMediaViewSet(viewsets.ModelViewSet):
+    queryset = CommentMedia.objects.all()
+    serializer_class = CommentMediaSerializer
     permission_classes = [IsAuthenticated]
 
 class DietViewSet(viewsets.ModelViewSet):
