@@ -1,7 +1,7 @@
 from django.db import models
 
 from accounts.models import Account
-from django.core.validators import MaxValueValidator, MinValueValidator
+from django.core.validators import MaxValueValidator, MinValueValidator, FileExtensionValidator
 
 class Diet(models.Model):
     name = models.CharField(max_length=100)
@@ -60,9 +60,10 @@ class Rating(models.Model):
                                             MinValueValidator(1)])
     poster = models.ForeignKey(to=Account, on_delete=models.CASCADE, related_name='ratings')
 
-class RecipeImage(models.Model):
+class RecipeMedia(models.Model):
     recipe = models.ForeignKey(to=Recipe, on_delete=models.CASCADE, related_name='images')
-    image = models.ImageField(null=True, blank=True, upload_to="recipe_images/")
+    media = models.FileField(null=True, blank=True, upload_to="recipe_images/", 
+                              validators=[FileExtensionValidator(allowed_extensions=['MOV','avi','mp4','webm','mkv', 'jpeg', 'jpg', 'png'])])
 
 class StepImage(models.Model):
     step = models.ForeignKey(to=Step, on_delete=models.CASCADE, related_name='images')
