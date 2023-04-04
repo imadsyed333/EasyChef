@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 
 from accounts.models import Account
-from recipes.models import Recipe, Diet, Step, Cuisine, Ingredient, RecipeMedia, StepImage, Comment, Rating, Favourite, Like, CommentMedia
+from recipes.models import Recipe, Diet, Step, Cuisine, Ingredient, RecipeMedia, StepMedia, Comment, Rating, Favourite, Like, CommentMedia
 
 from rest_framework.fields import CurrentUserDefault
 
@@ -21,21 +21,21 @@ class RecipeMediaSerializer(serializers.ModelSerializer):
                                            media=validated_data['media'])
         return media
 
-class StepImageSerializer(serializers.ModelSerializer):
+class StepMediaSerializer(serializers.ModelSerializer):
     class Meta:
-        model = StepImage
-        fields = ["id", "step", "image"]
+        model = StepMedia
+        fields = ["id", "step", "media"]
 
     def create(self, validated_data):
-        image = StepImage.objects.create(step=validated_data['step'],
-                                         image=validated_data['image'])
-        return image
+        media = StepMedia.objects.create(step=validated_data['step'],
+                                         media=validated_data['media'])
+        return media
 
 class StepSerializer(serializers.ModelSerializer):
-    images = StepImageSerializer(many=True, required=False)
+    media = StepMediaSerializer(many=True, required=False)
     class Meta:
         model = Step
-        fields = ["id", "content", "prep_time", "cooking_time", "images", 'recipe']
+        fields = ["id", "content", "prep_time", "cooking_time", "media", 'recipe']
     def create(self, validated_data):
         step = Step.objects.create(content=validated_data['content'],
                                   prep_time=validated_data['prep_time'],

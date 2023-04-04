@@ -8,9 +8,9 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.response import Response
 
 
-from recipes.models import Recipe, Diet, Comment, Rating, Cuisine, Ingredient, Step, StepImage, RecipeMedia, Favourite, Like, CommentMedia
+from recipes.models import Recipe, Diet, Comment, Rating, Cuisine, Ingredient, Step, StepMedia, RecipeMedia, Favourite, Like, CommentMedia
 from recipes.serializers import RecipeSerializer, DietSerializer, CommentSerializer, RatingSerializer, \
-    CuisineSerializer, IngredientSerializer, StepSerializer, StepImageSerializer, RecipeMediaSerializer, \
+    CuisineSerializer, IngredientSerializer, StepSerializer, StepMediaSerializer, RecipeMediaSerializer, \
         FavouriteSerializer, OverallRatingSerializer, LikeSerializer, CommentMediaSerializer
 
 from rest_framework import filters
@@ -26,9 +26,9 @@ class RecipeViewSet(viewsets.ModelViewSet):
             permission_classes = [AllowAny]
         return [permission() for permission in permission_classes]
 
-class StepImageViewSet(viewsets.ModelViewSet):
-    queryset = StepImage.objects.all()
-    serializer_class = StepImageSerializer
+class StepMediaViewSet(viewsets.ModelViewSet):
+    queryset = StepMedia.objects.all()
+    serializer_class = StepMediaSerializer
     permission_classes = [IsAuthenticated]
 
 class RecipeMediaViewSet(viewsets.ModelViewSet):
