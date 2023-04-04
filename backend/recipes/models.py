@@ -29,7 +29,7 @@ class Recipe(models.Model):
     total_likes = models.IntegerField(default=0)
     overall_rating = models.DecimalField(max_digits=3, decimal_places=2, null=True)
     '''---From Foreign Key---'''
-    '''images'''
+    '''media'''
     '''comments'''
     '''ratings'''
     '''steps'''
@@ -45,7 +45,7 @@ class Comment(models.Model):
 class CommentMedia(models.Model):
     comment = models.ForeignKey(to=Comment, on_delete=models.CASCADE, related_name='media')
     media = models.FileField(null=True, blank=True, upload_to="comment_images/",
-                             validators=[FileExtensionValidator(allowed_extensions=['MOV','avi','mp4','webm','mkv', 'jpeg', 'jpg', 'png'])])
+                            validators=[FileExtensionValidator(allowed_extensions=['MOV','avi','mp4','webm','mkv', 'jpeg', 'jpg', 'png'])])
 
 class Step(models.Model):
     recipe = models.ForeignKey(to=Recipe, on_delete=models.CASCADE, related_name='steps')
@@ -53,7 +53,7 @@ class Step(models.Model):
     prep_time = models.IntegerField(blank=True)
     cooking_time = models.IntegerField(blank=True)
     '''---From Foreign Key---'''
-    '''images'''
+    '''media'''
 
 class Rating(models.Model):
     recipe = models.ForeignKey(to=Recipe, on_delete=models.CASCADE, related_name='ratings')
@@ -64,11 +64,12 @@ class Rating(models.Model):
 class RecipeMedia(models.Model):
     recipe = models.ForeignKey(to=Recipe, on_delete=models.CASCADE, related_name='media')
     media = models.FileField(null=True, blank=True, upload_to="recipe_images/", 
-                              validators=[FileExtensionValidator(allowed_extensions=['MOV','avi','mp4','webm','mkv', 'jpeg', 'jpg', 'png'])])
+                            validators=[FileExtensionValidator(allowed_extensions=['MOV','avi','mp4','webm','mkv', 'jpeg', 'jpg', 'png'])])
 
-class StepImage(models.Model):
-    step = models.ForeignKey(to=Step, on_delete=models.CASCADE, related_name='images')
-    image = models.ImageField(null=True, blank=True, upload_to="step_images/")
+class StepMedia(models.Model):
+    step = models.ForeignKey(to=Step, on_delete=models.CASCADE, related_name='media')
+    media = models.FileField(null=True, blank=True, upload_to="step_images/",
+                            validators=[FileExtensionValidator(allowed_extensions=['MOV','avi','mp4','webm','mkv', 'jpeg', 'jpg', 'png'])])
 
 class Favourite(models.Model):
     recipe = models.ForeignKey(to=Recipe, on_delete=models.CASCADE, related_name='favourites')
