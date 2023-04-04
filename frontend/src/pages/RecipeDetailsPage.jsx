@@ -54,48 +54,49 @@ const RecipeDetailsPage = () => {
     return (
         // <>        
         <div>
+            {console.log("recipe name: ", recipe.name)}
             <h1>{recipe.name}</h1>
             {console.log('recipe media: ', recipe.media)}
-            {recipe.media.map(img => (<embed src={img.media} width="130px"></embed>))}
+            {recipe.media?.map(img => (<embed src={img.media} width="130px"></embed>))}
 
             <h2>Diets</h2>
             <ul>
 
-            {recipe.diets.map(diet => (
+            {recipe.diets?.map(diet => (
                 <li key={diet.id}>{diet.name}</li>
                 )
             )}
             </ul>
             <h2>Cuisines</h2>
             <ul>
-                {recipe.cuisines.map(cuisine => (
+                {recipe.cuisines?.map(cuisine => (
                     <li key={cuisine.id}>{cuisine.name}</li>
                 ))}
             </ul>
             <h2>Steps</h2>
             <ol>
-                {recipe.steps.map(step => (
+                {recipe.steps?.map(step => (
                     // <li key={step.id}>{step.content}</li>
                     <div key={step.id}>
                     {console.log("step " + step.id + " media: ", step.media)}
-                    {step.media.map(img => (<embed src={img.media} width="130px"></embed>))}
+                    {step.media?.map(img => (<embed src={img.media} width="130px"></embed>))}
                     <br></br>
-                    {step.content}
+                    <li>{step.content}</li>
                 </div>
 
                 ))}
             </ol>
             <h2>Comments Section</h2>
-            {recipe.comments.map(comment => (
+            {recipe.comments?.map(comment => (
                 <div key={comment.id}>
                     {console.log("comment " + comment.id + " media: ", comment.media)}
-                    {comment.media.map(img => (<embed src={img.media} width="130px"></embed>))}
+                    {comment.media?.map(img => (<embed src={img.media} width="130px"></embed>))}
                     <br></br>
-                    {comment.content}
+                    <li>{comment.content}</li>
                 </div>
                 // <li key={comment.id}>{comment.content}</li>
             ))}
-            {/* {recipe.comments.map((f) => {(<img key={f.id} src={f.media}></img>); console.log(f.id, f.media)})}   */}
+            {/* {recipe.comments?.map((f) => {(<img key={f.id} src={f.media}></img>); console.log(f.id, f.media)})}   */}
             {/* {<img></img>} */}
             <textarea value={comment} onChange={(e) => setComment(e.target.value)}/>
             <Button onClick={sendComment}>comment</Button>
