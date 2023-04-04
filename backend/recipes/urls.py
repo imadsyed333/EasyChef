@@ -4,7 +4,7 @@ from rest_framework import routers
 
 from recipes.views import RecipeViewSet, DietViewSet, CommentViewSet, \
     RatingViewSet, CuisineViewSet, IngredientViewSet, \
-    SearchAPIView, StepViewSet, StepImageViewSet, RecipeMediaViewSet, \
+    SearchAPIView, StepViewSet, StepMediaViewSet, RecipeMediaViewSet, \
     FavouriteViewSet, MostFavouritedViewSet, OverallRatingViewSet, \
     LikeViewSet, MostLikedViewSet, MyFavouritesView, MyInteractionsView, \
     MyRecipesView, CommentMediaViewSet
@@ -20,13 +20,13 @@ urlpatterns = [
     path('cuisines/add/', CuisineViewSet.as_view({'post': 'create'})),
     path('cuisines/all/', CuisineViewSet.as_view({'get': 'list'})),
 
-    path('images/add/', RecipeMediaViewSet.as_view({'post':'create'})),
+    path('media/add/', RecipeMediaViewSet.as_view({'post':'create'})),
 
     path('steps/add/', StepViewSet.as_view({'post':'create'})),
-    path('steps/image/add/', StepImageViewSet.as_view({'post':'create'})),
+    path('steps/media/add/', StepMediaViewSet.as_view({'post':'create'})),
 
     path('comments/add/', CommentViewSet.as_view({'post': 'create'})),
-    path('comments/image/add/', CommentMediaViewSet.as_view({'post': 'create'})),
+    path('comments/media/add/', CommentMediaViewSet.as_view({'post': 'create'})),
     path('comments/all/', CommentViewSet.as_view({'get': 'list'})),
 
     path('ratings/add/', RatingViewSet.as_view({'post': 'create'})),
