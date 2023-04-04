@@ -52,8 +52,12 @@ const RecipeDetailsPage = () => {
     }
 
     return (
+        // <>        
         <div>
             <h1>{recipe.name}</h1>
+            {console.log('recipe media: ', recipe.media)}
+            {recipe.media.map(img => (<embed src={img.media} width="130px"></embed>))}
+
             <h2>Diets</h2>
             <ul>
 
@@ -71,13 +75,20 @@ const RecipeDetailsPage = () => {
             <h2>Steps</h2>
             <ol>
                 {recipe.steps.map(step => (
-                    <li key={step.id}>{step.content}</li>
+                    // <li key={step.id}>{step.content}</li>
+                    <div key={step.id}>
+                    {console.log("step " + step.id + " media: ", step.media)}
+                    {step.media.map(img => (<embed src={img.media} width="130px"></embed>))}
+                    <br></br>
+                    {step.content}
+                </div>
+
                 ))}
             </ol>
             <h2>Comments Section</h2>
             {recipe.comments.map(comment => (
                 <div key={comment.id}>
-                    {/* {console.log(comment.media)} */}
+                    {console.log("comment " + comment.id + " media: ", comment.media)}
                     {comment.media.map(img => (<embed src={img.media} width="130px"></embed>))}
                     <br></br>
                     {comment.content}
@@ -89,6 +100,8 @@ const RecipeDetailsPage = () => {
             <textarea value={comment} onChange={(e) => setComment(e.target.value)}/>
             <Button onClick={sendComment}>comment</Button>
         </div>
+        // </>
+
     )
 }
 export default RecipeDetailsPage
