@@ -8,9 +8,9 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.response import Response
 
 
-from recipes.models import Recipe, Diet, Comment, Rating, Cuisine, Ingredient, Step, StepImage, RecipeImage, Favourite, Like, CommentImage
+from recipes.models import Recipe, Diet, Comment, Rating, Cuisine, Ingredient, Step, StepImage, RecipeMedia, Favourite, Like, CommentImage
 from recipes.serializers import RecipeSerializer, DietSerializer, CommentSerializer, RatingSerializer, \
-    CuisineSerializer, IngredientSerializer, StepSerializer, StepImageSerializer, RecipeImageSerializer, \
+    CuisineSerializer, IngredientSerializer, StepSerializer, StepImageSerializer, RecipeMediaSerializer, \
         FavouriteSerializer, OverallRatingSerializer, LikeSerializer, CommentImageSerializer
 
 from rest_framework import filters
@@ -31,9 +31,9 @@ class StepImageViewSet(viewsets.ModelViewSet):
     serializer_class = StepImageSerializer
     permission_classes = [IsAuthenticated]
 
-class RecipeImageViewSet(viewsets.ModelViewSet):
-    queryset = RecipeImage.objects.all()
-    serializer_class = RecipeImageSerializer
+class RecipeMediaViewSet(viewsets.ModelViewSet):
+    queryset = RecipeMedia.objects.all()
+    serializer_class = RecipeMediaSerializer
     permission_classes = [IsAuthenticated]
 
 class CommentImageViewSet(viewsets.ModelViewSet):
@@ -49,7 +49,12 @@ class DietViewSet(viewsets.ModelViewSet):
 class CuisineViewSet(viewsets.ModelViewSet):
     queryset = Cuisine.objects.all()
     serializer_class = CuisineSerializer
-    permission_classes = [IsAuthenticated]
+    def get_permissions(self):
+        if self.action not in ['list', 'retrieve']:
+            permission_classes = [IsAuthenticated]
+        else:
+            permission_classes = [AllowAny]
+        return [permission() for permission in permission_classes]
 
 class StepViewSet(viewsets.ModelViewSet):
     queryset = Step.objects.all()
