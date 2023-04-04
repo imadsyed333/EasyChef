@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 
 from accounts.models import Account
-from recipes.models import Recipe, Diet, Step, Cuisine, Ingredient, RecipeImage, StepImage, Comment, Rating, Favourite, Like, CommentImage
+from recipes.models import Recipe, Diet, Step, Cuisine, Ingredient, RecipeMedia, StepImage, Comment, Rating, Favourite, Like, CommentImage
 
 from rest_framework.fields import CurrentUserDefault
 
@@ -11,15 +11,15 @@ class DietSerializer(serializers.ModelSerializer):
         model = Diet
         fields = ["id", "name"]
 
-class RecipeImageSerializer(serializers.ModelSerializer):
+class RecipeMediaSerializer(serializers.ModelSerializer):
     class Meta:
-        model = RecipeImage
-        fields = ["id", "image", "recipe"]
+        model = RecipeMedia
+        fields = ["id", "media", "recipe"]
 
     def create(self, validated_data):
-        image = RecipeImage.objects.create(recipe=validated_data['recipe'],
-                                           image=validated_data['image'])
-        return image
+        media = RecipeMedia.objects.create(recipe=validated_data['recipe'],
+                                           media=validated_data['media'])
+        return media
 
 class StepImageSerializer(serializers.ModelSerializer):
     class Meta:
@@ -97,7 +97,7 @@ class RecipeSerializer(serializers.ModelSerializer):
 
     steps = StepSerializer(many=True, required=False)
 
-    images = RecipeImageSerializer(many=True, required=False)
+    media = RecipeMediaSerializer(many=True, required=False)
 
     comments = CommentSerializer(many=True, required=False)
 
