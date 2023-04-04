@@ -9,28 +9,34 @@ import MyRecipes from "./pages/MyRecipes";
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import RecipeDetailsPage from "./pages/RecipeDetailsPage";
 import MenuBar from "./components/MenuBar/MenuBar";
+import AccountContext, {useAccountContext} from "./contexts/AccountContext";
+import RegisterPage from "./pages/RegisterPage";
 
 function App() {
-  return (
-      <BrowserRouter>
-        <Routes>
-            <Route path="/" element={<MenuBar/>}>
-                <Route path={"recipe/"}>
-                    <Route path={":id"} element={<RecipeDetailsPage/>}/>
-                </Route>
-                <Route path="myrecipes" element={<MyRecipes/>}/>
-                <Route path="login" element={<LoginPage/>}/>
-                <Route path="cart" element={<ShoppingList/>}/>
-                <Route path="account" element={<AccountPage/>}/>
-                <Route index element={<HomePage/>}/>
-            </Route>
-        </Routes>
-      </BrowserRouter>
-  );
+    return (
+        <BrowserRouter>
+            <AccountContext.Provider value={useAccountContext()}>
+
+                <Routes>
+                    <Route path="/" element={<MenuBar/>}>
+                        <Route path={"recipe/"}>
+                            <Route path={":id"} element={<RecipeDetailsPage/>}/>
+                        </Route>
+                        <Route path="myrecipes" element={<MyRecipes/>}/>
+                        <Route path={"signup"} element={<RegisterPage/>}/>
+                        <Route path="login" element={<LoginPage/>}/>
+                        <Route path="cart" element={<ShoppingList/>}/>
+                        <Route path="account" element={<AccountPage/>}/>
+                        <Route index element={<HomePage/>}/>
+                    </Route>
+                </Routes>
+            </AccountContext.Provider>
+        </BrowserRouter>
+    );
 }
 
-const root = ReactDOM.createRoot(document.getElementById('root'))
-
-root.render(<App/>)
+// const root = ReactDOM.createRoot(document.getElementById('root'))
+//
+// root.render(<App/>)
 
 export default App;

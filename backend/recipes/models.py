@@ -1,7 +1,7 @@
 from django.db import models
 
 from accounts.models import Account
-from django.core.validators import MaxValueValidator, MinValueValidator
+from django.core.validators import MaxValueValidator, MinValueValidator, FileExtensionValidator
 
 class Diet(models.Model):
     name = models.CharField(max_length=100)
@@ -29,7 +29,7 @@ class Recipe(models.Model):
     total_likes = models.IntegerField(default=0)
     overall_rating = models.DecimalField(max_digits=3, decimal_places=2, null=True)
     '''---From Foreign Key---'''
-    '''images'''
+    '''media'''
     '''comments'''
     '''ratings'''
     '''steps'''
@@ -40,11 +40,12 @@ class Comment(models.Model):
     poster = models.ForeignKey(to=Account, on_delete=models.CASCADE, related_name='comments')
     # comment_image = models.ImageField(null=True, blank=True, upload_to="comment_images/")
     '''---From Foreign Key---'''
-    '''images'''
+    '''media'''
 
-class CommentImage(models.Model):
-    comment = models.ForeignKey(to=Comment, on_delete=models.CASCADE, related_name='images')
-    image = models.ImageField(null=True, blank=True, upload_to="comment_images/")
+class CommentMedia(models.Model):
+    comment = models.ForeignKey(to=Comment, on_delete=models.CASCADE, related_name='media')
+    media = models.FileField(null=True, blank=True, upload_to="comment_images/",
+                            validators=[FileExtensionValidator(allowed_extensions=['MOV','avi','mp4','webm','mkv', 'jpeg', 'jpg', 'png'])])
 
 class Step(models.Model):
     recipe = models.ForeignKey(to=Recipe, on_delete=models.CASCADE, related_name='steps')
@@ -52,7 +53,7 @@ class Step(models.Model):
     prep_time = models.IntegerField(blank=True)
     cooking_time = models.IntegerField(blank=True)
     '''---From Foreign Key---'''
-    '''images'''
+    '''media'''
 
 class Rating(models.Model):
     recipe = models.ForeignKey(to=Recipe, on_delete=models.CASCADE, related_name='ratings')
@@ -60,13 +61,15 @@ class Rating(models.Model):
                                             MinValueValidator(1)])
     poster = models.ForeignKey(to=Account, on_delete=models.CASCADE, related_name='ratings')
 
-class RecipeImage(models.Model):
-    recipe = models.ForeignKey(to=Recipe, on_delete=models.CASCADE, related_name='images')
-    image = models.ImageField(null=True, blank=True, upload_to="recipe_images/")
+class RecipeMedia(models.Model):
+    recipe = models.ForeignKey(to=Recipe, on_delete=models.CASCADE, related_name='media')
+    media = models.FileField(null=True, blank=True, upload_to="recipe_images/", 
+                            validators=[FileExtensionValidator(allowed_extensions=['MOV','avi','mp4','webm','mkv', 'jpeg', 'jpg', 'png'])])
 
-class StepImage(models.Model):
-    step = models.ForeignKey(to=Step, on_delete=models.CASCADE, related_name='images')
-    image = models.ImageField(null=True, blank=True, upload_to="step_images/")
+class StepMedia(models.Model):
+    step = models.ForeignKey(to=Step, on_delete=models.CASCADE, related_name='media')
+    media = models.FileField(null=True, blank=True, upload_to="step_images/",
+                            validators=[FileExtensionValidator(allowed_extensions=['MOV','avi','mp4','webm','mkv', 'jpeg', 'jpg', 'png'])])
 
 class Favourite(models.Model):
     recipe = models.ForeignKey(to=Recipe, on_delete=models.CASCADE, related_name='favourites')
