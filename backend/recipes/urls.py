@@ -30,7 +30,10 @@ urlpatterns = [
     path('comments/all/', CommentViewSet.as_view({'get': 'list'})),
 
     path('ratings/add/', RatingViewSet.as_view({'post': 'create'})),
+    path('ratings/<int:pk>/view/', RatingViewSet.as_view({'get': 'retrieve'})),
     path('ratings/all/', OverallRatingViewSet.as_view({'get':'list'})),
+    path('overallratings/<int:pk>/view/', OverallRatingViewSet.as_view({'get': 'retrieve'})),
+
 
     path('favourites/add/', FavouriteViewSet.as_view({'post': 'create'})),
     path('favourites/all/', MostFavouritedViewSet.as_view({'get':'list'})),
