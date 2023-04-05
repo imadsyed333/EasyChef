@@ -9,7 +9,7 @@ import {Navbar} from "react-bootstrap";
 
 const MenuBar = () => {
 
-    const {token} = useContext(AccountContext)
+    const {token, setToken} = useContext(AccountContext)
     const [user, setUser] = useState({})
 
     useEffect(() => {
@@ -22,15 +22,29 @@ const MenuBar = () => {
         }
     }, [token])
 
+    const logout = () => {
+        localStorage.setItem("token", "")
+        const formData = new FormData()
+        formData.append("refresh", localStorage.getItem("refresh"))
+        fetch("http://localhost:8000/accounts/logout/", {
+            method: "POST",
+            headers: {
+                "Authorization": "Bearer " + token
+            },
+            body: formData
+        }).then(response => response.json()).then(json => console.log(json))
+        setToken("")
+        localStorage.setItem("refresh", "")
+    }
+
     const authLinks = () => {
         if (token) {
             return (
-
                 <Navbar.Collapse className={"justify-content-end"}>
-                    <Nav.Link as={Link} to={"/logout/"}>Log Out</Nav.Link>
-                    <NavBar.Text>
-                        Hello {user.first_name} !
+                    <NavBar.Text style={{marginRight: ".5rem"}}>
+                        Hello {user.first_name}!
                     </NavBar.Text>
+                    <Nav.Link as={Link} to={"/"} onClick={logout}>Log Out</Nav.Link>
                 </Navbar.Collapse>
 
             )
@@ -38,8 +52,7 @@ const MenuBar = () => {
             return (
                 <>
                     <Navbar.Collapse className={"justify-content-end"}>
-                        <Nav.Link as={Link} to={"/login/"}> Login </Nav.Link>
-                        <br/>
+                        <Nav.Link as={Link} to={"/login/"} style={{marginRight: ".5rem"}}> Login </Nav.Link>
                         <Nav.Link as={Link} to={"/signup/"}> Sign Up </Nav.Link>
                     </Navbar.Collapse>
                 </>
