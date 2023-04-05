@@ -6,7 +6,7 @@ import AccountContext from "../contexts/AccountContext";
 
 const RecipeDetailsPage = () => {
 
-    const {token, refreshToken} = useContext(AccountContext)
+    const token = localStorage.getItem("token")
 
     let {id} = useParams()
     const [recipe, setRecipe] = useState({
@@ -33,20 +33,22 @@ const RecipeDetailsPage = () => {
     }
 
     const sendComment = () => {
-        console.log("token:", refreshToken)
         const data = {
             poster: 1,
             content: comment,
             recipe: parseInt(id)
         }
-        console.log("I am being called")
-        fetch("http://localhost:8000/recipes/comments/add/", {method: "POST",
-        headers: {
-            "Content-type": "application/json",
-            "Authorization": "Bearer " + refreshToken
-        },
-        body: JSON.stringify(data)}).then(response => response.json()).then(data => {console.log("Success:", data)
-        fetchRecipeDetails()}).catch(error => {
+        fetch("http://localhost:8000/recipes/comments/add/", {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json",
+                "Authorization": "Bearer " + token
+            },
+            body: JSON.stringify(data)
+        }).then(response => response.json()).then(data => {
+            console.log("Success:", data)
+            fetchRecipeDetails()
+        }).catch(error => {
             console.error("Error:", error)
         })
     }
@@ -62,10 +64,10 @@ const RecipeDetailsPage = () => {
             <h2>Diets</h2>
             <ul>
 
-            {recipe.diets?.map(diet => (
-                <li key={diet.id}>{diet.name}</li>
-                )
-            )}
+                {recipe.diets?.map(diet => (
+                        <li key={diet.id}>{diet.name}</li>
+                    )
+                )}
             </ul>
             <h2>Cuisines</h2>
             <ul>
@@ -78,11 +80,11 @@ const RecipeDetailsPage = () => {
                 {recipe.steps?.map(step => (
                     // <li key={step.id}>{step.content}</li>
                     <div key={step.id}>
-                    {console.log("step " + step.id + " media: ", step.media)}
-                    {step.media?.map(img => (<embed src={img.media} width="130px"></embed>))}
-                    <br></br>
-                    <li>{step.content}</li>
-                </div>
+                        {console.log("step " + step.id + " media: ", step.media)}
+                        {step.media?.map(img => (<embed src={img.media} width="130px"></embed>))}
+                        <br></br>
+                        <li>{step.content}</li>
+                    </div>
 
                 ))}
             </ol>
