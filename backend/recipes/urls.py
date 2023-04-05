@@ -36,6 +36,7 @@ urlpatterns = [
 
 
     path('favourites/add/', FavouriteViewSet.as_view({'post': 'create'})),
+    path('favourites/<int:pk>/view/', FavouriteViewSet.as_view({'get': 'retrieve'})),
     path('favourites/all/', MostFavouritedViewSet.as_view({'get':'list'})),
 
     path('favourites/', MyFavouritesView.as_view()),
