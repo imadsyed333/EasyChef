@@ -272,7 +272,7 @@ const RecipeDetailsPage = () => {
             "Authorization": "Bearer " + token
         }, body: JSON.stringify(data)}).then(response => response.json()).then(data => {
             console.log("removed favorite:", data)
-            // isFavourited();
+            isFavourited();
             }).catch(error => {
             console.error("Error:", error)
         })
