@@ -25,6 +25,7 @@ const RecipeDetailsPage = () => {
     const [rating, setRating] = useState(undefined)
     const [overallrating, setOverallRating] = useState(undefined)
     const [favourited, setFavourited] = useState(false)
+    const [liked, setLiked] = useState(false)
 
     useEffect(() => {
         fetchRecipeDetails()
@@ -32,6 +33,7 @@ const RecipeDetailsPage = () => {
         fetchOverallRating()
         isFavourited()
         fetchRecipes()
+        isLiked()
         // if(favourited){
 
         // }
@@ -128,6 +130,80 @@ const RecipeDetailsPage = () => {
             console.error("Error:", error)
         })
     }
+    // favouriting
+    const isLiked = () => {
+        // get all favourite objects
+        // find this recipe+user. if doesnt exist, it is not favourited. if found, check if favourited
+        const url = "http://localhost:8000/recipes/likes/all/"
+        
+        fetch(url, {method: "GET",
+        headers: {
+            "Content-type": "application/json",
+            "Authorization": "Bearer " + token
+        }}).then(response => response.json())
+        .then(json => json.results.find(item => item.id === parseInt(id)))
+        .then(c => {
+            console.log("LIKE EXISTS? ", c)
+            if(c){
+                console.log("LIKED")
+                setLiked(true)
+            }
+            else{
+                console.log("NOT LIKED")
+                setLiked(false)
+            }
+        })
+    }
+
+    // FAVOURITES THIS RECIPE
+    const addLike = () => {
+        // switchFavourited()
+        // setFavourited(!favourited)
+        setLiked(true)
+        // console.log(`Sending new rating to server: ${favourited}`);
+        const data = {
+            liker: 1,
+            like: true,
+            recipe: parseInt(id)
+        }
+
+        fetch("http://localhost:8000/recipes/likes/add/", {method: "POST",
+        headers: {
+            "Content-type": "application/json",
+            "Authorization": "Bearer " + token
+        }, body: JSON.stringify(data)}).then(response => response.json()).then(data => {
+                console.log("added like:", data); 
+                isLiked();
+            }).catch(error => {
+            console.error("Error:", error)
+        })
+    }
+
+    // FAVOURITES THIS RECIPE
+    const removeLike = () => {
+        // switchFavourited()
+        // setFavourited(!favourited)
+        setLiked(false)
+        // console.log(`Sending new rating to server: ${favourited}`);
+        const data = {
+            liker: 1,
+            like: false,
+            recipe: parseInt(id)
+        }
+
+        fetch("http://localhost:8000/recipes/likes/add/", {method: "POST",
+        headers: {
+            "Content-type": "application/json",
+            "Authorization": "Bearer " + token
+        }, body: JSON.stringify(data)}).then(response => response.json()).then(data => {
+            console.log("removed like:", data)
+            // isLiked();
+            }).catch(error => {
+            console.error("Error:", error)
+        })
+    }
+
+
 
     // favouriting
     const isFavourited = () => {
@@ -194,7 +270,9 @@ const RecipeDetailsPage = () => {
         headers: {
             "Content-type": "application/json",
             "Authorization": "Bearer " + token
-        }, body: JSON.stringify(data)}).then(response => response.json()).then(data => {console.log("removed favorite:", data)
+        }, body: JSON.stringify(data)}).then(response => response.json()).then(data => {
+            console.log("removed favorite:", data)
+            // isFavourited();
             }).catch(error => {
             console.error("Error:", error)
         })
@@ -232,6 +310,24 @@ const RecipeDetailsPage = () => {
 
             <button onClick={removeFavourite}>UnFavourite</button>
             {/* {console.log(favourited)} */}
+
+            <br></br>
+
+
+            {liked? (
+            <div>LIKED</div>
+            ): (
+                <div>NOT LIKED</div>
+            )}
+
+
+            <button onClick={addLike}>Like</button>
+            {/* {console.log(favourited)} */}
+
+
+            <button onClick={removeLike}>UnLike</button>
+            {/* {console.log(favourited)} */}
+
 
             <h2>Diets</h2>
             <ul>
