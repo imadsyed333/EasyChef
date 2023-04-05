@@ -24,11 +24,17 @@ const RecipeDetailsPage = () => {
     const [comment, setComment] = useState("")
     const [rating, setRating] = useState(undefined)
     const [overallrating, setOverallRating] = useState(undefined)
+    const [favourited, setFavourited] = useState(false)
 
     useEffect(() => {
         fetchRecipeDetails()
         fetchRating()
         fetchOverallRating()
+        isFavourited()
+        // if(favourited){
+
+        // }
+        updateFavourite()
         console.log("recipe name: ", recipe.name)
         console.log("CURRENT RATING: ", newRating.value)
         console.log('recipe media: ', recipe.media)
@@ -113,6 +119,41 @@ const RecipeDetailsPage = () => {
         })
     }
 
+    // favouriting
+    const isFavourited = () => {
+        fetch("http://localhost:8000/recipes/favourites/" + id + "/view/").then(response => response.json()).then(json => {
+            console.log("FAVOURITED? ", json.favourite)
+            setFavourited(json.favourite)
+            // sendRating(json.value)
+        })
+
+    }
+
+    const updateFavourite = () => {
+        console.log(`Sending new rating to server: ${favourited}`);
+        const data = {
+            poster: 1,
+            favourite: favourited,
+            recipe: parseInt(id)
+        }
+        fetch("http://localhost:8000/recipes/favourites/add/", {method: "POST",
+        headers: {
+            "Content-type": "application/json",
+            "Authorization": "Bearer " + token
+        }, body: JSON.stringify(data)}).then(response => response.json()).then(data => {console.log("fav:", data)
+        fetchRecipeDetails(); }).catch(error => {
+            console.error("Error:", error)
+        })
+    }
+
+    const switchFavourited = () => {
+        setFavourited(!favourited)
+    }
+
+    // liking
+
+
+
     return (
         // <>        
         <div>
@@ -131,6 +172,13 @@ const RecipeDetailsPage = () => {
             <div>Overall Rating: {overallrating}</div>
             {/* {fetchOverallRating()} */}
 
+            {favourited? (
+            <div>MY FAVOURITE</div>
+            ): (
+                <div>NOT MY FAVOURITE</div>
+            )}
+
+            <button onClick={switchFavourited}>Favourite/Unfavourite</button>
 
             <h2>Diets</h2>
             <ul>
