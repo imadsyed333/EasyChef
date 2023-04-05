@@ -23,8 +23,10 @@ const LoginPage = () => {
             .then((response) => {
                 if (response.status === 200) {
                     response.json().then((json) => {
-                        setToken(json.access);
-                        setRefreshToken(json.refresh);
+                        setToken(json.access)
+                        setRefreshToken(json.refresh)
+                        localStorage.setItem("token", json.access)
+                        localStorage.setItem("refresh", json.refresh)
                         setErrors({});
                         navigate("/")
                     });
