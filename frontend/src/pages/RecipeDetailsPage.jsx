@@ -2,14 +2,16 @@ import {useParams} from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import {useContext, useEffect, useState} from "react";
 import AccountContext from "../contexts/AccountContext";
+import ReactStars from "react-rating-stars-component";
 
-
+  
 const RecipeDetailsPage = () => {
 
     const {token, refreshToken} = useContext(AccountContext)
 
     let {id} = useParams()
     const [recipe, setRecipe] = useState({
+        // overall_rating: undefined,
         diets: [],
         cooking_time: 0,
         cuisines: [],
@@ -20,9 +22,17 @@ const RecipeDetailsPage = () => {
     })
 
     const [comment, setComment] = useState("")
+    const [rating, setRating] = useState(undefined)
+    const [overallrating, setOverallRating] = useState(undefined)
 
     useEffect(() => {
         fetchRecipeDetails()
+        fetchRating()
+        fetchOverallRating()
+        console.log("recipe name: ", recipe.name)
+        console.log("CURRENT RATING: ", newRating.value)
+        console.log('recipe media: ', recipe.media)
+
     }, [])
 
     const fetchRecipeDetails = () => {
@@ -33,7 +43,7 @@ const RecipeDetailsPage = () => {
     }
 
     const sendComment = () => {
-        console.log("token:", refreshToken)
+        console.log("token:", token)
         const data = {
             poster: 1,
             content: comment,
@@ -43,7 +53,7 @@ const RecipeDetailsPage = () => {
         fetch("http://localhost:8000/recipes/comments/add/", {method: "POST",
         headers: {
             "Content-type": "application/json",
-            "Authorization": "Bearer " + refreshToken
+            "Authorization": "Bearer " + token
         },
         body: JSON.stringify(data)}).then(response => response.json()).then(data => {console.log("Success:", data)
         fetchRecipeDetails()}).catch(error => {
@@ -51,13 +61,74 @@ const RecipeDetailsPage = () => {
         })
     }
 
+    const fetchRating = () => {
+        fetch("http://localhost:8000/recipes/ratings/" + id + "/view/").then(response => response.json()).then(json => {
+            console.log("RECIPE DATA TO GET RATING", json.value)
+            setRating(json.value)
+            // sendRating(json.value)
+        })
+
+    }
+
+    const fetchOverallRating = () => {
+        fetch("http://localhost:8000/recipes/overallratings/" + id + "/view/").then(response => response.json()).then(json => {
+            console.log("OVERALL RATING", json.overall_rating)
+            setOverallRating(json.overall_rating)
+        })
+
+    }
+
+
+    const newRating = {
+        size: 40,
+        count: 5,
+        isHalf: false,
+        value: rating,
+        color: "grey",
+        activeColor: "gold",
+        onChange: newValue => {
+            console.log(`New Rating: new value is ${newValue}`);
+            // SEND RATING TO SERVER
+            setRating(newValue)
+            sendRating(newValue)
+        }
+      };
+
+    const sendRating = (newVal) => {
+        console.log(`Sending new rating to server: ${newVal}`);
+        const data = {
+            poster: 1,
+            value: newVal,
+            recipe: parseInt(id)
+        }
+        fetch("http://localhost:8000/recipes/ratings/add/", {method: "POST",
+        headers: {
+            "Content-type": "application/json",
+            "Authorization": "Bearer " + token
+        }, body: JSON.stringify(data)}).then(response => response.json()).then(data => {console.log("yeye:", data)
+        fetchRecipeDetails(); fetchOverallRating()}).catch(error => {
+            console.error("Error:", error)
+        })
+    }
+
     return (
         // <>        
         <div>
-            {console.log("recipe name: ", recipe.name)}
+            {/* {console.log("recipe name: ", recipe.name)} */}
             <h1>{recipe.name}</h1>
-            {console.log('recipe media: ', recipe.media)}
+            {/* {console.log('recipe media: ', recipe.media)} */}
             {recipe.media?.map(img => (<embed src={img.media} width="130px"></embed>))}
+
+            <ReactStars {...newRating} />
+            {/* {console.log("CURRENT RATING: ", newRating.value)} */}
+
+            {/* <div>{recipe.overall_rating}</div> */}
+            <div>Current Rating: {rating}</div>
+            {/* {fetchRating()} */}
+
+            <div>Overall Rating: {overallrating}</div>
+            {/* {fetchOverallRating()} */}
+
 
             <h2>Diets</h2>
             <ul>
@@ -78,7 +149,7 @@ const RecipeDetailsPage = () => {
                 {recipe.steps?.map(step => (
                     // <li key={step.id}>{step.content}</li>
                     <div key={step.id}>
-                    {console.log("step " + step.id + " media: ", step.media)}
+                    {/* {console.log("step " + step.id + " media: ", step.media)} */}
                     {step.media?.map(img => (<embed src={img.media} width="130px"></embed>))}
                     <br></br>
                     <li>{step.content}</li>
@@ -89,7 +160,7 @@ const RecipeDetailsPage = () => {
             <h2>Comments Section</h2>
             {recipe.comments?.map(comment => (
                 <div key={comment.id}>
-                    {console.log("comment " + comment.id + " media: ", comment.media)}
+                    {/* {console.log("comment " + comment.id + " media: ", comment.media)} */}
                     {comment.media?.map(img => (<embed src={img.media} width="130px"></embed>))}
                     <br></br>
                     <li>{comment.content}</li>
