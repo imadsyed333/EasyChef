@@ -4,7 +4,7 @@ import {useContext, useEffect, useState} from "react";
 import AccountContext from "../contexts/AccountContext";
 import ReactStars from "react-rating-stars-component";
 
-  
+
 const RecipeDetailsPage = () => {
 
     const {token, refreshToken} = useContext(AccountContext)
@@ -78,7 +78,9 @@ const RecipeDetailsPage = () => {
 
     }
 
-
+    // using package: react-rating-stars-component
+    // https://www.npmjs.com/package/react-rating-stars-component
+    // https://codesandbox.io/s/elegant-mountain-w3ngk?file=/src/App.js
     const newRating = {
         size: 40,
         count: 5,
