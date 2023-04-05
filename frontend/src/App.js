@@ -16,7 +16,6 @@ function App() {
     return (
         <BrowserRouter>
             <AccountContext.Provider value={useAccountContext()}>
-
                 <Routes>
                     <Route path="/" element={<MenuBar/>}>
                         <Route path={"recipe/"}>
