@@ -94,7 +94,6 @@ class RatingViewSet(viewsets.ModelViewSet):
 
 class OverallRatingViewSet(viewsets.ModelViewSet):
 
-
     queryset = Recipe.objects.all().filter().order_by('-overall_rating')
     serializer_class = OverallRatingSerializer
 
@@ -110,6 +109,13 @@ class FavouriteViewSet(viewsets.ModelViewSet):
     queryset = Favourite.objects.all().filter(favourite=True)
     serializer_class = FavouriteSerializer
 
+    def get_permissions(self):
+        if self.action not in ['list', 'retrieve']:
+            permission_classes = [IsAuthenticated]
+        else:
+            permission_classes = [AllowAny]
+        return [permission() for permission in permission_classes]
+
 class MostFavouritedViewSet(viewsets.ModelViewSet):
 
     queryset = Recipe.objects.all().exclude(total_favourites=0).order_by('-total_favourites').values()
@@ -118,6 +124,12 @@ class MostFavouritedViewSet(viewsets.ModelViewSet):
 class LikeViewSet(viewsets.ModelViewSet):
     queryset = Like.objects.all().filter(like=True)
     serializer_class = LikeSerializer
+    def get_permissions(self):
+        if self.action not in ['list', 'retrieve']:
+            permission_classes = [IsAuthenticated]
+        else:
+            permission_classes = [AllowAny]
+        return [permission() for permission in permission_classes]
 
 class MostLikedViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all().exclude(total_likes=0).order_by('-total_likes').values()
@@ -154,3 +166,16 @@ class MyRecipesView(ListAPIView):
         serializer = RecipeSerializer(queryset, many=True)
         return Response(serializer.data)
 
+class MyLikesView(ListAPIView):
+    def list(self, request, *args, **kwargs):
+        account = request.user
+        queryset = account.likes.all()
+        serializer = RecipeSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+class TotalLikesView(ListAPIView):
+    def list(self, request, *args, **kwargs):
+        # account = request.user
+        queryset = Recipe.objects.all().order_by("-total_likes")
+        serializer = RecipeSerializer(queryset, many=True)
+        return Response(serializer.data)
