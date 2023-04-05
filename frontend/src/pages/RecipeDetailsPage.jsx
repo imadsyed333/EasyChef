@@ -134,14 +134,14 @@ const RecipeDetailsPage = () => {
     const isLiked = () => {
         // get all favourite objects
         // find this recipe+user. if doesnt exist, it is not favourited. if found, check if favourited
-        const url = "http://localhost:8000/recipes/likes/all/"
+        const url = "http://localhost:8000/recipes/likes/"
         
         fetch(url, {method: "GET",
         headers: {
             "Content-type": "application/json",
             "Authorization": "Bearer " + token
         }}).then(response => response.json())
-        .then(json => json.results.find(item => item.id === parseInt(id)))
+        .then(json => json.find(item => item.id === parseInt(id)))
         .then(c => {
             console.log("LIKE EXISTS? ", c)
             if(c){
@@ -197,7 +197,7 @@ const RecipeDetailsPage = () => {
             "Authorization": "Bearer " + token
         }, body: JSON.stringify(data)}).then(response => response.json()).then(data => {
             console.log("removed like:", data)
-            // isLiked();
+            isLiked();
             }).catch(error => {
             console.error("Error:", error)
         })
