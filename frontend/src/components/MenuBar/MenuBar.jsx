@@ -13,7 +13,7 @@ const MenuBar = () => {
     const [user, setUser] = useState({})
 
     useEffect(() => {
-        if (token.length > 0) {
+        if (token.length > 0) { //get rid of token == null
             fetch("http://localhost:8000/accounts/profile/view/", {
                 headers: {
                     "Authorization": "Bearer " + token
