@@ -133,11 +133,25 @@ const RecipeDetailsPage = () => {
     const isFavourited = () => {
         // get all favourite objects
         // find this recipe+user. if doesnt exist, it is not favourited. if found, check if favourited
-        const url = "http://localhost:8000/recipes/favourites/all/"
+        const url = "http://localhost:8000/recipes/favourites/"
         
-        fetch(url).then(response => response.json())
-        .then(json => json.results)
-        .then(j => console.log('YOYO ', j.find(item => item.id === parseInt(id))))
+        fetch(url, {method: "GET",
+        headers: {
+            "Content-type": "application/json",
+            "Authorization": "Bearer " + token
+        }}).then(response => response.json())
+        .then(json => json.find(item => item.id === parseInt(id)))
+        .then(c => {
+            console.log("FAVOURITE EXISTS? ", c)
+            if(c){
+                console.log("FAVOURITED")
+                setFavourited(true)
+            }
+            else{
+                console.log("NOT FAVOURITED")
+                setFavourited(false)
+            }
+        })
     }
 
     // FAVOURITES THIS RECIPE
@@ -156,7 +170,9 @@ const RecipeDetailsPage = () => {
         headers: {
             "Content-type": "application/json",
             "Authorization": "Bearer " + token
-        }, body: JSON.stringify(data)}).then(response => response.json()).then(data => {console.log("added favorite:", data)
+        }, body: JSON.stringify(data)}).then(response => response.json()).then(data => {
+                console.log("added favorite:", data); 
+                isFavourited();
             }).catch(error => {
             console.error("Error:", error)
         })
