@@ -31,10 +31,12 @@ const RecipeDetailsPage = () => {
         fetchRating()
         fetchOverallRating()
         isFavourited()
+        fetchRecipes()
         // if(favourited){
 
         // }
-        updateFavourite()
+        console.log("favourited: ", favourited)
+        // updateFavourite()
         console.log("recipe name: ", recipe.name)
         console.log("CURRENT RATING: ", newRating.value)
         console.log('recipe media: ', recipe.media)
@@ -47,6 +49,14 @@ const RecipeDetailsPage = () => {
             setRecipe(json)
         })
     }
+
+    const fetchRecipes = () => {
+        fetch("http://localhost:8000/recipes/all/").then(response => response.json()).then(json => {
+            console.log("ALLLLL", json.results.find(item => item.id === parseInt(id)))
+        })
+    }
+
+
 
     const sendComment = () => {
         console.log("token:", token)
@@ -121,36 +131,58 @@ const RecipeDetailsPage = () => {
 
     // favouriting
     const isFavourited = () => {
-        fetch("http://localhost:8000/recipes/favourites/" + id + "/view/").then(response => response.json()).then(json => {
-            console.log("FAVOURITED? ", json.favourite)
-            setFavourited(json.favourite)
-            // sendRating(json.value)
-        })
-
+        // get all favourite objects
+        // find this recipe+user. if doesnt exist, it is not favourited. if found, check if favourited
+        const url = "http://localhost:8000/recipes/favourites/all/"
+        
+        fetch(url).then(response => response.json())
+        .then(json => json.results)
+        .then(j => console.log('YOYO ', j.find(item => item.id === parseInt(id))))
     }
 
-    const updateFavourite = () => {
-        console.log(`Sending new rating to server: ${favourited}`);
+    // FAVOURITES THIS RECIPE
+    const addFavourite = () => {
+        // switchFavourited()
+        // setFavourited(!favourited)
+        setFavourited(true)
+        // console.log(`Sending new rating to server: ${favourited}`);
         const data = {
             poster: 1,
-            favourite: favourited,
+            favourite: true,
             recipe: parseInt(id)
         }
+
         fetch("http://localhost:8000/recipes/favourites/add/", {method: "POST",
         headers: {
             "Content-type": "application/json",
             "Authorization": "Bearer " + token
-        }, body: JSON.stringify(data)}).then(response => response.json()).then(data => {console.log("fav:", data)
-        fetchRecipeDetails(); }).catch(error => {
+        }, body: JSON.stringify(data)}).then(response => response.json()).then(data => {console.log("added favorite:", data)
+            }).catch(error => {
             console.error("Error:", error)
         })
     }
 
-    const switchFavourited = () => {
-        setFavourited(!favourited)
-    }
+    // FAVOURITES THIS RECIPE
+    const removeFavourite = () => {
+        // switchFavourited()
+        // setFavourited(!favourited)
+        setFavourited(false)
+        // console.log(`Sending new rating to server: ${favourited}`);
+        const data = {
+            poster: 1,
+            favourite: false,
+            recipe: parseInt(id)
+        }
 
-    // liking
+        fetch("http://localhost:8000/recipes/favourites/add/", {method: "POST",
+        headers: {
+            "Content-type": "application/json",
+            "Authorization": "Bearer " + token
+        }, body: JSON.stringify(data)}).then(response => response.json()).then(data => {console.log("removed favorite:", data)
+            }).catch(error => {
+            console.error("Error:", error)
+        })
+    }
 
 
 
@@ -178,7 +210,12 @@ const RecipeDetailsPage = () => {
                 <div>NOT MY FAVOURITE</div>
             )}
 
-            <button onClick={switchFavourited}>Favourite/Unfavourite</button>
+            <button onClick={addFavourite}>Favourite</button>
+            {/* {console.log(favourited)} */}
+
+
+            <button onClick={removeFavourite}>UnFavourite</button>
+            {/* {console.log(favourited)} */}
 
             <h2>Diets</h2>
             <ul>
