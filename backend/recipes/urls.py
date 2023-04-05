@@ -30,20 +30,23 @@ urlpatterns = [
     path('comments/all/', CommentViewSet.as_view({'get': 'list'})),
 
     path('ratings/add/', RatingViewSet.as_view({'post': 'create'})),
-    path('ratings/<int:pk>/view/', RatingViewSet.as_view({'get': 'retrieve'})),
-    path('ratings/all/', OverallRatingViewSet.as_view({'get':'list'})),
+    path('ratings/all/', RatingViewSet.as_view({'get': 'list'})),
+    # path('ratings/<int:pk>/view/', RatingViewSet.as_view({'get': 'retrieve'})),
+    path('overallratings/all/', OverallRatingViewSet.as_view({'get':'list'})),
     path('overallratings/<int:pk>/view/', OverallRatingViewSet.as_view({'get': 'retrieve'})),
 
 
     path('favourites/add/', FavouriteViewSet.as_view({'post': 'create'})),
+    path('favourites/all/', FavouriteViewSet.as_view({'get':'list'})),
     path('favourites/<int:pk>/view/', FavouriteViewSet.as_view({'get': 'retrieve'})),
-    path('favourites/all/', MostFavouritedViewSet.as_view({'get':'list'})),
+    path('mostfavourited/all/', MostFavouritedViewSet.as_view({'get':'list'})),
 
     path('favourites/', MyFavouritesView.as_view()),
     path('interactions/', MyInteractionsView.as_view()),
     path('recipes/', MyRecipesView.as_view()),
     
     path('likes/add/', LikeViewSet.as_view({'post': 'create'})),
+    path('likes/<int:pk>/view/', LikeViewSet.as_view({'get': 'retrieve'})),
     path('likes/all/', MostLikedViewSet.as_view({'get':'list'})),
 
     path('find/', SearchAPIView.as_view()),
