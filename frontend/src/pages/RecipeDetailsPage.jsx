@@ -27,9 +27,11 @@ const RecipeDetailsPage = () => {
     const [favourited, setFavourited] = useState(false)
     const [liked, setLiked] = useState(false)
     const [totallikes, setTotalLikes] = useState(0)
+    // const [comments, setComments] = useState([])
     
     useEffect(() => {
         fetchRecipeDetails()
+        // fetchAllComments()
         fetchRating()
         fetchTotalLikes()
         fetchOverallRating()
@@ -57,6 +59,16 @@ const RecipeDetailsPage = () => {
         })
     }
 
+    // bruh why'd i think we needed to get the comments :sob:
+    // const fetchAllComments = () => {
+    //     fetch("http://localhost:8000/recipes/comments/all/")
+    //     .then(response => response.json())
+    //     .then(json => {
+    //         console.log("This recipes's comments: ", json.results)
+    //         setComments(json.results)
+    //     })
+
+    // }
     
 
     const sendComment = () => {
@@ -226,8 +238,6 @@ const RecipeDetailsPage = () => {
         })
     }
 
-
-
     // favouriting
     const isFavourited = () => {
         // get all favourite objects
@@ -353,9 +363,9 @@ const RecipeDetailsPage = () => {
             <h2>Steps</h2>
             <ol>
                 {recipe.steps?.map(step => (
-                    // <li key={step.id}>{step.content}</li>
+                    
                     <div key={step.id}>
-                    {/* {console.log("step " + step.id + " media: ", step.media)} */}
+
                     {step.media?.map(img => (<embed src={img.media} width="130px"></embed>))}
                     <br></br>
                     <li>{step.content}</li>
@@ -366,15 +376,17 @@ const RecipeDetailsPage = () => {
             <h2>Comments Section</h2>
             {recipe.comments?.map(comment => (
                 <div key={comment.id}>
-                    {/* {console.log("comment " + comment.id + " media: ", comment.media)} */}
+
                     {comment.media?.map(img => (<embed src={img.media} width="130px"></embed>))}
                     <br></br>
                     <li>{comment.content}</li>
                 </div>
-                // <li key={comment.id}>{comment.content}</li>
+            
             ))}
-            {/* {recipe.comments?.map((f) => {(<img key={f.id} src={f.media}></img>); console.log(f.id, f.media)})}   */}
-            {/* {<img></img>} */}
+
+            {/* might not need this */}
+            {/* <div>{(comments !== [])?(comments[0].content):('no comments yet')}</div> */}
+
             <textarea value={comment} onChange={(e) => setComment(e.target.value)}/>
             <Button onClick={sendComment}>comment</Button>
         </div>
