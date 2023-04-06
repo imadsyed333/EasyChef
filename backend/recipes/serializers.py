@@ -85,6 +85,77 @@ class CommentSerializer(serializers.ModelSerializer):
             account.interactions.add(recipe)
         return comment
 
+class FavouriteSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = Favourite
+        fields = ["id", "recipe", "favourite"]
+
+    def create(self, validated_data):
+        favourite, created = Favourite.objects.update_or_create(recipe=validated_data['recipe'],
+                                                                poster=self.context['request'].user,
+                                                                defaults={'favourite': validated_data['favourite']})
+        favourite.save()
+
+        # print(Recipe.objects.all())
+        print('fav? ', validated_data['favourite'])
+        print('fav? ', self.context['request'].user)
+        # user favourited this recipe
+        if validated_data['favourite']:
+            # favourited_recipe = Recipe.objects.filter(id=validated_data['recipe'].id)
+            favourited_recipe = validated_data['recipe']
+            favoriter = self.context['request'].user
+            print('+initial favouriters: ', favourited_recipe.favoriters.all())
+            # if favoriters is empty
+            if not favourited_recipe.favoriters.all():
+                favourited_recipe.favoriters.set([favoriter])
+                # one person has favourited this recipe
+                favourited_recipe.total_favourites=1
+                print(favourited_recipe.total_favourites)
+
+                favourited_recipe.save()
+                # Recipe.objects.get(id=validated_data['recipe'].id).favoriters
+                print('+new favouriter: ', favoriter)
+                print('+favourited recipe: ', favourited_recipe)
+                print('+total favouriters: ', favourited_recipe.favoriters.all())
+            # if there is at least one favoriter
+            else:
+                old_favouriters = list(favourited_recipe.favoriters.all())
+                print('+old favouriters: ', old_favouriters)
+                print('+old favouriters: ', list(old_favouriters))
+                
+                # only favourite if recipe is not already favourited by this user
+                if favoriter not in old_favouriters:
+                    all_favouriters = old_favouriters + [favoriter]
+                    print('+all favouriters: ', all_favouriters)
+
+                    # total favourites for this recipe
+                    favourited_recipe.total_favourites=len(all_favouriters)
+                    print(favourited_recipe.total_favourites)
+                    # print('+all favouriters: ', all_favouriters)
+                    favourited_recipe.favoriters.set(all_favouriters)
+                    favourited_recipe.save()
+
+                    print('+new favouriter: ', favoriter)
+                    print('+favourited recipe: ', favourited_recipe)
+                    print('+favouriters: ', favourited_recipe.favoriters.all())
+        # if unfavourited
+        else:
+            favourited_recipe = Recipe.objects.get(id=validated_data['recipe'].id)
+            favourited_recipe.favoriters.remove(Account.objects.get(email=self.context['request'].user))
+            favourited_recipe.save()
+
+            total_favs = list(favourited_recipe.favoriters.all())
+            favourited_recipe.total_favourites = len(total_favs)
+            favourited_recipe.save()
+            print(favourited_recipe.total_favourites)
+
+            print('-favouriters: ', Account.objects.get(email=self.context['request'].user))
+            print('-favouriters: ', favourited_recipe.favoriters.all())
+
+        return favourite
+
+
 class RecipeSerializer(serializers.ModelSerializer):
     diets = DietSerializer(many=True, required=False)
     diet_ids = serializers.PrimaryKeyRelatedField(many=True, write_only=True, queryset=Diet.objects.all())
@@ -103,7 +174,7 @@ class RecipeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Recipe
-        fields = ["id", 'name', 'media', 'diets', 'diet_ids', 'cuisines', 'cuisine_ids', 'ingredients', 'ingredient_ids', 'prep_time', 'cooking_time', 'steps', 'servings', 'comments']
+        fields = ["id", "total_likes", 'name', 'media', 'diets', 'diet_ids', 'cuisines', 'cuisine_ids', 'ingredients', 'ingredient_ids', 'prep_time', 'cooking_time', 'steps', 'servings', 'comments']
 
     def create(self, validated_data):
         diets = validated_data.pop('diet_ids', None)
@@ -175,76 +246,6 @@ class OverallRatingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Recipe
         fields = ["id", "name", "overall_rating"]
-
-class FavouriteSerializer(serializers.ModelSerializer):
-    
-    class Meta:
-        model = Favourite
-        fields = ["id", "recipe", "favourite"]
-
-    def create(self, validated_data):
-        favourite, created = Favourite.objects.update_or_create(recipe=validated_data['recipe'],
-                                                                poster=self.context['request'].user,
-                                                                defaults={'favourite': validated_data['favourite']})
-        favourite.save()
-
-        # print(Recipe.objects.all())
-        print('fav? ', validated_data['favourite'])
-        print('fav? ', self.context['request'].user)
-        # user favourited this recipe
-        if validated_data['favourite']:
-            # favourited_recipe = Recipe.objects.filter(id=validated_data['recipe'].id)
-            favourited_recipe = validated_data['recipe']
-            favoriter = self.context['request'].user
-            print('+initial favouriters: ', favourited_recipe.favoriters.all())
-            # if favoriters is empty
-            if not favourited_recipe.favoriters.all():
-                favourited_recipe.favoriters.set([favoriter])
-                # one person has favourited this recipe
-                favourited_recipe.total_favourites=1
-                print(favourited_recipe.total_favourites)
-
-                favourited_recipe.save()
-                # Recipe.objects.get(id=validated_data['recipe'].id).favoriters
-                print('+new favouriter: ', favoriter)
-                print('+favourited recipe: ', favourited_recipe)
-                print('+total favouriters: ', favourited_recipe.favoriters.all())
-            # if there is at least one favoriter
-            else:
-                old_favouriters = list(favourited_recipe.favoriters.all())
-                print('+old favouriters: ', old_favouriters)
-                print('+old favouriters: ', list(old_favouriters))
-                
-                # only favourite if recipe is not already favourited by this user
-                if favoriter not in old_favouriters:
-                    all_favouriters = old_favouriters + [favoriter]
-                    print('+all favouriters: ', all_favouriters)
-
-                    # total favourites for this recipe
-                    favourited_recipe.total_favourites=len(all_favouriters)
-                    print(favourited_recipe.total_favourites)
-                    # print('+all favouriters: ', all_favouriters)
-                    favourited_recipe.favoriters.set(all_favouriters)
-                    favourited_recipe.save()
-
-                    print('+new favouriter: ', favoriter)
-                    print('+favourited recipe: ', favourited_recipe)
-                    print('+favouriters: ', favourited_recipe.favoriters.all())
-        # if unfavourited
-        else:
-            favourited_recipe = Recipe.objects.get(id=validated_data['recipe'].id)
-            favourited_recipe.favoriters.remove(Account.objects.get(email=self.context['request'].user))
-            favourited_recipe.save()
-
-            total_favs = list(favourited_recipe.favoriters.all())
-            favourited_recipe.total_favourites = len(total_favs)
-            favourited_recipe.save()
-            print(favourited_recipe.total_favourites)
-
-            print('-favouriters: ', Account.objects.get(email=self.context['request'].user))
-            print('-favouriters: ', favourited_recipe.favoriters.all())
-
-        return favourite
 
 
 
