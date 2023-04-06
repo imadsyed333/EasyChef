@@ -4,7 +4,6 @@ import {useContext, useEffect, useState} from "react";
 import AccountContext from "../contexts/AccountContext";
 import ReactStars from "react-rating-stars-component";
 
-
 const RecipeDetailsPage = () => {
 
     const {token, refreshToken} = useContext(AccountContext)
@@ -58,7 +57,7 @@ const RecipeDetailsPage = () => {
         })
     }
 
-
+    
 
     const sendComment = () => {
         console.log("token:", token)
@@ -79,14 +78,48 @@ const RecipeDetailsPage = () => {
         })
     }
 
+    // const fetchRating = () => {
+    //     fetch("http://localhost:8000/recipes/ratings/" + id + "/view/").then(response => response.json()).then(json => {
+    //         console.log("RECIPE DATA TO GET RATING", json.value)
+    //         setRating(json.value)
+    //         // sendRating(json.value)
+    //     })
+
+    // }
+
+
+    // fetch all rating objects of this user
+    // if the user has a rating object for this current recipe, 
+    //     display it by doing setRating(curr_recipe.value) 
+    // if user does not have rating object for this current recipe,
+    //     
     const fetchRating = () => {
-        fetch("http://localhost:8000/recipes/ratings/" + id + "/view/").then(response => response.json()).then(json => {
-            console.log("RECIPE DATA TO GET RATING", json.value)
-            setRating(json.value)
+        fetch("http://localhost:8000/recipes/ratings/", {method: "GET",
+        headers: {
+            "Content-type": "application/json",
+            "Authorization": "Bearer " + token
+        }})
+        .then(response => response.json())
+        .then(json => json.find(item => item.recipe === parseInt(id)))
+        .then(curr_recipe => {
+            console.log("THIS USER'S INFO FOR THIS RECIPE: ", curr_recipe)
+            if(curr_recipe){
+                console.log("USER'S RATING FOR THIS RECIPE: ", curr_recipe.value)
+                setRating(curr_recipe.value)
+            }
+            else{
+                console.log("USER'S DOESN'T HAVE RATING FOR THIS RECIPE")
+                // console.log("SET NEW RECIPE RATING FOR THIS USER")
+                // setRating()
+            }
+            // console.log("RECIPE DATA TO GET RATING", json.value)
+            // setRating(json.value)
             // sendRating(json.value)
+        
         })
 
     }
+
 
     const fetchOverallRating = () => {
         fetch("http://localhost:8000/recipes/overallratings/" + id + "/view/").then(response => response.json()).then(json => {
