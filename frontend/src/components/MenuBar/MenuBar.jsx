@@ -8,7 +8,6 @@ import Nav from 'react-bootstrap/Nav'
 import {Navbar} from "react-bootstrap";
 
 const MenuBar = () => {
-
     const {token, setToken} = useContext(AccountContext)
     const [user, setUser] = useState({})
 
@@ -60,6 +59,14 @@ const MenuBar = () => {
         }
     }
 
+    const addRecipe = () => {
+        if (token) {
+            return (
+                <Nav.Link as={Link} to={"/recipe/add/"}>Add Recipe</Nav.Link>
+            )
+        }
+    }
+
     return (
         <>
             <Navbar bg="light" variant="light">
@@ -70,6 +77,7 @@ const MenuBar = () => {
                     <Nav className="me-auto">
                         <Nav.Link as={Link} to="/">Home</Nav.Link>
                         <Nav.Link as={Link} to="/myrecipes">My Recipes</Nav.Link>
+                        {addRecipe()}
                         <Nav.Link as={Link} to={"/cart"}>Shopping Cart</Nav.Link>
                     </Nav>
                     {authLinks()}
