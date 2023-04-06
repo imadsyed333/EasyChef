@@ -179,3 +179,10 @@ class TotalLikesView(ListAPIView):
         queryset = Recipe.objects.all().order_by("-total_likes")
         serializer = RecipeSerializer(queryset, many=True)
         return Response(serializer.data)
+
+class MyRatingsView(ListAPIView):
+    def list(self, request, *args, **kwargs):
+        account = request.user
+        queryset = account.ratings.all()
+        serializer = RatingSerializer(queryset, many=True)
+        return Response(serializer.data)
