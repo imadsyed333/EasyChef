@@ -11,5 +11,5 @@ class Account(AbstractUser):
     avatar = models.ImageField(null=True)
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
-
+    shopping_list = models.ManyToManyField("recipes.Recipe", blank=True, related_name="customers")
 

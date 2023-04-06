@@ -2,6 +2,7 @@ import AccountContext from "../contexts/AccountContext";
 import {useContext, useState} from "react";
 import Button from "react-bootstrap/Button";
 import {useNavigate} from "react-router-dom";
+import Form from 'react-bootstrap/Form';
 
 const LoginPage = () => {
     const {setToken, setRefreshToken} = useContext(AccountContext);
@@ -28,7 +29,7 @@ const LoginPage = () => {
                         localStorage.setItem("token", json.access)
                         localStorage.setItem("refresh", json.refresh)
                         setErrors({});
-                        navigate("/")
+                        navigate("/home")
                     });
                 } else if (response.status === 400) {
                     response.json().then((json) => setErrors(json));
@@ -56,6 +57,7 @@ const LoginPage = () => {
     return (
         <div>
             Login here <br/>
+            <Form>
             <label>
                 Email:
                 <input
@@ -77,6 +79,7 @@ const LoginPage = () => {
             </label>
             {passwordErrors()}
             <Button onClick={handleLogin}>Login</Button>
+            </Form>
         </div>
     );
 };

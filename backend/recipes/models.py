@@ -57,13 +57,13 @@ class Step(models.Model):
 
 class Rating(models.Model):
     recipe = models.ForeignKey(to=Recipe, on_delete=models.CASCADE, related_name='ratings')
-    value = models.IntegerField(validators=[MaxValueValidator(5), 
+    value = models.IntegerField(validators=[MaxValueValidator(5),
                                             MinValueValidator(1)])
     poster = models.ForeignKey(to=Account, on_delete=models.CASCADE, related_name='ratings')
 
 class RecipeMedia(models.Model):
     recipe = models.ForeignKey(to=Recipe, on_delete=models.CASCADE, related_name='media')
-    media = models.FileField(null=True, blank=True, upload_to="recipe_images/", 
+    media = models.FileField(null=True, blank=True, upload_to="recipe_images/",
                             validators=[FileExtensionValidator(allowed_extensions=['MOV','avi','mp4','webm','mkv', 'jpeg', 'jpg', 'png'])])
 
 class StepMedia(models.Model):
@@ -73,10 +73,10 @@ class StepMedia(models.Model):
 
 class Favourite(models.Model):
     recipe = models.ForeignKey(to=Recipe, on_delete=models.CASCADE, related_name='favourites')
-    favourite = models.BooleanField(default=False)    
+    favourite = models.BooleanField(default=False)
     poster = models.ForeignKey(to=Account, on_delete=models.CASCADE, related_name='favourites')
 
 class Like(models.Model):
     recipe = models.ForeignKey(to=Recipe, on_delete=models.CASCADE, related_name='recipe_likes')
-    like = models.BooleanField(default=False)    
+    like = models.BooleanField(default=False)
     liker = models.ForeignKey(to=Account, on_delete=models.CASCADE, related_name='recipe_likes')
