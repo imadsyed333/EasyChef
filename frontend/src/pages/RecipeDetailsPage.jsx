@@ -36,9 +36,6 @@ const RecipeDetailsPage = () => {
         isFavourited()
         fetchRecipes()
         isLiked()
-        // if(favourited){
-
-        // }
         console.log("favourited: ", favourited)
         // updateFavourite()
         console.log("recipe name: ", recipe.name)
@@ -85,7 +82,6 @@ const RecipeDetailsPage = () => {
     const fetchTotalLikes = () => {
         fetch("http://localhost:8000/recipes/totallikes/")
         .then(response => response.json())
-        // .then(json => console.log('jkdfhkjfahf ', json))
         .then(json => json.find(item => item.id === parseInt(id)))
         .then(curr_recipe => {
             console.log("FETCH THIS RECIPE'S LIKES", curr_recipe)
@@ -117,13 +113,7 @@ const RecipeDetailsPage = () => {
             }
             else{
                 console.log("USER'S DOESN'T HAVE RATING FOR THIS RECIPE")
-                // console.log("SET NEW RECIPE RATING FOR THIS USER")
-                // setRating()
-            }
-            // console.log("RECIPE DATA TO GET RATING", json.value)
-            // setRating(json.value)
-            // sendRating(json.value)
-        
+            }        
         })
 
     }
@@ -265,10 +255,7 @@ const RecipeDetailsPage = () => {
 
     // FAVOURITES THIS RECIPE
     const addFavourite = () => {
-        // switchFavourited()
-        // setFavourited(!favourited)
         setFavourited(true)
-        // console.log(`Sending new rating to server: ${favourited}`);
         const data = {
             poster: 1,
             favourite: true,
@@ -287,12 +274,8 @@ const RecipeDetailsPage = () => {
         })
     }
 
-    // FAVOURITES THIS RECIPE
     const removeFavourite = () => {
-        // switchFavourited()
-        // setFavourited(!favourited)
         setFavourited(false)
-        // console.log(`Sending new rating to server: ${favourited}`);
         const data = {
             poster: 1,
             favourite: false,
@@ -314,24 +297,17 @@ const RecipeDetailsPage = () => {
 
 
     return (
-        // <>        
         <div>
-            {/* {console.log("recipe name: ", recipe.name)} */}
             <h1>{recipe.name}</h1>
-            {/* {console.log('recipe media: ', recipe.media)} */}
             {recipe.media?.map(img => (<embed src={img.media} width="130px"></embed>))}
 
             <ReactStars {...newRating} />
-            {/* {console.log("CURRENT RATING: ", newRating.value)} */}
 
-            {/* <div>{recipe.overall_rating}</div> */}
 
             {/* if rating exists, display it. otherwise, display 'no rating exists' */}
             <div>Current Rating: {rating? (rating):("no rating yet")}</div>
-            {/* {fetchRating()} */}
 
             <div>Overall Rating: {overallrating? (overallrating):("no overall rating yet")}</div>
-            {/* {fetchOverallRating()} */}
 
             {favourited? (
             <div>MY FAVOURITE</div>
@@ -340,11 +316,8 @@ const RecipeDetailsPage = () => {
             )}
 
             <button onClick={addFavourite}>Favourite</button>
-            {/* {console.log(favourited)} */}
-
 
             <button onClick={removeFavourite}>UnFavourite</button>
-            {/* {console.log(favourited)} */}
 
             <br></br>
 
@@ -358,13 +331,9 @@ const RecipeDetailsPage = () => {
                 <div>NOT LIKED</div>
             )}
 
-
             <button onClick={addLike}>Like</button>
-            {/* {console.log(favourited)} */}
-
 
             <button onClick={removeLike}>UnLike</button>
-            {/* {console.log(favourited)} */}
 
 
             <h2>Diets</h2>
