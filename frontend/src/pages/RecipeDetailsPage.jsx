@@ -78,15 +78,6 @@ const RecipeDetailsPage = () => {
         })
     }
 
-    // const fetchRating = () => {
-    //     fetch("http://localhost:8000/recipes/ratings/" + id + "/view/").then(response => response.json()).then(json => {
-    //         console.log("RECIPE DATA TO GET RATING", json.value)
-    //         setRating(json.value)
-    //         // sendRating(json.value)
-    //     })
-
-    // }
-
 
     // fetch all rating objects of this user
     // if the user has a rating object for this current recipe, 
@@ -163,10 +154,9 @@ const RecipeDetailsPage = () => {
             console.error("Error:", error)
         })
     }
-    // favouriting
+
     const isLiked = () => {
-        // get all favourite objects
-        // find this recipe+user. if doesnt exist, it is not favourited. if found, check if favourited
+
         const url = "http://localhost:8000/recipes/likes/"
         
         fetch(url, {method: "GET",
@@ -188,12 +178,8 @@ const RecipeDetailsPage = () => {
         })
     }
 
-    // FAVOURITES THIS RECIPE
     const addLike = () => {
-        // switchFavourited()
-        // setFavourited(!favourited)
         setLiked(true)
-        // console.log(`Sending new rating to server: ${favourited}`);
         const data = {
             liker: 1,
             like: true,
@@ -212,12 +198,8 @@ const RecipeDetailsPage = () => {
         })
     }
 
-    // FAVOURITES THIS RECIPE
     const removeLike = () => {
-        // switchFavourited()
-        // setFavourited(!favourited)
         setLiked(false)
-        // console.log(`Sending new rating to server: ${favourited}`);
         const data = {
             liker: 1,
             like: false,
