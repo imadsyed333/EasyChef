@@ -6,7 +6,7 @@ import RecipeList from "../components/Recipe/RecipeList";
 const MyRecipes = () => {
 
     let {token, refreshToken} = useContext(AccountContext)
-    console.log("token:", refreshToken)
+    // console.log("token:", localStorage.getItem("token"))
 
     const [myrecipes, setMyRecipes] = useState([])
     const [myinteractions, setMyInteractions] = useState([])
@@ -26,7 +26,7 @@ const MyRecipes = () => {
                 }})
                 .then(recipes => recipes.json())
                 .then(r => {
-                    console.log(r)
+                    console.log("recipes: ", r)
                     setMyRecipes(r)
                 }),
 
@@ -38,7 +38,7 @@ const MyRecipes = () => {
                 }})
                 .then(interactions => interactions.json())
                 .then(i => {
-                    console.log(i)
+                    console.log("interactions: ", i)
                     setMyInteractions(i)
                 }),
 
@@ -50,7 +50,7 @@ const MyRecipes = () => {
                 }})
                 .then(favourites => favourites.json())
                 .then(f => {
-                    console.log(f)
+                    console.log("favourites: ", f)
                     setMyFavourites(f)
                 })
             ])
@@ -61,9 +61,12 @@ const MyRecipes = () => {
     return (
         <div>
             <h1>Recipes I've Interacted With:</h1>
-            <RecipeList recipes={myrecipes}/>
-            <RecipeList recipes={myinteractions}/>
+            <h2>My Favourite Recipes:</h2>
             <RecipeList recipes={myfavourites}/>
+            <h2>My Recipes:</h2>
+            <RecipeList recipes={myrecipes}/>
+            <h2>My Interactions:</h2>
+            <RecipeList recipes={myinteractions}/>
         </div>
     )
 }
