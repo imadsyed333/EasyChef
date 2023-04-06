@@ -330,7 +330,7 @@ const RecipeDetailsPage = () => {
             <div>Current Rating: {rating? (rating):("no rating yet")}</div>
             {/* {fetchRating()} */}
 
-            <div>Overall Rating: {overallrating}</div>
+            <div>Overall Rating: {overallrating? (overallrating):("no overall rating yet")}</div>
             {/* {fetchOverallRating()} */}
 
             {favourited? (
