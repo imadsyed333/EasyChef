@@ -17,7 +17,8 @@ const RecipeDetailsPage = () => {
         prep_time: 0,
         servings: 1,
         steps: [],
-        comments: []
+        comments: [],
+        total_likes: 0
     })
 
     const [comment, setComment] = useState("")
@@ -25,10 +26,12 @@ const RecipeDetailsPage = () => {
     const [overallrating, setOverallRating] = useState(undefined)
     const [favourited, setFavourited] = useState(false)
     const [liked, setLiked] = useState(false)
-
+    const [totallikes, setTotalLikes] = useState(0)
+    
     useEffect(() => {
         fetchRecipeDetails()
         fetchRating()
+        fetchTotalLikes()
         fetchOverallRating()
         isFavourited()
         fetchRecipes()
@@ -79,6 +82,20 @@ const RecipeDetailsPage = () => {
     }
 
 
+    const fetchTotalLikes = () => {
+        fetch("http://localhost:8000/recipes/totallikes/")
+        .then(response => response.json())
+        // .then(json => console.log('jkdfhkjfahf ', json))
+        .then(json => json.find(item => item.id === parseInt(id)))
+        .then(curr_recipe => {
+            console.log("FETCH THIS RECIPE'S LIKES", curr_recipe)
+            console.log("TOTAL LIKES", curr_recipe.total_likes)
+            setTotalLikes(curr_recipe.total_likes)
+        })
+    }
+
+    
+
     // fetch all rating objects of this user
     // if the user has a rating object for this current recipe, 
     //     display it by doing setRating(curr_recipe.value) 
@@ -110,7 +127,6 @@ const RecipeDetailsPage = () => {
         })
 
     }
-
 
     const fetchOverallRating = () => {
         fetch("http://localhost:8000/recipes/overallratings/" + id + "/view/").then(response => response.json()).then(json => {
@@ -193,6 +209,7 @@ const RecipeDetailsPage = () => {
         }, body: JSON.stringify(data)}).then(response => response.json()).then(data => {
                 console.log("added like:", data); 
                 isLiked();
+                fetchTotalLikes();
             }).catch(error => {
             console.error("Error:", error)
         })
@@ -213,6 +230,7 @@ const RecipeDetailsPage = () => {
         }, body: JSON.stringify(data)}).then(response => response.json()).then(data => {
             console.log("removed like:", data)
             isLiked();
+            fetchTotalLikes();
             }).catch(error => {
             console.error("Error:", error)
         })
@@ -329,6 +347,9 @@ const RecipeDetailsPage = () => {
             {/* {console.log(favourited)} */}
 
             <br></br>
+
+
+            <div>TOTAL LIKES: {totallikes}</div>
 
 
             {liked? (
