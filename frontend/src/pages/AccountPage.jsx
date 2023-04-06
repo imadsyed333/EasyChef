@@ -1,6 +1,7 @@
 import MenuBar from "../components/MenuBar/MenuBar";
 import {useEffect, useState} from "react";
 import Button from "react-bootstrap/Button";
+
 const AccountPage = () => {
     const token = localStorage.getItem("token");
     const [firstN, setFirstN] = useState("");
@@ -10,10 +11,10 @@ const AccountPage = () => {
     const [email, setEmail] = useState("");
 
     const putdata = {
-        first_name:firstN,
-        last_name:lastN,
-        phone_number:phone,
-        avatar:avatar,
+        first_name: firstN,
+        last_name: lastN,
+        phone_number: phone,
+        avatar: avatar,
         email: email,
     }
 
@@ -29,9 +30,7 @@ const AccountPage = () => {
                     body: JSON.stringify(putdata)
                 })
         }
-        window.location.reload();
     }
-
 
 
     useEffect(() => {
@@ -59,7 +58,6 @@ const AccountPage = () => {
     }, [setFirstN, setLastN, setPhone, setAvatar])
 
 
-
     return (
         <div>
             <label>First name:
@@ -71,7 +69,7 @@ const AccountPage = () => {
 
             <label>Last name:
                 <input type={"text"} name={"last_name"} defaultValue={lastN}
-                onChange={(event) => setLastN(event.target.value)}>
+                       onChange={(event) => setLastN(event.target.value)}>
                 </input>
             </label>
             <br></br>
@@ -84,14 +82,14 @@ const AccountPage = () => {
 
             <label>Phone number:
                 <input type={"text"} name={"phone_number"} defaultValue={phone}
-                    onChange={(event) => setPhone(event.target.value)}>
+                       onChange={(event) => setPhone(event.target.value)}>
                 </input>
             </label>
             <br></br>
 
             <label>Avatar:
                 <input type={"image"} name={"avatar"} defaultValue={avatar}
-                    onChange={(event) => setAvatar(event.target.value)}>
+                       onChange={(event) => setAvatar(event.target.value)}>
                 </input>
             </label>
 
