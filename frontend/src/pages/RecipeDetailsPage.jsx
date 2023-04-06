@@ -325,7 +325,9 @@ const RecipeDetailsPage = () => {
             {/* {console.log("CURRENT RATING: ", newRating.value)} */}
 
             {/* <div>{recipe.overall_rating}</div> */}
-            <div>Current Rating: {rating}</div>
+
+            {/* if rating exists, display it. otherwise, display 'no rating exists' */}
+            <div>Current Rating: {rating? (rating):("no rating yet")}</div>
             {/* {fetchRating()} */}
 
             <div>Overall Rating: {overallrating}</div>
