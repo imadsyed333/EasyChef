@@ -387,17 +387,21 @@ const RecipeDetailsPage = () => {
                 ))}
             </ol>
             <h2>Comments Section</h2>
+            <hr></hr>
             {recipe.comments?.map(comment => (
                 <div key={comment.id}>
 
-                    {comment.media?.map(img => (<embed src={img.media} width="130px"></embed>))}
-                    <br></br>
-                    <div>{allusers.find(item => item.id === parseInt(comment.poster))?.avatar?(<img src={allusers.find(item => item.id === parseInt(comment.poster)).avatar} width="100px"></img> ):("")}</div>
-                    <div>{"Commenter: " + allusers.find(item => item.id === parseInt(comment.poster)).email}</div>
+                    <div>{allusers.find(item => item.id === parseInt(comment.poster))?.avatar?(<img src={allusers.find(item => item.id === parseInt(comment.poster)).avatar} width="75px"></img> ):("")}</div>
+                    {/* <br></br> */}
                     {/* {console.log("USERS: ", )} */}
+                    <div>{"Commenter: " + allusers.find(item => item.id === parseInt(comment.poster)).email}</div>
                     {console.log("NEW COMMENT: ", comment)}
                     <div>{"Comment: " + comment.content}</div>
-                    <br></br>
+
+                    {comment.media?.map(img => (<embed src={img.media} width="130px"></embed>))}
+
+                    {/* <br></br> */}
+                    <hr></hr>
 
                 </div>
             
