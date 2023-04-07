@@ -392,7 +392,7 @@ const RecipeDetailsPage = () => {
 
                     {comment.media?.map(img => (<embed src={img.media} width="130px"></embed>))}
                     <br></br>
-                    <div>{allusers.find(item => item.id === parseInt(comment.poster)).avatar?(<img src={allusers.find(item => item.id === parseInt(comment.poster)).avatar} width="100px"></img> ):("")}</div>
+                    <div>{allusers.find(item => item.id === parseInt(comment.poster))?.avatar?(<img src={allusers.find(item => item.id === parseInt(comment.poster)).avatar} width="100px"></img> ):("")}</div>
                     <div>{"Commenter: " + allusers.find(item => item.id === parseInt(comment.poster)).email}</div>
                     {/* {console.log("USERS: ", )} */}
                     {console.log("NEW COMMENT: ", comment)}
