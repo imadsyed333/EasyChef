@@ -391,8 +391,8 @@ const RecipeDetailsPage = () => {
             {recipe.comments?.map(comment => (
                 <div key={comment.id}>
 
-                    <div>{allusers.find(item => item.id === parseInt(comment.poster))?.avatar?(<img src={allusers.find(item => item.id === parseInt(comment.poster)).avatar} width="75px"></img> ):("")}</div>
-                    <div>{"Commenter: " + allusers.find(item => item.id === parseInt(comment.poster)).email}</div>
+                    <div>{allusers.find(item => item.id === parseInt(comment.poster))?.avatar?(<img src={allusers.find(item => item.id === parseInt(comment.poster))?.avatar} width="75px"></img> ):("")}</div>
+                    <div>{"Commenter: " + allusers.find(item => item.id === parseInt(comment.poster))?.email}</div>
                     {console.log("NEW COMMENT: ", comment)}
                     <div>{"Comment: " + comment.content}</div>
 
