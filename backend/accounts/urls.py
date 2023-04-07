@@ -1,6 +1,6 @@
 from django.urls import path
 
-from accounts.views import EditProfileView, SignupView, ProfileView
+from accounts.views import EditProfileView, SignupView, ProfileView, AllProfilesView
 
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
@@ -14,5 +14,6 @@ urlpatterns = [
     path('login/', TokenObtainPairView.as_view()),
     path('refresh/', TokenRefreshView.as_view()),
     path('logout/', TokenBlacklistView.as_view()),
-    path('profile/edit/', EditProfileView.as_view())
+    path('profile/edit/', EditProfileView.as_view()),
+    path('profiles/all/', AllProfilesView.as_view({'get': 'list'}))
 ]

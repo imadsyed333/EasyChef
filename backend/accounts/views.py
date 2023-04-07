@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from rest_framework import generics, status
+from rest_framework import generics, status, viewsets
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.generics import CreateAPIView
 from rest_framework.permissions import AllowAny
@@ -37,5 +37,10 @@ class EditProfileView(generics.UpdateAPIView):
     def get_object(self):
         return self.request.user
 
+
+class AllProfilesView(viewsets.ModelViewSet):
+    queryset = Account.objects.all()
+    permission_classes = [AllowAny]
+    serializer_class = AccountSerializer
 
 

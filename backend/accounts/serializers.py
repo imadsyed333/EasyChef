@@ -17,7 +17,8 @@ class AccountSerializer(serializers.ModelSerializer):
     password2 = serializers.CharField(write_only=True, required=True)
     class Meta:
         model = Account
-        fields = ('password', 'password2',
+        # ID IS THE PRIMARY KEY BC WE DONT SPECIFY EMAIL = PK
+        fields = ('id', 'password', 'password2',
                   'email', 'first_name', 'last_name', 'phone_number', 'avatar')
         # extra_kwargs = {
         #     'first_name': {'required': False},
