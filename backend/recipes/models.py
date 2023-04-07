@@ -81,6 +81,4 @@ class Like(models.Model):
     like = models.BooleanField(default=False)
     liker = models.ForeignKey(to=Account, on_delete=models.CASCADE, related_name='recipe_likes')
 
-# class CartItem(models.Model):
-#     recipe = models.ForeignKey(to=Recipe, on_delete=models.CASCADE)
-#     added = models.BooleanField(default=False)
+
