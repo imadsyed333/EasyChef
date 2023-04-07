@@ -392,15 +392,21 @@ const RecipeDetailsPage = () => {
                 <div key={comment.id}>
 
                     <div>{allusers.find(item => item.id === parseInt(comment.poster))?.avatar?(<img src={allusers.find(item => item.id === parseInt(comment.poster)).avatar} width="75px"></img> ):("")}</div>
-                    {/* <br></br> */}
-                    {/* {console.log("USERS: ", )} */}
                     <div>{"Commenter: " + allusers.find(item => item.id === parseInt(comment.poster)).email}</div>
                     {console.log("NEW COMMENT: ", comment)}
                     <div>{"Comment: " + comment.content}</div>
 
-                    {comment.media?.map(img => (<embed src={img.media} width="130px"></embed>))}
+                    {/* Conditional rendering: if media is video, render as video. otherwise, render as image. */}
+                    {comment.media?.map(comment_media => 
+                        ((comment_media.media.split(".")[1] === "mp4") || 
+                        (comment_media.media.split(".")[1] === "avi") ||
+                        (comment_media.media.split(".")[1] === "MOV") ||
+                        (comment_media.media.split(".")[1] === "webm")  )? 
+                            (<video width="150" controls >
+                                <source src={comment_media.media} />
+                            </video>):
+                            (<embed src={comment_media.media} width="130px"></embed>) )}
 
-                    {/* <br></br> */}
                     <hr></hr>
 
                 </div>
