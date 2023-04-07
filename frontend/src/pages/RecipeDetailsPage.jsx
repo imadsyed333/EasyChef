@@ -22,6 +22,7 @@ const RecipeDetailsPage = () => {
     })
 
     const [comment, setComment] = useState("")
+    // const [comm_media, setCommentMedia] = useState([])
     const [rating, setRating] = useState(undefined)
     const [overallrating, setOverallRating] = useState(undefined)
     const [favourited, setFavourited] = useState(false)
@@ -71,38 +72,6 @@ const RecipeDetailsPage = () => {
             })
 
     }
-
-    // bruh why'd i think we needed to get the comments :sob:
-    // const fetchAllComments = () => {
-    //     fetch("http://localhost:8000/recipes/comments/all/")
-    //     .then(response => response.json())
-    //     .then(json => {
-    //         console.log("This recipes's comments: ", json.results)
-    //         setComments(json.results)
-    //     })
-
-    // }
-    
-
-    const sendComment = () => {
-        console.log("token:", token)
-        const data = {
-            poster: 1,
-            content: comment,
-            recipe: parseInt(id)
-        }
-        console.log("I am being called")
-        fetch("http://localhost:8000/recipes/comments/add/", {method: "POST",
-        headers: {
-            "Content-type": "application/json",
-            "Authorization": "Bearer " + token
-        },
-        body: JSON.stringify(data)}).then(response => response.json()).then(data => {console.log("Success:", data)
-        fetchRecipeDetails()}).catch(error => {
-            console.error("Error:", error)
-        })
-    }
-
 
     const fetchTotalLikes = () => {
         fetch("http://localhost:8000/recipes/totallikes/")
@@ -317,6 +286,37 @@ const RecipeDetailsPage = () => {
         })
     }
 
+    // bruh why'd i think we needed to get the comments :sob:
+    // const fetchAllComments = () => {
+    //     fetch("http://localhost:8000/recipes/comments/all/")
+    //     .then(response => response.json())
+    //     .then(json => {
+    //         console.log("This recipes's comments: ", json.results)
+    //         setComments(json.results)
+    //     })
+
+    // }
+    
+
+    const sendComment = () => {
+        console.log("token:", token)
+        const data = {
+            poster: 1,
+            content: comment,
+            // media: comm_media,
+            recipe: parseInt(id)
+        }
+        console.log("I am being called")
+        fetch("http://localhost:8000/recipes/comments/add/", {method: "POST",
+        headers: {
+            "Content-type": "application/json",
+            "Authorization": "Bearer " + token
+        },
+        body: JSON.stringify(data)}).then(response => response.json()).then(data => {console.log("Success:", data)
+        fetchRecipeDetails()}).catch(error => {
+            console.error("Error:", error)
+        })
+    }
 
 
     return (
@@ -388,8 +388,17 @@ const RecipeDetailsPage = () => {
             </ol>
             <h2>Comments Section</h2>
             <hr></hr>
-            <textarea value={comment} onChange={(e) => setComment(e.target.value)}/>
-            <Button onClick={sendComment}>comment</Button>
+
+            <form>
+                <input type="text" value={comment} onChange={(e) => setComment(e.target.value)}/>
+
+                {/* <input type="file" value={comm_media} onChange={(e) => setComment(e.target.files[0])}/> */}
+            
+                <Button onClick={sendComment}>comment</Button>
+
+            </form>
+
+
             <hr></hr>
 
             {recipe.comments?.slice(0).reverse().map(comment => (

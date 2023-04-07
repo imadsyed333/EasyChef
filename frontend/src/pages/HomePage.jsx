@@ -19,7 +19,7 @@ const HomePage = () => {
         <div>
             <h1>Welcome to EasyChef</h1>
 
-            <h3>Popular Recipes:</h3>
+            <h3>Popular Recipes</h3>
             <div>
                 <h4>Highest Overall Rating: </h4>
                 <RecipeList recipes={topratedrecipes}/>
