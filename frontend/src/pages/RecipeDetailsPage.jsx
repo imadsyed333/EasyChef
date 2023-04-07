@@ -28,6 +28,7 @@ const RecipeDetailsPage = () => {
     const [liked, setLiked] = useState(false)
     const [totallikes, setTotalLikes] = useState(0)
     // const [comments, setComments] = useState([])
+    const [allusers, setAllUsers] = useState([])
     
     useEffect(() => {
         fetchRecipeDetails()
@@ -38,6 +39,7 @@ const RecipeDetailsPage = () => {
         isFavourited()
         fetchRecipes()
         isLiked()
+        fetchAllUsers()
         console.log("favourited: ", favourited)
         // updateFavourite()
         console.log("recipe name: ", recipe.name)
@@ -57,6 +59,17 @@ const RecipeDetailsPage = () => {
         fetch("http://localhost:8000/recipes/all/").then(response => response.json()).then(json => {
             console.log("ALLLLL", json.results.find(item => item.id === parseInt(id)))
         })
+    }
+
+
+    const fetchAllUsers = () => {
+            fetch("http://localhost:8000/accounts/profiles/all/")
+            .then(response => response.json())
+            .then(json => {
+                console.log("Users: ", json.results)
+                setAllUsers(json.results)
+            })
+
     }
 
     // bruh why'd i think we needed to get the comments :sob:
@@ -379,7 +392,13 @@ const RecipeDetailsPage = () => {
 
                     {comment.media?.map(img => (<embed src={img.media} width="130px"></embed>))}
                     <br></br>
-                    <li>{comment.content}</li>
+                    <div>{allusers.find(item => item.id === parseInt(comment.poster)).avatar?(<img src={allusers.find(item => item.id === parseInt(comment.poster)).avatar} width="100px"></img> ):("")}</div>
+                    <div>{"Commenter: " + allusers.find(item => item.id === parseInt(comment.poster)).email}</div>
+                    {/* {console.log("USERS: ", )} */}
+                    {console.log("NEW COMMENT: ", comment)}
+                    <div>{"Comment: " + comment.content}</div>
+                    <br></br>
+
                 </div>
             
             ))}
