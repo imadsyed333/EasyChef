@@ -388,7 +388,11 @@ const RecipeDetailsPage = () => {
             </ol>
             <h2>Comments Section</h2>
             <hr></hr>
-            {recipe.comments?.map(comment => (
+            <textarea value={comment} onChange={(e) => setComment(e.target.value)}/>
+            <Button onClick={sendComment}>comment</Button>
+            <hr></hr>
+
+            {recipe.comments?.slice(0).reverse().map(comment => (
                 <div key={comment.id}>
 
                     <div>{allusers.find(item => item.id === parseInt(comment.poster))?.avatar?(<img src={allusers.find(item => item.id === parseInt(comment.poster))?.avatar} width="75px"></img> ):("")}</div>
@@ -416,8 +420,6 @@ const RecipeDetailsPage = () => {
             {/* might not need this */}
             {/* <div>{(comments !== [])?(comments[0].content):('no comments yet')}</div> */}
 
-            <textarea value={comment} onChange={(e) => setComment(e.target.value)}/>
-            <Button onClick={sendComment}>comment</Button>
         </div>
         // </>
 
