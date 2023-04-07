@@ -174,7 +174,7 @@ class RecipeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Recipe
-        fields = ["id", "total_likes", 'name', 'media', 'diets', 'diet_ids', 'cuisines', 'cuisine_ids', 'ingredients', 'ingredient_ids', 'prep_time', 'cooking_time', 'steps', 'servings', 'comments']
+        fields = ["id", "total_likes", "total_favourites", "overall_rating", 'name', 'media', 'diets', 'diet_ids', 'cuisines', 'cuisine_ids', 'ingredients', 'ingredient_ids', 'prep_time', 'cooking_time', 'steps', 'servings', 'comments']
 
     def create(self, validated_data):
         diets = validated_data.pop('diet_ids', None)
