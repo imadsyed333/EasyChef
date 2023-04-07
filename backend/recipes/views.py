@@ -14,6 +14,9 @@ from recipes.serializers import RecipeSerializer, DietSerializer, CommentSeriali
         FavouriteSerializer, OverallRatingSerializer, LikeSerializer, CommentMediaSerializer
 
 from rest_framework import filters
+from rest_framework.views import APIView
+
+
 # Create your views here.
 class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
@@ -153,4 +156,17 @@ class MyRecipesView(ListAPIView):
         queryset = account.recipes.all()
         serializer = RecipeSerializer(queryset, many=True)
         return Response(serializer.data)
+
+
+class AddToCart(APIView):
+    permission_classes = [IsAuthenticated]
+    def post(self, request):
+        r = request.data['recipe']
+        user = request.user
+        user.shopping_list.add(r)
+        return Response(request.data)
+
+
+
+
 
