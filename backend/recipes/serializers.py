@@ -70,7 +70,7 @@ class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
         # fields = ["recipe", "content"]
-        fields = ["id", "recipe", "content", "media"]
+        fields = ["id", "poster", "recipe", "content", "media"]
 
     def create(self, validated_data):
         comment = Comment.objects.create(content=validated_data['content'],
