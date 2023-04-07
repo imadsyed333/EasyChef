@@ -393,7 +393,7 @@ const RecipeDetailsPage = () => {
 
                     <div>{allusers.find(item => item.id === parseInt(comment.poster))?.avatar?(<img src={allusers.find(item => item.id === parseInt(comment.poster))?.avatar} width="75px"></img> ):("")}</div>
                     <div>{"Commenter: " + allusers.find(item => item.id === parseInt(comment.poster))?.email}</div>
-                    {console.log("NEW COMMENT: ", comment)}
+                    {/* {console.log("NEW COMMENT: ", comment)} */}
                     <div>{"Comment: " + comment.content}</div>
 
                     {/* Conditional rendering: if media is video, render as video. otherwise, render as image. */}
