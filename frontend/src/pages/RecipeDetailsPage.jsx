@@ -299,6 +299,9 @@ const RecipeDetailsPage = () => {
     
 
     const sendComment = () => {
+        // clear the comment
+        setComment("")
+
         console.log("token:", token)
         const data = {
             poster: 1,
