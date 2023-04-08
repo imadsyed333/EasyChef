@@ -5,7 +5,8 @@ const CuisineDietForm = ({type, items, setItems}) => {
     const [item, setItem] = useState("")
 
     const handleAdd = () => {
-        setItems([...items, item])
+        const data = {"name": item}
+        setItems([...items, data])
     }
 
     return (
@@ -16,6 +17,11 @@ const CuisineDietForm = ({type, items, setItems}) => {
             <Button onClick={() => {
                 handleAdd()
             }}>Add {type}</Button>
+            {items.map((item, index) => (
+                <div key={index}>
+                    {item.name}
+                </div>
+            ))}
         </div>
     )
 }
