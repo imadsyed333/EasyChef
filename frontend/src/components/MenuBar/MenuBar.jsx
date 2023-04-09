@@ -8,9 +8,7 @@ import Nav from 'react-bootstrap/Nav'
 import {Navbar} from "react-bootstrap";
 
 const MenuBar = () => {
-
-    const {token, setToken} = useContext(AccountContext)
-    const [user, setUser] = useState({})
+    const {username, token, setToken, setUsername} = useContext(AccountContext)
 
     useEffect(() => {
         if (token.length > 0) { //get rid of token == null
@@ -18,7 +16,9 @@ const MenuBar = () => {
                 headers: {
                     "Authorization": "Bearer " + token
                 }
-            }).then(response => response.json()).then(json => setUser(json))
+            }).then(response => response.json()).then(json => {
+                setUsername(json.first_name)
+            })
         }
     }, [token])
 
@@ -42,7 +42,7 @@ const MenuBar = () => {
             return (
                 <Navbar.Collapse className={"justify-content-end"}>
                     <NavBar.Text style={{marginRight: ".5rem"}}>
-                        Hello {user.first_name}!
+                        Hello {username}!
                     </NavBar.Text>
                     <Nav.Link as={Link} to={"/"} onClick={logout}>Log Out</Nav.Link>
                 </Navbar.Collapse>
@@ -60,6 +60,14 @@ const MenuBar = () => {
         }
     }
 
+    const addRecipe = () => {
+        if (token) {
+            return (
+                <Nav.Link as={Link} to={"/recipe/add/"}>Add Recipe</Nav.Link>
+            )
+        }
+    }
+
     return (
         <>
             <Navbar bg="light" variant="light">
@@ -70,6 +78,7 @@ const MenuBar = () => {
                     <Nav className="me-auto">
                         <Nav.Link as={Link} to="/">Home</Nav.Link>
                         <Nav.Link as={Link} to="/myrecipes">My Recipes</Nav.Link>
+                        {addRecipe()}
                         <Nav.Link as={Link} to={"/cart"}>Shopping Cart</Nav.Link>
                     </Nav>
                     {authLinks()}

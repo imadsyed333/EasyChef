@@ -11,6 +11,9 @@ import RecipeDetailsPage from "./pages/RecipeDetailsPage";
 import MenuBar from "./components/MenuBar/MenuBar";
 import AccountContext, {useAccountContext} from "./contexts/AccountContext";
 import RegisterPage from "./pages/RegisterPage";
+import RecipeForm from "./components/Forms/RecipeForm/RecipeForm";
+import AddRecipePage from "./pages/AddRecipePage";
+import EditRecipePage from "./pages/EditRecipePage";
 
 function App() {
     return (
@@ -20,6 +23,10 @@ function App() {
                     <Route path="/" element={<MenuBar/>}>
                         <Route path={"recipe/"}>
                             <Route path={":id"} element={<RecipeDetailsPage/>}/>
+                            <Route path={"edit/"}>
+                                <Route path={":id"} element={<EditRecipePage/>}/>
+                            </Route>
+                            <Route path={"add"} element={<AddRecipePage/>}/>
                         </Route>
                         <Route path="myrecipes" element={<MyRecipes/>}/>
                         <Route path={"signup"} element={<RegisterPage/>}/>
