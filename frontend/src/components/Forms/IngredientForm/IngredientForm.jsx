@@ -1,5 +1,6 @@
 import {useState} from "react";
 import Button from "react-bootstrap/Button";
+import Card from "react-bootstrap/Card";
 
 const IngredientForm = ({ingredients, setIngredients}) => {
     const [name, setName] = useState("")
@@ -17,7 +18,7 @@ const IngredientForm = ({ingredients, setIngredients}) => {
     return (
         <div>
             <label>
-                Enter name:
+                Enter ingredient:
                 <input type={"text"} name={"name"} value={name} onChange={e => setName(e.target.value)}/>
             </label>
             <br/>
