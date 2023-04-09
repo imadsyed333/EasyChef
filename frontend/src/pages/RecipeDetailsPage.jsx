@@ -16,7 +16,8 @@ const RecipeDetailsPage = () => {
         prep_time: 0,
         servings: 1,
         steps: [],
-        comments: []
+        comments: [],
+        media: []
     })
 
     const [comment, setComment] = useState("")
@@ -73,6 +74,12 @@ const RecipeDetailsPage = () => {
             <ul>
                 {recipe.cuisines?.map(cuisine => (
                     <li key={cuisine.id}>{cuisine.name}</li>
+                ))}
+            </ul>
+            <h2>Ingredients</h2>
+            <ul>
+                {recipe.ingredients?.map((ingredient, i) => (
+                    <li key={i}>{ingredient.amount} of {ingredient.name}</li>
                 ))}
             </ul>
             <h2>Steps</h2>
