@@ -12,7 +12,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from accounts.models import Account
 from accounts.serializers import AccountSerializer, UpdateUserSerializer
 
-from recipes.serializers import ShoppingListSerializer, RecipeSerializer
+from recipes.serializers import RecipeSerializer
 
 
 # Code inspired by https://medium.com/django-rest/django-rest-framework-jwt-authentication-94bee36f2af8
@@ -44,6 +44,5 @@ class ShoppingListView(ListAPIView):
     def list(self, request, *args, **kwargs):
         account = request.user
         queryset = account.shopping_list
-        serializer = ShoppingListSerializer(queryset, many=True)
-        # serializer = RecipeSerializer(queryset, many=True)
+        serializer = RecipeSerializer(queryset, many=True)
         return Response(serializer.data)

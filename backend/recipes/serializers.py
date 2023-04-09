@@ -320,26 +320,7 @@ class LikeSerializer(serializers.ModelSerializer):
 
         return like
 
-class ShoppingListSerializer(serializers.ModelSerializer):
 
-    ingredients = IngredientSerializer(many=True, required=False)
-    ingredient_ids = serializers.PrimaryKeyRelatedField(many=True,
-                                                        write_only=True,
-                                                        queryset=Ingredient.objects.all())
-
-    class Meta:
-        model = Recipe
-        fields = ["name", "servings", "ingredients", "ingredient_ids"]
-    def create(self, validated_data):
-        ingredients = validated_data.pop('ingredient_ids', None)
-
-        validated_data['creator'] = self.context['request'].user
-        recipe = Recipe.objects.create(**validated_data)
-
-        if ingredients:
-            recipe.ingredients.set(ingredients)
-
-        return recipe
 
 
 

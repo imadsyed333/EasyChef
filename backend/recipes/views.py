@@ -164,7 +164,7 @@ class AddToCart(APIView):
         r = request.data['recipe']
         user = request.user
         user.shopping_list.add(r)
-        return Response(request.data)
+        return Response("Success added recipe")
 
 class RemoveFromCart(APIView):
     permission_classes = [IsAuthenticated]
@@ -172,7 +172,7 @@ class RemoveFromCart(APIView):
         r = request.data['recipe']
         user = request.user
         user.shopping_list.remove(r)
-        return Response(request.data)
+        return Response("Success deleted recipe")
 
 
 

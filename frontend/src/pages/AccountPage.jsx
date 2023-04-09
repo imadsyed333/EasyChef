@@ -47,7 +47,7 @@ const AccountPage = () => {
                 })
                 .then(data => data.json())
                 .then(r => {
-                    console.log(r)
+                    // console.log(r)
                     setFirstN(r.first_name)
                     setLastN(r.last_name)
                     setPhone(r.phone_number)
