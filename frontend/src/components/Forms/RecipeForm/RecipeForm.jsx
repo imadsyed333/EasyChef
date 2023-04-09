@@ -3,6 +3,7 @@ import Button from "react-bootstrap/Button";
 import CuisineDietForm from "../CuisineDietForm/CuisineDietForm";
 import IngredientForm from "../IngredientForm/IngredientForm";
 import AccountContext from "../../../contexts/AccountContext";
+import StepForm from "../StepForm/StepForm";
 
 const RecipeForm = () => {
     const {token} = useContext(AccountContext)
@@ -16,6 +17,8 @@ const RecipeForm = () => {
     const [diets, setDiets] = useState([])
     const [ingredients, setIngredients] = useState([])
 
+    const [steps, setSteps] = useState([])
+
     const handleAdd = () => {
         const recipe = {
             name: name,
@@ -24,7 +27,8 @@ const RecipeForm = () => {
             cuisines: cuisines,
             ingredients: ingredients,
             cooking_time: cookingTime,
-            servings: servings
+            servings: servings,
+            steps: steps
         }
         fetch("http://localhost:8000/recipes/create/", {
             method: "POST",
@@ -63,6 +67,8 @@ const RecipeForm = () => {
             <CuisineDietForm type={"diets"} items={diets} setItems={setDiets}/>
             <br/>
             <IngredientForm ingredients={ingredients} setIngredients={setIngredients}/>
+            <br/>
+            <StepForm steps={steps} setSteps={setSteps}/>
             <br/>
             <Button onClick={handleAdd}>Add Recipe</Button>
         </div>
