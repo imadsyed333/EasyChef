@@ -7,17 +7,17 @@ from recipes.views import RecipeViewSet, DietViewSet, CommentViewSet, \
     SearchAPIView, StepViewSet, StepMediaViewSet, RecipeMediaViewSet, \
     FavouriteViewSet, MostFavouritedViewSet, OverallRatingViewSet, \
     LikeViewSet, MostLikedViewSet, MyFavouritesView, MyInteractionsView, \
-    MyRecipesView, CommentMediaViewSet, RecipeView
+    MyRecipesView, CommentMediaViewSet, NewRecipeViewSet
 
 urlpatterns = [
-    path('add/', RecipeViewSet.as_view({'post': 'create'})),
-    path('<int:pk>/view/', RecipeViewSet.as_view({'get': 'retrieve'})),
-    path('<int:pk>/delete/', RecipeViewSet.as_view({'get': 'destroy'})),
     path('all/', RecipeViewSet.as_view({'get': 'list'})),
-
-    path('create/', RecipeView.as_view()),
+    path('create/', NewRecipeViewSet.as_view({'post': 'create'})),
+    path('<int:pk>/view/', NewRecipeViewSet.as_view({'get': 'retrieve'})),
+    path('<int:pk>/delete/', NewRecipeViewSet.as_view({'delete': 'destroy'})),
+    path('<int:pk>/update/', NewRecipeViewSet.as_view({'put': 'update'})),
 
     path('diets/add/', DietViewSet.as_view({'post': 'create'})),
+    path('diets/<int:pk>/view/', DietViewSet.as_view({'get': 'retrieve'})),
     path('ingredients/add/', IngredientViewSet.as_view({'post': 'create'})),
     path('cuisines/add/', CuisineViewSet.as_view({'post': 'create'})),
     path('cuisines/all/', CuisineViewSet.as_view({'get': 'list'})),

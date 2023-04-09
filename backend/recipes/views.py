@@ -14,6 +14,7 @@ from recipes.serializers import RecipeSerializer, DietSerializer, CommentSeriali
     FavouriteSerializer, OverallRatingSerializer, LikeSerializer, CommentMediaSerializer, NewRecipeSerializer
 
 from rest_framework import filters
+from rest_framework.viewsets import ViewSet, ModelViewSet
 
 
 # Create your views here.
@@ -172,6 +173,13 @@ class MyRecipesView(ListAPIView):
         return Response(serializer.data)
 
 
-class RecipeView(CreateAPIView):
+class NewRecipeViewSet(ModelViewSet):
     queryset = Recipe.objects.all()
     serializer_class = NewRecipeSerializer
+
+    def get_permissions(self):
+        if self.action not in ['list', 'retrieve']:
+            permission_classes = [IsAuthenticated]
+        else:
+            permission_classes = [AllowAny]
+        return [permission() for permission in permission_classes]

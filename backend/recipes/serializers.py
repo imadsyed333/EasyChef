@@ -9,6 +9,7 @@ from rest_framework.fields import CurrentUserDefault
 
 
 class DietSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(required=False)
     name = serializers.CharField()
 
     class Meta:
@@ -21,6 +22,8 @@ class DietSerializer(serializers.ModelSerializer):
 
 
 class RecipeMediaSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(required=False)
+
     class Meta:
         model = RecipeMedia
         fields = ["id", "media", "recipe"]
@@ -32,6 +35,8 @@ class RecipeMediaSerializer(serializers.ModelSerializer):
 
 
 class StepMediaSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(required=False)
+
     class Meta:
         model = StepMedia
         fields = ["id", "step", "media"]
@@ -43,6 +48,7 @@ class StepMediaSerializer(serializers.ModelSerializer):
 
 
 class StepSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(required=False)
     media = StepMediaSerializer(many=True, required=False)
 
     class Meta:
@@ -57,12 +63,16 @@ class StepSerializer(serializers.ModelSerializer):
 
 
 class CuisineSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(required=False)
+
     class Meta:
         model = Cuisine
         fields = ["id", "name"]
 
 
 class IngredientSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(required=False)
+
     class Meta:
         model = Ingredient
         fields = ["id", "name", "amount"]
@@ -80,6 +90,7 @@ class CommentMediaSerializer(serializers.ModelSerializer):
 
 
 class CommentSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(required=False)
     media = CommentMediaSerializer(many=True, required=False)
 
     class Meta:
@@ -187,6 +198,79 @@ class NewRecipeSerializer(serializers.ModelSerializer):
             recipe.steps.add(step)
 
         return recipe
+
+    def update(self, instance, validated_data):
+        instance.name = validated_data['name']
+        instance.prep_time = validated_data['prep_time']
+        instance.cooking_time = validated_data['cooking_time']
+        instance.servings = validated_data['servings']
+
+        diets_copy = []
+        cuisines_copy = []
+        ingredients_copy = []
+        steps_copy = []
+
+        diets = validated_data.pop('diets', [])
+        cuisines = validated_data.pop('cuisines', [])
+        ingredients = validated_data.pop('ingredients', [])
+        steps = validated_data.pop('steps', [])
+
+        for item in diets:
+            item_id = item.get('id', None)
+            print(item_id, item['name'])
+            print(diets)
+            if item_id:
+                diet = Diet.objects.get(id=item_id)
+                diet.name = item['name']
+                diet.save()
+            else:
+                diet = Diet.objects.create(name=item['name'])
+            diets_copy.append(diet)
+
+        for item in cuisines:
+            item_id = item.get('id', None)
+            if item_id:
+                cuisine = Cuisine.objects.get(id=item_id)
+                cuisine.name = item['name']
+                cuisine.save()
+            else:
+                cuisine = Cuisine.objects.create(name=item['name'])
+            cuisines_copy.append(cuisine)
+
+        for item in ingredients:
+            item_id = item.get('id', None)
+            if item_id:
+                ingredient = Ingredient.objects.get(id=item_id)
+                ingredient.name = item['name']
+                ingredient.amount = item['amount']
+                ingredient.save()
+            else:
+                ingredient = Ingredient.objects.create(name=item['name'], amount=item['amount'])
+                instance.ingredients.add(ingredient)
+            ingredients_copy.append(ingredient)
+
+        for item in steps:
+            item_id = item.get('id', None)
+            if item_id:
+                step = Step.objects.get(id=item_id)
+                step.content = item['content']
+                step.cooking_time = item['cooking_time']
+                step.prep_time = item['prep_time']
+                step.save()
+            else:
+                step = Step.objects.create(content=item['content'], prep_time=item['prep_time'],
+                                           cooking_time=item['cooking_time'],
+                                           recipe_id=instance.id)
+            steps_copy.append(step)
+
+        instance.diets.set(diets_copy)
+        instance.cuisines.set(cuisines_copy)
+        instance.ingredients.set(ingredients_copy)
+        instance.steps.set(steps_copy)
+
+        instance.save()
+
+        return instance
 
 
 class RatingSerializer(serializers.ModelSerializer):

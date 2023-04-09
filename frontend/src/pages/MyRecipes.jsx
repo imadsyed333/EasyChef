@@ -16,7 +16,6 @@ const MyRecipes = () => {
         // have 3 fetch calls for each endpoint, set each state and render separately 
         if (token) {
             Promise.all([
-
                 fetch("http://localhost:8000/recipes/recipes/",
                     {
                         method: "GET",
@@ -67,7 +66,7 @@ const MyRecipes = () => {
         <div>
             <h1>Recipes I've Interacted With:</h1>
             <h2>My Recipes</h2>
-            <RecipeList recipes={myrecipes}/>
+            <RecipeList recipes={myrecipes} setRecipes={setMyRecipes} isOwner={true}/>
             <h2>My Interactions</h2>
             <RecipeList recipes={myinteractions}/>
             <h2>My Favourites</h2>

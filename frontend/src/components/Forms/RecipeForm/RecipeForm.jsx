@@ -1,12 +1,15 @@
-import {useContext, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import Button from "react-bootstrap/Button";
 import CuisineDietForm from "../CuisineDietForm/CuisineDietForm";
 import IngredientForm from "../IngredientForm/IngredientForm";
 import AccountContext from "../../../contexts/AccountContext";
 import StepForm from "../StepForm/StepForm";
+import {useNavigate} from "react-router-dom";
 
-const RecipeForm = () => {
+const RecipeForm = ({edit, recipeId}) => {
     const {token} = useContext(AccountContext)
+
+    const navigate = useNavigate()
 
     const [name, setName] = useState("")
     const [prepTime, setPrepTime] = useState(0)
@@ -19,7 +22,22 @@ const RecipeForm = () => {
 
     const [steps, setSteps] = useState([])
 
-    const handleAdd = () => {
+    useEffect(() => {
+        if (edit) {
+            fetch("http://localhost:8000/recipes/" + recipeId + "/view/").then(response => response.json()).then(json => {
+                setName(json.name)
+                setPrepTime(json.prep_time)
+                setCookingTime(json.cooking_time)
+                setServings(json.servings)
+                setDiets(json.diets)
+                setCuisines(json.cuisines)
+                setIngredients(json.ingredients)
+                setSteps(json.steps)
+            })
+        }
+    }, [])
+
+    const handleAction = () => {
         const recipe = {
             name: name,
             prep_time: prepTime,
@@ -30,14 +48,17 @@ const RecipeForm = () => {
             servings: servings,
             steps: steps
         }
-        fetch("http://localhost:8000/recipes/create/", {
-            method: "POST",
+        fetch(edit ? "http://localhost:8000/recipes/" + recipeId + "/update/" : "http://localhost:8000/recipes/create/", {
+            method: edit ? "PUT" : "POST",
             headers: {
                 "Authorization": "Bearer " + token,
                 "Content-type": "application/json"
             },
             body: JSON.stringify(recipe)
-        }).then(response => response.json()).then(json => console.log(json))
+        }).then(response => response.json()).then(json => {
+            console.log(json)
+            navigate("/recipe/" + json.id)
+        })
     }
 
     return (
@@ -70,7 +91,7 @@ const RecipeForm = () => {
             <br/>
             <StepForm steps={steps} setSteps={setSteps}/>
             <br/>
-            <Button onClick={handleAdd}>Add Recipe</Button>
+            <Button onClick={handleAction}>{edit ? "Save Changes" : "Add Recipe"}</Button>
         </div>
     )
 
