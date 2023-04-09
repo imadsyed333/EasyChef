@@ -16,6 +16,12 @@ const StepForm = ({steps, setSteps}) => {
         setSteps([...steps, step])
     }
 
+    const handleDelete = (id) => {
+        const new_steps = [...steps]
+        new_steps.splice(id, 1)
+        setSteps(new_steps)
+    }
+
     return (
         <div>
             <label>
@@ -41,6 +47,7 @@ const StepForm = ({steps, setSteps}) => {
                     {index + 1}.{step.content}
                     {step.prep_time}
                     {step.cooking_time}
+                    <Button onClick={() => handleDelete(index)}>Delete Me</Button>
                 </div>
             ))}
         </div>

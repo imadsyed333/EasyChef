@@ -15,6 +15,12 @@ const IngredientForm = ({ingredients, setIngredients}) => {
         setIngredients([...ingredients, ingredient])
     }
 
+    const handleDelete = (id) => {
+        const new_ingredients = [...ingredients]
+        new_ingredients.splice(id, 1)
+        setIngredients(new_ingredients)
+    }
+
     return (
         <div>
             <label>
@@ -34,6 +40,7 @@ const IngredientForm = ({ingredients, setIngredients}) => {
                     {ingredient.name}
                     <br/>
                     {ingredient.amount}
+                    <Button onClick={() => handleDelete(index)}>Delete Me</Button>
                 </div>
             ))}
         </div>

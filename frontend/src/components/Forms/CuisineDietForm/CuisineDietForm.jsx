@@ -9,6 +9,12 @@ const CuisineDietForm = ({type, items, setItems}) => {
         setItems([...items, data])
     }
 
+    const handleDelete = (id) => {
+        const new_items = [...items]
+        new_items.splice(id, 1)
+        setItems(new_items)
+    }
+
     return (
         <div>
             <label>Enter {type}:
@@ -20,6 +26,7 @@ const CuisineDietForm = ({type, items, setItems}) => {
             {items.map((item, index) => (
                 <div key={index}>
                     {item.name}
+                    <Button onClick={() => handleDelete(index)}>Delete Me</Button>
                 </div>
             ))}
         </div>
