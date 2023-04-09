@@ -274,6 +274,7 @@ class NewRecipeSerializer(serializers.ModelSerializer):
 
 
 class RatingSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Rating
         fields = ["id", "recipe", "value"]
@@ -289,8 +290,8 @@ class RatingSerializer(serializers.ModelSerializer):
         print("ADD RECIPE RATING: ", recipe, " -- ", validated_data['value'], "out of 5")
 
         rating, created = Rating.objects.update_or_create(recipe=validated_data['recipe'],
-                                                          poster=self.context['request'].user,
-                                                          defaults={'value': validated_data['value']})
+                                                    poster=self.context['request'].user,
+                                                    defaults={'value': validated_data['value']})
         rating.save()
         # UPDATE RECIPE'S OVERALL RATING:
         # if overall rating is not null
@@ -325,6 +326,7 @@ class OverallRatingSerializer(serializers.ModelSerializer):
 
 
 class FavouriteSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Favourite
         fields = ["id", "recipe", "favourite"]
@@ -395,6 +397,7 @@ class FavouriteSerializer(serializers.ModelSerializer):
 
 
 class LikeSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Like
         fields = ["id", "recipe", "like"]
@@ -463,3 +466,11 @@ class LikeSerializer(serializers.ModelSerializer):
             print('-likers: ', liked_recipe.likers.all())
 
         return like
+
+
+
+
+
+
+
+

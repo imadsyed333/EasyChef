@@ -14,6 +14,7 @@ from recipes.serializers import RecipeSerializer, DietSerializer, CommentSeriali
     FavouriteSerializer, OverallRatingSerializer, LikeSerializer, CommentMediaSerializer, NewRecipeSerializer
 
 from rest_framework import filters
+from rest_framework.views import APIView
 from rest_framework.viewsets import ViewSet, ModelViewSet
 
 
@@ -172,6 +173,40 @@ class MyRecipesView(ListAPIView):
         serializer = RecipeSerializer(queryset, many=True)
         return Response(serializer.data)
 
+class AddToCart(APIView):
+    permission_classes = [IsAuthenticated]
+    def post(self, request):
+        r = request.data['recipe']
+        user = request.user
+        user.shopping_list.add(r)
+        return Response("Success added recipe")
+
+class RemoveFromCart(APIView):
+    permission_classes = [IsAuthenticated]
+    def post(self, request):
+        r = request.data['recipe']
+        user = request.user
+        user.shopping_list.remove(r)
+        return Response("Success deleted recipe")
+
+class UpdateServings(APIView):
+    permission_classes = [IsAuthenticated]
+    def post(self, request):
+        r = request.data['recipe']
+        recipe = Recipe.objects.get(id=r)
+        old_s = int(recipe.servings)
+        s = request.data['servings']
+
+        for i in range(0, len(recipe.ingredients.all())):
+            ind = recipe.ingredients.all()[i]
+            ind.amount = str(int(s) * round(int(ind.amount) / int(old_s)))
+            ind.save()
+
+        recipe.servings = s
+        recipe.save()
+
+        return Response("Succesful update servings")
+
 
 class NewRecipeViewSet(ModelViewSet):
     queryset = Recipe.objects.all()
@@ -183,3 +218,4 @@ class NewRecipeViewSet(ModelViewSet):
         else:
             permission_classes = [AllowAny]
         return [permission() for permission in permission_classes]
+

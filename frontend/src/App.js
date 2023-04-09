@@ -33,13 +33,17 @@ function App() {
                         <Route path="login" element={<LoginPage/>}/>
                         <Route path="cart" element={<ShoppingList/>}/>
                         <Route path="account" element={<AccountPage/>}/>
-                        <Route index element={<HomePage/>}/>
+                        <Route path="home" element={<HomePage/>}/>
+                        <Route index element={<LoginPage/>}/>
+                        <Route index element={<AccountPage/>}/>
                     </Route>
                 </Routes>
             </AccountContext.Provider>
         </BrowserRouter>
     );
 }
+
+
 
 // const root = ReactDOM.createRoot(document.getElementById('root'))
 //
