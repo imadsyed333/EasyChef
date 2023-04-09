@@ -7,7 +7,7 @@ from recipes.views import RecipeViewSet, DietViewSet, CommentViewSet, \
     SearchAPIView, StepViewSet, StepMediaViewSet, RecipeMediaViewSet, \
     FavouriteViewSet, MostFavouritedViewSet, OverallRatingViewSet, \
     LikeViewSet, MostLikedViewSet, MyFavouritesView, MyInteractionsView, \
-    MyRecipesView, CommentMediaViewSet, AddToCart, RemoveFromCart
+    MyRecipesView, CommentMediaViewSet, AddToCart, RemoveFromCart, UpdateServings
 
 urlpatterns = [
     path('add/', RecipeViewSet.as_view({'post': 'create'})),
@@ -45,5 +45,6 @@ urlpatterns = [
     path('find/', SearchAPIView.as_view()),
 
     path('cart/add/', AddToCart.as_view()),
-    path('cart/remove/', RemoveFromCart.as_view())
+    path('cart/remove/', RemoveFromCart.as_view()),
+    path('cart/update/', UpdateServings.as_view())
 ]

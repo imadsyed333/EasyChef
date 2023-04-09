@@ -174,5 +174,23 @@ class RemoveFromCart(APIView):
         user.shopping_list.remove(r)
         return Response("Success deleted recipe")
 
+class UpdateServings(APIView):
+    permission_classes = [IsAuthenticated]
+    def post(self, request):
+        r = request.data['recipe']
+        recipe = Recipe.objects.get(id=r)
+        old_s = int(recipe.servings)
+        s = request.data['servings']
+
+        for i in range(0, len(recipe.ingredients.all())):
+            ind = recipe.ingredients.all()[i]
+            ind.amount = str(int(s) * round(int(ind.amount) / int(old_s)))
+            ind.save()
+
+        recipe.servings = s
+        recipe.save()
+
+        return Response("Succesful update servings")
+
 
 
