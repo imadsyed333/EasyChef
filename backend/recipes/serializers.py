@@ -47,13 +47,12 @@ class StepSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Step
-        fields = ["id", "content", "prep_time", "cooking_time", "media", 'recipe']
+        fields = ["id", "content", "prep_time", "cooking_time", "media"]
 
     def create(self, validated_data):
         step = Step.objects.create(content=validated_data['content'],
                                    prep_time=validated_data['prep_time'],
-                                   cooking_time=validated_data['cooking_time'],
-                                   recipe=validated_data['recipe'])
+                                   cooking_time=validated_data['cooking_time'])
         return step
 
 
@@ -167,7 +166,9 @@ class NewRecipeSerializer(serializers.ModelSerializer):
         diets = validated_data.pop('diets', [])
         cuisines = validated_data.pop('cuisines', [])
         ingredients = validated_data.pop('ingredients', [])
+        steps = validated_data.pop('steps', [])
         recipe = Recipe.objects.create(**validated_data)
+
         for item in diets:
             diet = Diet.objects.create(name=item['name'])
             recipe.diets.add(diet)
@@ -179,6 +180,12 @@ class NewRecipeSerializer(serializers.ModelSerializer):
         for item in ingredients:
             ingredient = Ingredient.objects.create(name=item['name'], amount=item['amount'])
             recipe.ingredients.add(ingredient)
+
+        for item in steps:
+            step = Step.objects.create(content=item['content'], cooking_time=item['cooking_time'],
+                                       prep_time=item['prep_time'], recipe=recipe)
+            recipe.steps.add(step)
+
         return recipe
 
 
