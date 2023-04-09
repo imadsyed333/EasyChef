@@ -1,24 +1,25 @@
 import MenuBar from "../components/MenuBar/MenuBar";
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import Button from "react-bootstrap/Button";
+import AccountContext from "../contexts/AccountContext";
 
 const AccountPage = () => {
-    const token = localStorage.getItem("token");
+    const {token, setUsername} = useContext(AccountContext)
     const [firstN, setFirstN] = useState("");
     const [lastN, setLastN] = useState("");
     const [phone, setPhone] = useState("");
     const [avatar, setAvatar] = useState("");
     const [email, setEmail] = useState("");
 
-    const putdata = {
-        first_name: firstN,
-        last_name: lastN,
-        phone_number: phone,
-        avatar: avatar,
-        email: email,
-    }
-
     const save_changes = () => {
+        const putdata = {
+            first_name: firstN,
+            last_name: lastN,
+            phone_number: phone,
+            email: email,
+            avatar: avatar
+        }
+
         if (token) {
             fetch("http://localhost:8000/accounts/profile/edit/",
                 {
@@ -28,7 +29,10 @@ const AccountPage = () => {
                         "Authorization": "Bearer " + token
                     },
                     body: JSON.stringify(putdata)
-                })
+                }).then(response => response.json()).then(json => {
+                console.log(json)
+                setUsername(firstN)
+            })
         }
     }
 
@@ -55,7 +59,7 @@ const AccountPage = () => {
                 })
 
         }
-    }, [setFirstN, setLastN, setPhone, setAvatar])
+    }, [])
 
 
     return (
