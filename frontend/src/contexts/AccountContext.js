@@ -2,8 +2,8 @@ import {createContext, useState} from "react";
 
 
 export const useAccountContext = () => {
-    const [token, setToken] = useState(localStorage.getItem("token"))
-    const [refreshToken, setRefreshToken] = useState(localStorage.getItem("refresh"))
+    const [token, setToken] = useState("")
+    const [refreshToken, setRefreshToken] = useState("")
     const [username, setUsername] = useState("User")
 
     return {
@@ -13,12 +13,12 @@ export const useAccountContext = () => {
 
 const AccountContext = createContext({
     username: "User",
-    token: localStorage.getItem("token"),
+    token: "",
     setToken: () => {
     },
     setUsername: () => {
     },
-    refreshToken: localStorage.getItem("refresh"),
+    refreshToken: "",
     setRefreshToken: () => {
     }
 })
