@@ -22,7 +22,7 @@ const MenuBar = () => {
                         setUsername(json.first_name)
                     })
                 } else {
-                    console.log(response.json())
+                    logout()
                 }
             }).catch(errors => console.log(errors))
         }
@@ -46,7 +46,6 @@ const MenuBar = () => {
                     console.log(response.json())
                 }
             }).catch(errors => console.log(errors))
-
     }
 
     const authLinks = () => {
