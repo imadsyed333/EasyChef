@@ -1,13 +1,21 @@
-import {createContext, useState} from "react";
+import {createContext, useEffect, useState} from "react";
 
 
 export const useAccountContext = () => {
     const [token, setToken] = useState("")
-    const [refreshToken, setRefreshToken] = useState("")
     const [username, setUsername] = useState("User")
 
+    useEffect(() => {
+        const stored_token = localStorage.getItem("token")
+        console.log("i am being called", stored_token)
+        if (stored_token) {
+            console.log("i am being called here")
+            setToken(stored_token)
+        }
+    }, [])
+
     return {
-        username, token, setToken, setUsername, refreshToken, setRefreshToken
+        username, token, setToken, setUsername
     }
 }
 
@@ -18,9 +26,6 @@ const AccountContext = createContext({
     },
     setUsername: () => {
     },
-    refreshToken: "",
-    setRefreshToken: () => {
-    }
 })
 
 export default AccountContext
