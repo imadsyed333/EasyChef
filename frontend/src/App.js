@@ -33,9 +33,7 @@ function App() {
                         <Route path="login" element={<LoginPage/>}/>
                         <Route path="cart" element={<ShoppingList/>}/>
                         <Route path="account" element={<AccountPage/>}/>
-                        <Route path="home" element={<HomePage/>}/>
-                        <Route index element={<LoginPage/>}/>
-                        <Route index element={<AccountPage/>}/>
+                        <Route index element={<HomePage/>}/>
                     </Route>
                 </Routes>
             </AccountContext.Provider>
