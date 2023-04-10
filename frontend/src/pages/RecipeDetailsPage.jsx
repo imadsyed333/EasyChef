@@ -6,7 +6,7 @@ import ReactStars from "react-rating-stars-component";
 
 const RecipeDetailsPage = () => {
 
-    const {token, refreshToken} = useContext(AccountContext)
+    const token = localStorage.getItem("token")
 
     let {id} = useParams()
     const [recipe, setRecipe] = useState({
@@ -18,7 +18,8 @@ const RecipeDetailsPage = () => {
         servings: 1,
         steps: [],
         comments: [],
-        total_likes: 0
+        total_likes: 0,
+        media: []
     })
 
     const [comment, setComment] = useState("")
@@ -299,24 +300,29 @@ const RecipeDetailsPage = () => {
     
 
     const sendComment = () => {
+
         // clear the comment
         setComment("")
-
         console.log("token:", token)
+
         const data = {
             poster: 1,
             content: comment,
             // media: comm_media,
             recipe: parseInt(id)
         }
-        console.log("I am being called")
-        fetch("http://localhost:8000/recipes/comments/add/", {method: "POST",
-        headers: {
-            "Content-type": "application/json",
-            "Authorization": "Bearer " + token
-        },
-        body: JSON.stringify(data)}).then(response => response.json()).then(data => {console.log("Success:", data)
-        fetchRecipeDetails()}).catch(error => {
+
+        fetch("http://localhost:8000/recipes/comments/add/", {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json",
+                "Authorization": "Bearer " + token
+            },
+            body: JSON.stringify(data)
+        }).then(response => response.json()).then(data => {
+            console.log("Success:", data)
+            fetchRecipeDetails()
+        }).catch(error => {
             console.error("Error:", error)
         })
     }
@@ -365,10 +371,10 @@ const RecipeDetailsPage = () => {
             <h2>Diets</h2>
             <ul>
 
-            {recipe.diets?.map(diet => (
-                <li key={diet.id}>{diet.name}</li>
-                )
-            )}
+                {recipe.diets?.map(diet => (
+                        <li key={diet.id}>{diet.name}</li>
+                    )
+                )}
             </ul>
             <h2>Cuisines</h2>
             <ul>
@@ -376,16 +382,22 @@ const RecipeDetailsPage = () => {
                     <li key={cuisine.id}>{cuisine.name}</li>
                 ))}
             </ul>
+            <h2>Ingredients</h2>
+            <ul>
+                {recipe.ingredients?.map((ingredient, i) => (
+                    <li key={i}>{ingredient.amount} of {ingredient.name}</li>
+                ))}
+            </ul>
             <h2>Steps</h2>
             <ol>
                 {recipe.steps?.map(step => (
                     
                     <div key={step.id}>
-
-                    {step.media?.map(img => (<embed src={img.media} width="130px"></embed>))}
-                    <br></br>
-                    <li>{step.content}</li>
-                </div>
+                        {console.log("step " + step.id + " media: ", step.media)}
+                        {step.media?.map(img => (<embed src={img.media} width="130px"></embed>))}
+                        <br></br>
+                        <li>{step.content}</li>
+                    </div>
 
                 ))}
             </ol>

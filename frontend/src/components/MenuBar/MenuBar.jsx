@@ -8,29 +8,43 @@ import Nav from 'react-bootstrap/Nav'
 import {Navbar} from "react-bootstrap";
 
 const MenuBar = () => {
-
-    const {token} = useContext(AccountContext)
-    const [user, setUser] = useState({})
+    const {username, token, setToken, setUsername} = useContext(AccountContext)
 
     useEffect(() => {
-        if (token.length > 0) {
+        if (token.length > 0) { //get rid of token == null
             fetch("http://localhost:8000/accounts/profile/view/", {
                 headers: {
                     "Authorization": "Bearer " + token
                 }
-            }).then(response => response.json()).then(json => setUser(json))
+            }).then(response => response.json()).then(json => {
+                setUsername(json.first_name)
+            })
         }
     }, [token])
+
+    const logout = () => {
+        localStorage.setItem("token", "")
+        const formData = new FormData()
+        formData.append("refresh", localStorage.getItem("refresh"))
+        fetch("http://localhost:8000/accounts/logout/", {
+            method: "POST",
+            headers: {
+                "Authorization": "Bearer " + token
+            },
+            body: formData
+        }).then(response => response.json()).then(json => console.log(json))
+        setToken("")
+        localStorage.setItem("refresh", "")
+    }
 
     const authLinks = () => {
         if (token) {
             return (
-
                 <Navbar.Collapse className={"justify-content-end"}>
-                    <Nav.Link as={Link} to={"/logout/"}>Log Out</Nav.Link>
-                    <NavBar.Text>
-                        Hello {user.first_name} !
+                    <NavBar.Text style={{marginRight: ".5rem"}}>
+                        Hello {username}!
                     </NavBar.Text>
+                    <Nav.Link as={Link} to={"/"} onClick={logout}>Log Out</Nav.Link>
                 </Navbar.Collapse>
 
             )
@@ -38,11 +52,18 @@ const MenuBar = () => {
             return (
                 <>
                     <Navbar.Collapse className={"justify-content-end"}>
-                        <Nav.Link as={Link} to={"/login/"}> Login </Nav.Link>
-                        <br/>
+                        <Nav.Link as={Link} to={"/login/"} style={{marginRight: ".5rem"}}> Login </Nav.Link>
                         <Nav.Link as={Link} to={"/signup/"}> Sign Up </Nav.Link>
                     </Navbar.Collapse>
                 </>
+            )
+        }
+    }
+
+    const addRecipe = () => {
+        if (token) {
+            return (
+                <Nav.Link as={Link} to={"/recipe/add/"}>Add Recipe</Nav.Link>
             )
         }
     }
@@ -57,6 +78,7 @@ const MenuBar = () => {
                     <Nav className="me-auto">
                         <Nav.Link as={Link} to="/">Home</Nav.Link>
                         <Nav.Link as={Link} to="/myrecipes">My Recipes</Nav.Link>
+                        {addRecipe()}
                         <Nav.Link as={Link} to={"/cart"}>Shopping Cart</Nav.Link>
                     </Nav>
                     {authLinks()}

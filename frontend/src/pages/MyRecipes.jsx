@@ -5,8 +5,7 @@ import RecipeList from "../components/Recipe/RecipeList";
 
 const MyRecipes = () => {
 
-    let {token, refreshToken} = useContext(AccountContext)
-    // console.log("token:", localStorage.getItem("token"))
+    const token = localStorage.getItem("token")
 
     const [myrecipes, setMyRecipes] = useState([])
     const [myinteractions, setMyInteractions] = useState([])
@@ -61,12 +60,12 @@ const MyRecipes = () => {
     return (
         <div>
             <h1>Recipes I've Interacted With:</h1>
-            <h2>My Favourite Recipes:</h2>
-            <RecipeList recipes={myfavourites}/>
-            <h2>My Recipes:</h2>
-            <RecipeList recipes={myrecipes}/>
-            <h2>My Interactions:</h2>
+            <h2>My Recipes</h2>
+            <RecipeList recipes={myrecipes} setRecipes={setMyRecipes} isOwner={true}/>
+            <h2>My Interactions</h2>
             <RecipeList recipes={myinteractions}/>
+            <h2>My Favourites</h2>
+            <RecipeList recipes={myfavourites}/>
         </div>
     )
 }

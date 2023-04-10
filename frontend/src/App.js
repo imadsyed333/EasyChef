@@ -11,29 +11,39 @@ import RecipeDetailsPage from "./pages/RecipeDetailsPage";
 import MenuBar from "./components/MenuBar/MenuBar";
 import AccountContext, {useAccountContext} from "./contexts/AccountContext";
 import RegisterPage from "./pages/RegisterPage";
+import RecipeForm from "./components/Forms/RecipeForm/RecipeForm";
+import AddRecipePage from "./pages/AddRecipePage";
+import EditRecipePage from "./pages/EditRecipePage";
 
 function App() {
     return (
         <BrowserRouter>
             <AccountContext.Provider value={useAccountContext()}>
-
                 <Routes>
                     <Route path="/" element={<MenuBar/>}>
                         <Route path={"recipe/"}>
                             <Route path={":id"} element={<RecipeDetailsPage/>}/>
+                            <Route path={"edit/"}>
+                                <Route path={":id"} element={<EditRecipePage/>}/>
+                            </Route>
+                            <Route path={"add"} element={<AddRecipePage/>}/>
                         </Route>
                         <Route path="myrecipes" element={<MyRecipes/>}/>
                         <Route path={"signup"} element={<RegisterPage/>}/>
                         <Route path="login" element={<LoginPage/>}/>
                         <Route path="cart" element={<ShoppingList/>}/>
                         <Route path="account" element={<AccountPage/>}/>
-                        <Route index element={<HomePage/>}/>
+                        <Route path="home" element={<HomePage/>}/>
+                        <Route index element={<LoginPage/>}/>
+                        <Route index element={<AccountPage/>}/>
                     </Route>
                 </Routes>
             </AccountContext.Provider>
         </BrowserRouter>
     );
 }
+
+
 
 // const root = ReactDOM.createRoot(document.getElementById('root'))
 //
