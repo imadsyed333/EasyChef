@@ -16,9 +16,15 @@ const MenuBar = () => {
                 headers: {
                     "Authorization": "Bearer " + token
                 }
-            }).then(response => response.json()).then(json => {
-                setUsername(json.first_name)
-            })
+            }).then(response => {
+                if (response.status === 200) {
+                    response.json().then(json => {
+                        setUsername(json.first_name)
+                    })
+                } else {
+                    console.log(response.json())
+                }
+            }).catch(errors => console.log(errors))
         }
     }, [token])
 
@@ -32,9 +38,15 @@ const MenuBar = () => {
                 "Authorization": "Bearer " + token
             },
             body: formData
-        }).then(response => response.json()).then(json => console.log(json))
-        setToken("")
+        }).then(response => {
+                if (response.status === 200) {
+                    setToken("")
         localStorage.setItem("refresh", "")
+                } else {
+                    console.log(response.json())
+                }
+            }).catch(errors => console.log(errors))
+
     }
 
     const authLinks = () => {
