@@ -5,7 +5,7 @@ import {useNavigate} from "react-router-dom";
 import Form from 'react-bootstrap/Form';
 
 const LoginPage = () => {
-    const {setToken, setRefreshToken} = useContext(AccountContext);
+    const {setToken} = useContext(AccountContext);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [errors, setErrors] = useState({});
@@ -25,13 +25,12 @@ const LoginPage = () => {
                 if (response.status === 200) {
                     response.json().then((json) => {
                         setToken(json.access)
-                        setRefreshToken(json.refresh)
                         localStorage.setItem("token", json.access)
                         localStorage.setItem("refresh", json.refresh)
                         setErrors({});
                         navigate("/")
                     });
-                } else if (response.status === 400) {
+                } else {
                     response.json().then((json) => setErrors(json));
                 }
             })
@@ -40,7 +39,7 @@ const LoginPage = () => {
 
     const emailErrors = () => {
         if (errors.email) {
-            return errors.email.map((error) => <li>{error}</li>);
+            return errors.email.map((error, i) => <li key={i}>{error}</li>);
         } else {
             return <br/>;
         }
@@ -48,7 +47,15 @@ const LoginPage = () => {
 
     const passwordErrors = () => {
         if (errors.password) {
-            return errors.password.map((error) => <li>{error}</li>);
+            return errors.password.map((error, i) => <li key={i}>{error}</li>);
+        } else {
+            return <br/>;
+        }
+    };
+
+    const authErrors = () => {
+        if (errors.detail) {
+            return (<div>{errors.detail}</div>)
         } else {
             return <br/>;
         }
@@ -80,6 +87,7 @@ const LoginPage = () => {
             {passwordErrors()}
             <Button onClick={handleLogin}>Login</Button>
             </Form>
+            {authErrors()}
         </div>
     );
 };
