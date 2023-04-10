@@ -5,7 +5,7 @@ import RecipeList from "../components/Recipe/RecipeList";
 import {useNavigate} from "react-router-dom";
 
 const MyRecipes = () => {
-    const {token} = useContext(AccountContext)
+    const {token, setToken} = useContext(AccountContext)
 
     const navigate = useNavigate()
 
@@ -25,10 +25,16 @@ const MyRecipes = () => {
                     "Content-type": "application/json",
                     "Authorization": "Bearer " + token
                 }})
-                .then(recipes => recipes.json())
-                .then(r => {
-                    console.log("recipes: ", r)
-                    setMyRecipes(r)
+                .then(response => {
+                    if (response.status === 200) {
+                        response.json().then(json => {
+                            console.log(json)
+                            setMyRecipes(json)
+                        })
+                    } else {
+                        setToken("")
+                        navigate("/login")
+                    }
                 }),
 
                 fetch("http://localhost:8000/recipes/interactions/", 
@@ -37,10 +43,16 @@ const MyRecipes = () => {
                     "Content-type": "application/json",
                     "Authorization": "Bearer " + token
                 }})
-                .then(interactions => interactions.json())
-                .then(i => {
-                    console.log("interactions: ", i)
-                    setMyInteractions(i)
+                .then(response => {
+                    if (response.status === 200) {
+                        response.json().then(json => {
+                            console.log(json)
+                            setMyInteractions(json)
+                        })
+                    } else {
+                        setToken("")
+                        navigate("/login")
+                    }
                 }),
 
                 fetch("http://localhost:8000/recipes/favourites/", 
@@ -49,13 +61,20 @@ const MyRecipes = () => {
                         "Content-type": "application/json",
                         "Authorization": "Bearer " + token
                 }})
-                .then(favourites => favourites.json())
-                .then(f => {
-                    console.log("favourites: ", f)
-                    setMyFavourites(f)
+                .then(response => {
+                    if (response.status === 200) {
+                        response.json().then(json => {
+                            console.log(json)
+                            setMyFavourites(json)
+                        })
+                    } else {
+                        setToken("")
+                        navigate("/login")
+                    }
                 })
             ]).catch(errors => {
                 console.log(errors)
+                setToken("")
                 navigate("/")
             })
         }
