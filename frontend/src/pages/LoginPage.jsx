@@ -29,7 +29,7 @@ const LoginPage = () => {
                         localStorage.setItem("token", json.access)
                         localStorage.setItem("refresh", json.refresh)
                         setErrors({});
-                        navigate("/home")
+                        navigate("/")
                     });
                 } else if (response.status === 400) {
                     response.json().then((json) => setErrors(json));
