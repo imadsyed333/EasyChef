@@ -20,15 +20,15 @@ const HomePage = () => {
         })])
     }, [])
 
-    useEffect(() => {
-        fetch(`http://localhost:8000/recipes/find/?search=${search}`)
-                    .then(response => response.json())
-                    .then(json => {
-                        // console.log(json.results)
-                        setRecipes(json.results)
-                    })
-        // console.log(result)
-    }, [search])
+    // useEffect(() => {
+    //     fetch(`http://localhost:8000/recipes/find/?search=${search}`)
+    //                 .then(response => response.json())
+    //                 .then(json => {
+    //                     // console.log(json.results)
+    //                     setRecipes(json.results)
+    //                 })
+    //     // console.log(result)
+    // }, [search])
     
     // let all_cuisines = []
     // const addCuisines = () => {
