@@ -5,8 +5,32 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import {CardActionArea, CardActions, Button} from '@mui/material';
+import {useContext} from "react";
+import AccountContext from "../../contexts/AccountContext";
 
-const RecipeCard = ({name, media, servings}) => {
+const RecipeCard = ({id, name, media, servings}) => {
+    const {token} = useContext(AccountContext)
+    const updateServings = () =>{
+        const postdata = {
+            recipe: id,
+            servings: servings,
+        }
+
+        if (token) {
+            fetch("http://localhost:8000/recipes/cart/update/",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-type": "application/json",
+                        "Authorization": "Bearer " + token
+                    },
+                    body: JSON.stringify(postdata)
+                })
+            console.log("Servings Updated")
+        }
+
+
+    }
 
 
     return (
@@ -23,7 +47,7 @@ const RecipeCard = ({name, media, servings}) => {
               {name}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            Servings: {servings}
+            Servings: <input type={"number"} min={1} onChange={updateServings} defaultValue={servings}></input>
           </Typography>
         </CardContent>
       </CardActionArea>

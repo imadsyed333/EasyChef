@@ -29,6 +29,8 @@ const IngredientList = () => {
 
     return (
         <div>
+            All Ingredients
+            <br></br>
             {Object.keys(list)} : {list[Object.keys(list)[0]]}
         </div>
     )

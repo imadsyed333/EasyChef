@@ -1,8 +1,10 @@
 import MenuBar from "../components/MenuBar/MenuBar";
-import RecipeCard from "../components/Recipe/RecipeCard";
 
 import {useContext, useEffect, useState} from "react";
 import AccountContext from "../contexts/AccountContext";
+import ShoppingCard from "../components/ShoppingList/ShoppingCard";
+import IngredientList from "../components/ShoppingList/IngredientList";
+import shoppingCard from "../components/ShoppingList/ShoppingCard";
 
 const ShoppingList = () => {
 
@@ -11,7 +13,7 @@ const ShoppingList = () => {
     const [rname, setRname] = useState([]);
     const [media, setMedia] = useState([]);
     const [servings, setServings] = useState([]);
-
+    const [ids, setIds] = useState([])
 
 
 
@@ -32,17 +34,19 @@ const ShoppingList = () => {
                     let n = []
                     let m = []
                     let s = []
+                    let id = []
                     for (let i = 0; i < a.length; i++){
                         let recipe = a[i]
                         n.push(recipe.name)
                         m.push(recipe.media[0]['media'])
                         s.push(recipe.servings)
+                        id.push(recipe.id)
                     }
 
                     setRname(n)
                     setMedia(m)
-
                     setServings(s)
+                    setIds(id)
                 })
 
         }
@@ -51,6 +55,8 @@ const ShoppingList = () => {
 
     return (
         <div>
+            <ShoppingCard id={ids[0]} name={rname[0]} media={media[0]} servings={servings[0]}/>
+            <IngredientList/>
 
         </div>
     )
