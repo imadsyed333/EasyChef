@@ -1,4 +1,4 @@
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -7,6 +7,7 @@ import Typography from '@mui/material/Typography';
 import {CardActionArea, CardActions, Button} from '@mui/material';
 
 const RecipeCard = ({id, name, cooking_time}) => {
+    const navigate = useNavigate()
 
     // return (
     //     <Card style={{ width: '18rem' }}>
@@ -22,29 +23,27 @@ const RecipeCard = ({id, name, cooking_time}) => {
     // )
 
     return (
-        <Card sx={{ maxWidth: 345 }}>
-      <CardActionArea>
-        <CardMedia
-          component="img"
-          height="140"
-          image="/static/images/cards/contemplative-reptile.jpg"
-          alt="green iguana"
-        />
-        <CardContent>
-          <Typography gutterBottom variant="h5" component="div">
-              {name}
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            Cooking time: {cooking_time}
-          </Typography>
-        </CardContent>
-      </CardActionArea>
+        <Card sx={{maxWidth: 345}} onClick={() => navigate("/recipe/" + id)}>
+            <CardActionArea>
+                <CardMedia
+                    component="img"
+                    height="140"
+                    image=""
+                    alt="Image not found!"
+                />
+                <CardContent>
+                    <Typography gutterBottom variant="h5" component="div">
+                        {name}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                        Cooking time: {cooking_time}
+                    </Typography>
+                </CardContent>
+                <Link to={'/recipe/' + id}/>
+            </CardActionArea>
             <CardActions>
-                <Button>
-
-                </Button>
             </CardActions>
-    </Card>
+        </Card>
     )
 }
 
