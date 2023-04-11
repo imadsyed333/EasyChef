@@ -48,6 +48,7 @@ const RecipeForm = ({edit, recipeId}) => {
             servings: servings,
             steps: steps
         }
+        console.log(recipe)
         fetch(edit ? "http://localhost:8000/recipes/" + recipeId + "/update/" : "http://localhost:8000/recipes/create/", {
             method: edit ? "PUT" : "POST",
             headers: {
@@ -57,12 +58,12 @@ const RecipeForm = ({edit, recipeId}) => {
             body: JSON.stringify(recipe)
         }).then(response => response.json()).then(json => {
             console.log(json)
-            navigate("/recipe/" + json.id)
+            // navigate("/recipe/" + json.id)
         })
     }
 
     return (
-        <div>
+        <div style={{width: "50%"}}>
             <label>Name:
                 <input type={"text"} name={"name"} value={name} onChange={e => setName(e.target.value)}/>
             </label>
