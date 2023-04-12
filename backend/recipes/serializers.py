@@ -111,8 +111,8 @@ class CommentSerializer(serializers.ModelSerializer):
             account.interactions.add(recipe)
         return comment
 
+
 class FavouriteSerializer(serializers.ModelSerializer):
-    
     class Meta:
         model = Favourite
         fields = ["id", "recipe", "favourite"]
@@ -136,7 +136,7 @@ class FavouriteSerializer(serializers.ModelSerializer):
             if not favourited_recipe.favoriters.all():
                 favourited_recipe.favoriters.set([favoriter])
                 # one person has favourited this recipe
-                favourited_recipe.total_favourites=1
+                favourited_recipe.total_favourites = 1
                 print(favourited_recipe.total_favourites)
 
                 favourited_recipe.save()
@@ -149,14 +149,14 @@ class FavouriteSerializer(serializers.ModelSerializer):
                 old_favouriters = list(favourited_recipe.favoriters.all())
                 print('+old favouriters: ', old_favouriters)
                 print('+old favouriters: ', list(old_favouriters))
-                
+
                 # only favourite if recipe is not already favourited by this user
                 if favoriter not in old_favouriters:
                     all_favouriters = old_favouriters + [favoriter]
                     print('+all favouriters: ', all_favouriters)
 
                     # total favourites for this recipe
-                    favourited_recipe.total_favourites=len(all_favouriters)
+                    favourited_recipe.total_favourites = len(all_favouriters)
                     print(favourited_recipe.total_favourites)
                     # print('+all favouriters: ', all_favouriters)
                     favourited_recipe.favoriters.set(all_favouriters)
@@ -200,7 +200,9 @@ class RecipeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Recipe
-        fields = ["id", "total_likes", "total_favourites", "overall_rating", 'name', 'media', 'diets', 'diet_ids', 'cuisines', 'cuisine_ids', 'ingredients', 'ingredient_ids', 'prep_time', 'cooking_time', 'steps', 'servings', 'comments']
+        fields = ["id", "total_likes", "total_favourites", "overall_rating", 'name', 'media', 'diets', 'diet_ids',
+                  'cuisines', 'cuisine_ids', 'ingredients', 'ingredient_ids', 'prep_time', 'cooking_time', 'steps',
+                  'servings', 'comments']
 
     def create(self, validated_data):
         diets = validated_data.pop('diet_ids', None)
@@ -343,7 +345,6 @@ class NewRecipeSerializer(serializers.ModelSerializer):
 
 
 class RatingSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Rating
         fields = ["id", "recipe", "value"]
@@ -359,8 +360,8 @@ class RatingSerializer(serializers.ModelSerializer):
         print("ADD RECIPE RATING: ", recipe, " -- ", validated_data['value'], "out of 5")
 
         rating, created = Rating.objects.update_or_create(recipe=validated_data['recipe'],
-                                                    poster=self.context['request'].user,
-                                                    defaults={'value': validated_data['value']})
+                                                          poster=self.context['request'].user,
+                                                          defaults={'value': validated_data['value']})
         rating.save()
         # UPDATE RECIPE'S OVERALL RATING:
         # if overall rating is not null
@@ -395,7 +396,6 @@ class OverallRatingSerializer(serializers.ModelSerializer):
 
 
 class LikeSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Like
         fields = ["id", "recipe", "like"]
@@ -466,9 +466,10 @@ class LikeSerializer(serializers.ModelSerializer):
         return like
 
 
+class ShoppingItemSerializer(serializers.ModelSerializer):
+    ingredients = IngredientSerializer(many=True)
+    media = RecipeMediaSerializer(many=True)
 
-
-
-
-
-
+    class Meta:
+        model = Recipe
+        fields = ['id', 'name', 'ingredients', 'media', 'servings']
