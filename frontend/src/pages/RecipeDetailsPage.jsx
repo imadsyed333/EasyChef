@@ -335,31 +335,35 @@ const RecipeDetailsPage = () => {
 
 
     const sendCommentMedia = (comment_med, comm_id) => {
-        console.log("MEDIA TO SEND TO RECIPE " + parseInt(id) + ": ", comment_med)
+        console.log("MEDIA TO SEND TO RECIPE " + parseInt(id) + ": ", comment_med, " total media items: ", comment_med.length)
         console.log("COMMENT ID: ", comm_id)
         
-        // const data = {
-        //     comment: comm_id,
-        //     media: comment_med
-        // }
+        // loop through each item, and send it one by one to the server
 
-        const formData = new FormData();
+        // convert filelist to array
+        let comm_media_array = [...comment_med]
+        console.log("Comment's Media Array: ", comm_media_array)
 
-        formData.append('media', comment_med);
-        formData.append("comment", comm_id);
-          
-        fetch('http://localhost:8000/recipes/comments/media/add/', {
-            method: "POST",
-            headers: {
-                "Authorization": "Bearer " + token
-            },
-            body: formData
-        }).then(response => response.json())
-        .then(data => {
-            console.log("Success:", data)
-            fetchRecipeDetails()
-        }).catch(error => {
-            console.error("Error:", error)
+        comm_media_array.map(curr_comm_media => {
+            const formData = new FormData();
+
+            formData.append('media', curr_comm_media);
+            formData.append("comment", comm_id);
+            
+            fetch('http://localhost:8000/recipes/comments/media/add/', {
+                method: "POST",
+                headers: {
+                    "Authorization": "Bearer " + token
+                },
+                body: formData
+            }).then(response => response.json())
+            .then(data => {
+                console.log("Success:", data)
+                fetchRecipeDetails()
+            }).catch(error => {
+                console.error("Error:", error)
+            })
+
         })
 
 
@@ -446,7 +450,10 @@ const RecipeDetailsPage = () => {
             <form>
                 <input type="text" value={comment} onChange={(e) => setComment(e.target.value)}/>
 
-                <input type="file" accept="image/*,video/*" onChange={(e) => setCommentMedia(e.target.files[0])}/>
+                <input type="file" accept="image/*,video/*" multiple onChange={(e) => {
+                    console.log("ALL FILES: ", e.target.files); 
+                    setCommentMedia(e.target.files); 
+                    console.log(comm_media)}}/>
             
                 <Button onClick={sendComment}>comment</Button>
 
