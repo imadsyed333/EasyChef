@@ -2,6 +2,7 @@ import './App.css';
 import ReactDOM from "react-dom/client";
 import {BrowserRouter, Routes, Route} from "react-router-dom";
 import HomePage from "./pages/HomePage";
+import PopularRecipesPage from "./pages/PopularRecipesPage";
 import AccountPage from "./pages/AccountPage";
 import ShoppingList from "./pages/ShoppingList";
 import LoginPage from "./pages/LoginPage";
@@ -33,6 +34,7 @@ function App() {
                         <Route path="login" element={<LoginPage/>}/>
                         <Route path="cart" element={<ShoppingList/>}/>
                         <Route path="account" element={<AccountPage/>}/>
+                        <Route path="popular" element={<PopularRecipesPage/>}/>
                         <Route index element={<HomePage/>}/>
                     </Route>
                 </Routes>

@@ -23,7 +23,7 @@ const RecipeDetailsPage = () => {
     })
 
     const [comment, setComment] = useState("")
-    // const [comm_media, setCommentMedia] = useState([])
+    const [comm_media, setCommentMedia] = useState([])
     const [rating, setRating] = useState(undefined)
     const [overallrating, setOverallRating] = useState(undefined)
     const [favourited, setFavourited] = useState(false)
@@ -321,11 +321,54 @@ const RecipeDetailsPage = () => {
             body: JSON.stringify(data)
         }).then(response => response.json()).then(data => {
             console.log("Success:", data)
+
+            if(comm_media){
+                sendCommentMedia(comm_media, data.id);
+            }
+    
             fetchRecipeDetails()
         }).catch(error => {
             console.error("Error:", error)
         })
+
     }
+
+
+    const sendCommentMedia = (comment_med, comm_id) => {
+        console.log("MEDIA TO SEND TO RECIPE " + parseInt(id) + ": ", comment_med, " total media items: ", comment_med.length)
+        console.log("COMMENT ID: ", comm_id)
+        
+        // loop through each item, and send it one by one to the server
+
+        // convert filelist to array
+        let comm_media_array = [...comment_med]
+        console.log("Comment's Media Array: ", comm_media_array)
+
+        comm_media_array.map(curr_comm_media => {
+            const formData = new FormData();
+
+            formData.append('media', curr_comm_media);
+            formData.append("comment", comm_id);
+            
+            fetch('http://localhost:8000/recipes/comments/media/add/', {
+                method: "POST",
+                headers: {
+                    "Authorization": "Bearer " + token
+                },
+                body: formData
+            }).then(response => response.json())
+            .then(data => {
+                console.log("Success:", data)
+                fetchRecipeDetails()
+            }).catch(error => {
+                console.error("Error:", error)
+            })
+
+        })
+
+
+    }
+
 
 
     return (
@@ -407,7 +450,10 @@ const RecipeDetailsPage = () => {
             <form>
                 <input type="text" value={comment} onChange={(e) => setComment(e.target.value)}/>
 
-                {/* <input type="file" value={comm_media} onChange={(e) => setComment(e.target.files[0])}/> */}
+                <input type="file" accept="image/*,video/*" multiple onChange={(e) => {
+                    console.log("ALL FILES: ", e.target.files); 
+                    setCommentMedia(e.target.files); 
+                    console.log(comm_media)}}/>
             
                 <Button onClick={sendComment}>comment</Button>
 
@@ -426,10 +472,10 @@ const RecipeDetailsPage = () => {
 
                     {/* Conditional rendering: if media is video, render as video. otherwise, render as image. */}
                     {comment.media?.map(comment_media => 
-                        ((comment_media.media.split(".")[1] === "mp4") || 
-                        (comment_media.media.split(".")[1] === "avi") ||
-                        (comment_media.media.split(".")[1] === "MOV") ||
-                        (comment_media.media.split(".")[1] === "webm")  )? 
+                        ((comment_media?.media?.split(".")[1] === "mp4") || 
+                        (comment_media?.media?.split(".")[1] === "avi") ||
+                        (comment_media?.media?.split(".")[1] === "MOV") ||
+                        (comment_media?.media?.split(".")[1] === "webm")  )? 
                             (<video width="150" controls >
                                 <source src={comment_media.media} />
                             </video>):

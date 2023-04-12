@@ -1,34 +1,35 @@
 import MenuBar from "../components/MenuBar/MenuBar";
 import RecipeList from "../components/Recipe/RecipeList";
 import {useEffect, useState} from "react";
+import Box from '@mui/material/Box';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Paper from '@mui/material/Paper';
 
 const HomePage = () => {
-    const [topratedrecipes, setTopRatedRecipes] = useState([])
-    const [mostfavouritedrecipes, setmostfavouritedrecipes] = useState([])
+    const [recipes, setRecipes] = useState([])
+
 
     let [search, setSearch] = useState("")
     // var [cuisines, setCuisine] = useState(1)
     // var [diets, setDiet] = useState('')
     // var [cooking_time, setCookingTime] = useState('')
 
-    useEffect(() => {
-        Promise.all([fetch("http://localhost:8000/recipes/overallratings/all/").then(response => response.json()).then(json => {
-            setTopRatedRecipes(json.results)
-        }),
-        fetch("http://localhost:8000/recipes/mostfavourited/all/").then(response => response.json()).then(json => {
-            setmostfavouritedrecipes(json.results)
-        })])
-    }, [])
-
     // useEffect(() => {
-    //     fetch(`http://localhost:8000/recipes/find/?search=${search}`)
-    //                 .then(response => response.json())
-    //                 .then(json => {
-    //                     // console.log(json.results)
-    //                     setRecipes(json.results)
-    //                 })
-    //     // console.log(result)
-    // }, [search])
+    //     fetch("http://localhost:8000/recipes/find/").then(response => response.json()).then(json => {
+    //         setRecipes(json.results)
+    //     })
+    // }, [recipes])
+
+    useEffect(() => {
+        fetch(`http://localhost:8000/recipes/find/?search=${search}`)
+                    .then(response => response.json())
+                    .then(json => {
+                        // console.log(json.results)
+                        setRecipes(json.results)
+                    })
+        // console.log(result)
+    }, [search])
     
     // let all_cuisines = []
     // const addCuisines = () => {
@@ -40,7 +41,6 @@ const HomePage = () => {
     // }
     // addCuisines()
 
-    
     // all_cuisines.forEach(t => console.log(t))
     // console.log(all_cuisines)
 
@@ -51,20 +51,23 @@ const HomePage = () => {
     //     </p>
     //   ))
     // console.log(c)
+
+
     return (
         <div>
-            <h1>Welcome to EasyChef</h1>
+            <h1 style={{display: "flex", justifyContent: "center"}}>Welcome to EasyChef</h1>
+            <Box sx={{ width: '100%', bgcolor: 'background.paper' }}>
+               
+                <h3 style={{display: "flex", justifyContent: "center"}}>Search Recipes</h3>
 
-            <h3>Popular Recipes</h3>
-            <div>
-                <h4>Highest Overall Rating: </h4>
-                <RecipeList recipes={topratedrecipes}/>
-            </div>
+                <input style={{display: "flex", textAlign: "center", width: "100%"}}
+                 type="text" value={search} onChange={(e) => setSearch(e.target.value)}/>
 
-            <div>
-                <h4>Most Favourited: </h4>
-                <RecipeList recipes={mostfavouritedrecipes}/>
-            </div>
+                <RecipeList recipes={recipes}/>
+
+            </Box>
+
+            
 
         </div>
     )

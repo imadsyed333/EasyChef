@@ -59,7 +59,39 @@ class StepSerializer(serializers.ModelSerializer):
         step = Step.objects.create(content=validated_data['content'],
                                    prep_time=validated_data['prep_time'],
                                    cooking_time=validated_data['cooking_time'])
+        media = validated_data.pop('media', [])
+
+        for item in media:
+            file = StepMedia.objects.create(media=item['media'], step=step)
+            step.media.add(file)
         return step
+
+    def update(self, instance, validated_data):
+        instance.content = validated_data['content']
+        instance.prep_time = validated_data['prep_time']
+        instance.cooking_time = validated_data['cooking_time']
+
+        media_copy = []
+        media = validated_data.pop('media', [])
+        for item in media:
+            item_id = item.get('id', None)
+            if item_id:
+                file = StepMedia.objects.get(id=item_id)
+                file.media = item['media']
+                file.save()
+            else:
+                file = StepMedia.objects.create(media=item['media'], step=instance)
+            media_copy.append(file)
+
+        for file in instance.media.all():
+            if file not in media_copy:
+                file.step = None
+                StepMedia.objects.filter(id=file.id).delete()
+
+        instance.media.set(media_copy)
+        instance.save()
+
+        return instance
 
 
 class CuisineSerializer(serializers.ModelSerializer):
@@ -288,8 +320,6 @@ class NewRecipeSerializer(serializers.ModelSerializer):
 
         for item in diets:
             item_id = item.get('id', None)
-            print(item_id, item['name'])
-            print(diets)
             if item_id:
                 diet = Diet.objects.get(id=item_id)
                 diet.name = item['name']
@@ -317,22 +347,25 @@ class NewRecipeSerializer(serializers.ModelSerializer):
                 ingredient.save()
             else:
                 ingredient = Ingredient.objects.create(name=item['name'], amount=item['amount'])
-                instance.ingredients.add(ingredient)
             ingredients_copy.append(ingredient)
 
         for item in steps:
             item_id = item.get('id', None)
             if item_id:
                 step = Step.objects.get(id=item_id)
-                step.content = item['content']
-                step.cooking_time = item['cooking_time']
-                step.prep_time = item['prep_time']
-                step.save()
+                serializer = StepSerializer(step, item)
+                serializer.is_valid()
+                serializer.save()
             else:
                 step = Step.objects.create(content=item['content'], prep_time=item['prep_time'],
                                            cooking_time=item['cooking_time'],
-                                           recipe_id=instance.id)
+                                           recipe=instance)
             steps_copy.append(step)
+
+        for step in instance.steps.all():
+            if step not in steps_copy:
+                step.recipe = None
+                Step.objects.filter(id=step.id).delete()
 
         instance.diets.set(diets_copy)
         instance.cuisines.set(cuisines_copy)

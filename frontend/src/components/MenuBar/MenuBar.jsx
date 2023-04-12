@@ -22,7 +22,7 @@ const MenuBar = () => {
                         setUsername(json.first_name)
                     })
                 } else {
-                    console.log(response.json())
+                    logout()
                 }
             }).catch(errors => console.log(errors))
         }
@@ -39,14 +39,13 @@ const MenuBar = () => {
             },
             body: formData
         }).then(response => {
-                if (response.status === 200) {
-                    setToken("")
-        localStorage.setItem("refresh", "")
-                } else {
-                    console.log(response.json())
-                }
-            }).catch(errors => console.log(errors))
-
+            if (response.status === 200) {
+                setToken("")
+                localStorage.setItem("refresh", "")
+            } else {
+                console.log(response.json())
+            }
+        }).catch(errors => console.log(errors))
     }
 
     const authLinks = () => {
@@ -72,31 +71,36 @@ const MenuBar = () => {
         }
     }
 
-    const addRecipe = () => {
+    const userLinks = () => {
         if (token) {
             return (
-                <Nav.Link as={Link} to={"/recipe/add/"}>Add Recipe</Nav.Link>
+                <>
+                    <Nav.Link as={Link} to={"/myrecipes/"}>My Recipes</Nav.Link>
+                    <Nav.Link as={Link} to={"/recipe/add/"}>Add Recipe</Nav.Link>
+                    <Nav.Link as={Link} to={"/cart"}>Shopping Cart</Nav.Link>
+                </>
             )
         }
     }
 
     return (
         <>
-            <Navbar bg="light" variant="light">
+            <Navbar bg="light" variant="light" sticky={"top"}>
                 <Container>
-                    <Navbar.Brand as={Link} to={"/"}>
-                        <img src="logo192.png" alt={""}/>
+                    <Navbar.Brand>
+                        <img src={require('./logo.png')} alt={""} style={{height: 50, width: 50}}/>
                     </Navbar.Brand>
                     <Nav className="me-auto">
                         <Nav.Link as={Link} to="/">Home</Nav.Link>
-                        <Nav.Link as={Link} to="/myrecipes">My Recipes</Nav.Link>
-                        {addRecipe()}
-                        <Nav.Link as={Link} to={"/cart"}>Shopping Cart</Nav.Link>
+                        <Nav.Link as={Link} to={"/popular/"}>Popular Recipes</Nav.Link>
+                        {userLinks()}
                     </Nav>
                     {authLinks()}
                 </Container>
             </Navbar>
-            <Outlet/>
+            <div>
+                <Outlet/>
+            </div>
         </>
     )
 }
