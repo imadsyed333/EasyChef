@@ -7,6 +7,8 @@ import Grid from "@mui/material/Grid";
 const RecipeList = ({recipes, setRecipes, isOwner}) => {
 
     const token = localStorage.getItem("token")
+
+    console.log("recipes list", recipes)
     const delete_recipe = (id) => {
         fetch("http://localhost:8000/recipes/" + id + "/delete/", {
             method: "DELETE",
@@ -24,16 +26,17 @@ const RecipeList = ({recipes, setRecipes, isOwner}) => {
     }
     return (
         <Grid
-        container
-        direction="column"
-        alignItems="center"
+            container
+            direction="column"
+            alignItems="center"
         >
-  
+
             {recipes.map((recipe, i) => (
                 <>
                     <br></br>
                     <div key={i}>
-                        <RecipeCard name={recipe.name} cooking_time={recipe.cooking_time} id={recipe.id}/>
+                        <RecipeCard name={recipe.name} cooking_time={recipe.cooking_time} id={recipe.id}
+                                    media={recipe.media}/>
                         {isOwner ? (
                             <div>
                                 <Button as={Link} to={"/recipe/edit/" + recipe.id}>Edit</Button>
