@@ -2,6 +2,7 @@ import RecipeCard from "./RecipeCard";
 import {useEffect, useState} from "react";
 import {Link, useParams} from "react-router-dom";
 import Button from "react-bootstrap/Button";
+import Grid from "@mui/material/Grid";
 
 const RecipeList = ({recipes, setRecipes, isOwner}) => {
 
@@ -22,23 +23,32 @@ const RecipeList = ({recipes, setRecipes, isOwner}) => {
         })
     }
     return (
-        <div>
-            {/* <h2> Here are your recipes! </h2> */}
+        <Grid
+        container
+        direction="column"
+        alignItems="center"
+        >
+  
             {recipes.map((recipe, i) => (
-                <div key={i}>
-                    <RecipeCard name={recipe.name} cooking_time={recipe.cooking_time} id={recipe.id}/>
-                    {isOwner ? (
-                        <div>
-                            <Button as={Link} to={"/recipe/edit/" + recipe.id}>Edit</Button>
-                            <Button onClick={() => {
-                                delete_recipe(recipe.id)
-                            }
-                            }>Delete</Button>
-                        </div>
-                    ) : <></>}
-                </div>
+                <>
+                    <br></br>
+                    <div key={i}>
+                        <RecipeCard name={recipe.name} cooking_time={recipe.cooking_time} id={recipe.id}/>
+                        {isOwner ? (
+                            <div>
+                                <Button as={Link} to={"/recipe/edit/" + recipe.id}>Edit</Button>
+                                <Button onClick={() => {
+                                    delete_recipe(recipe.id)
+                                }
+                                }>Delete</Button>
+                            </div>
+                        ) : <></>}
+                    </div>
+                    {/* <br></br> */}
+                </>
             ))}
-        </div>
+            <br></br>
+        </Grid>
     )
 }
 export default RecipeList

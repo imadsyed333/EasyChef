@@ -23,7 +23,7 @@ const RecipeCard = ({id, name, cooking_time}) => {
     // )
 
     return (
-        <Card sx={{maxWidth: 345}} onClick={() => navigate("/recipe/" + id)}>
+        <Card variant="outlined" sx={{minWidth: 375, maxWidth: 455}} onClick={() => navigate("/recipe/" + id)}>
             <CardActionArea>
                 <CardMedia
                     component="img"
