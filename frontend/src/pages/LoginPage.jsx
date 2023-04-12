@@ -39,7 +39,7 @@ const LoginPage = () => {
 
     const emailErrors = () => {
         if (errors.email) {
-            return errors.email.map((error, i) => <li key={i}>{error}</li>);
+            return errors.email.map((error, i) => <li style={{color: 'red'}} key={i}>{error}</li>);
         } else {
             return <br/>;
         }
@@ -47,7 +47,7 @@ const LoginPage = () => {
 
     const passwordErrors = () => {
         if (errors.password) {
-            return errors.password.map((error, i) => <li key={i}>{error}</li>);
+            return errors.password.map((error, i) => <li style={{color: 'red'}} key={i}>{error}</li>);
         } else {
             return <br/>;
         }
@@ -55,7 +55,7 @@ const LoginPage = () => {
 
     const authErrors = () => {
         if (errors.detail) {
-            return (<div>{errors.detail}</div>)
+            return (<div style={{color: 'red'}}>{errors.detail}</div>)
         } else {
             return <br/>;
         }
