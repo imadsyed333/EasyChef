@@ -3,12 +3,12 @@ import Button from "react-bootstrap/Button";
 
 const MediaForm = ({media, setMedia}) => {
 
-
     return (
         <div>
             <label>
-                Upload file:
-                {/*<input type={"file"} name={"file"} value={media} onChange={}/>*/}
+                Upload files:
+                <input type={"file"} name={"file"} accept={"image/*,video/*"} multiple
+                       onChange={event => setMedia(event.target.files)}/>
             </label>
             <br/>
         </div>
