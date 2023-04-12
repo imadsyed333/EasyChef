@@ -13,22 +13,6 @@ const ShoppingList = () => {
 
     const [ingredients, setIngredients] = useState([])
 
-    const removeFromCart = (id) => {
-        const data = new FormData()
-        data.append("recipe", id)
-
-        fetch("http://localhost:8000/recipes/cart/remove/", {
-            method: "POST",
-            headers: {
-                "Authorization": "Bearer " + token
-            },
-            body: data
-        }).then(response => response.json()).then(json => console.log(json))
-
-    }
-
-
-
     useEffect(() => {
         if (token) {
             fetch("http://localhost:8000/accounts/shopping_list/",
@@ -64,6 +48,22 @@ const ShoppingList = () => {
         setIngredients(temp)
     }, [shoppingList])
 
+    const deleteItem = (index, id) => {
+        const temp = [...shoppingList]
+        temp.splice(index, 1)
+        setShoppingList(temp)
+
+        const data = new FormData()
+        data.append("recipe", id)
+        fetch("http://localhost:8000/recipes/cart/remove/", {
+            method: "POST",
+            headers: {
+                "Authorization": "Bearer " + token
+            },
+            body: data
+        }).then(response => response.json()).then(json => console.log(json))
+    }
+
 
     return (
         <div>
@@ -75,14 +75,14 @@ const ShoppingList = () => {
             ))}
             <h1>My Items</h1>
             {shoppingList.map((recipe, index) => (
-                <>
-                <ShoppingCard key={index} recipe={recipe} shoppingList={shoppingList}
-                              setShoppingList={setShoppingList} index={index}/>
+                <div key={index}>
 
-                <Button onClick={() => removeFromCart(recipe.id)}>Remove From Shopping List</Button>
-                </>
+                    <ShoppingCard key={index} recipe={recipe} shoppingList={shoppingList}
+                                  setShoppingList={setShoppingList} index={index}/>
+                    <Button onClick={() => deleteItem(index, recipe.id)}>Delete Me</Button>
+                </div>
+
             ))}
-
         </div>
     )
 }
