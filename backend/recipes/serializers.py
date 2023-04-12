@@ -59,11 +59,6 @@ class StepSerializer(serializers.ModelSerializer):
         step = Step.objects.create(content=validated_data['content'],
                                    prep_time=validated_data['prep_time'],
                                    cooking_time=validated_data['cooking_time'])
-        media = validated_data.pop('media', [])
-
-        for item in media:
-            file = StepMedia.objects.create(media=item['media'], step=step)
-            step.media.add(file)
         return step
 
     def update(self, instance, validated_data):
