@@ -32,6 +32,7 @@ const RecipeDetailsPage = () => {
     // const [comments, setComments] = useState([])
     const [allusers, setAllUsers] = useState([])
 
+
     useEffect(() => {
         fetchRecipeDetails()
         // fetchAllComments()
@@ -87,10 +88,10 @@ const RecipeDetailsPage = () => {
 
 
     // fetch all rating objects of this user
-    // if the user has a rating object for this current recipe, 
-    //     display it by doing setRating(curr_recipe.value) 
+    // if the user has a rating object for this current recipe,
+    //     display it by doing setRating(curr_recipe.value)
     // if user does not have rating object for this current recipe,
-    //     
+    //
     const fetchRating = () => {
         fetch("http://localhost:8000/recipes/ratings/", {
             method: "GET",
@@ -394,6 +395,18 @@ const RecipeDetailsPage = () => {
         }).then(response => response.json()).then(json => console.log(json))
     }
 
+    const removeFromCart = () => {
+        const data = new FormData()
+        data.append("recipe", id)
+        fetch("http://localhost:8000/recipes/cart/remove/", {
+            method: "POST",
+            headers: {
+                "Authorization": "Bearer " + token
+            },
+            body: data
+        }).then(response => response.json()).then(json => console.log(json))
+    }
+
 
     return (
         <div>
@@ -401,6 +414,7 @@ const RecipeDetailsPage = () => {
             {
                 recipe.media?.map(img => (<embed src={img.media} width="130px"></embed>))}
             <Button onClick={addToCart}>Add to Shopping List</Button>
+            <Button onClick={removeFromCart}> Remove from Shopping List </Button>
 
             <ReactStars {...newRating} />
 
