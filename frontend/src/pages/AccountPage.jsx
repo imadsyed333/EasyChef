@@ -4,34 +4,36 @@ import Button from "react-bootstrap/Button";
 import AccountContext from "../contexts/AccountContext";
 
 const AccountPage = () => {
-    const {token, setUsername} = useContext(AccountContext)
+    const {token, avatar, setAvatar, setUsername} = useContext(AccountContext)
     const [firstN, setFirstN] = useState("");
     const [lastN, setLastN] = useState("");
     const [phone, setPhone] = useState("");
-    const [avatar, setAvatar] = useState("");
+    const [image, setImage] = useState();
     const [email, setEmail] = useState("");
 
     const save_changes = () => {
-        const putdata = {
-            first_name: firstN,
-            last_name: lastN,
-            phone_number: phone,
-            email: email,
-            avatar: avatar
-        }
+
+        const data = new FormData()
+        data.append("first_name", firstN)
+        data.append("last_name", lastN)
+        data.append("phone_number", phone)
+        data.append("email", email)
+        data.append("avatar", image)
+
+        console.log("avatar", image)
 
         if (token) {
             fetch("http://localhost:8000/accounts/profile/edit/",
                 {
                     method: "PUT",
                     headers: {
-                        "Content-type": "application/json",
                         "Authorization": "Bearer " + token
                     },
-                    body: JSON.stringify(putdata)
+                    body: data
                 }).then(response => response.json()).then(json => {
                 console.log(json)
                 setUsername(firstN)
+                setAvatar(json.avatar)
             })
         }
     }
@@ -54,7 +56,7 @@ const AccountPage = () => {
                     setFirstN(r.first_name)
                     setLastN(r.last_name)
                     setPhone(r.phone_number)
-                    setAvatar(r.avatar)
+                    setImage(r.avatar)
                     setEmail(r.email)
                 })
 
@@ -92,8 +94,12 @@ const AccountPage = () => {
             <br></br>
 
             <label>Avatar:
-                <input type={"image"} name={"avatar"} defaultValue={avatar}
-                       onChange={(event) => setAvatar(event.target.value)}>
+                <input type={"file"} name={"avatar"}
+                       onChange={(event) => {
+                           console.log(event.target.files)
+                           setImage(event.target.files[0])
+                       }
+                       }>
                 </input>
             </label>
 
