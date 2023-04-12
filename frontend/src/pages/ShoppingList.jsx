@@ -4,6 +4,7 @@ import {useContext, useEffect, useState} from "react";
 import AccountContext from "../contexts/AccountContext";
 import ShoppingCard from "../components/ShoppingList/ShoppingCard";
 import IngredientList from "../components/ShoppingList/IngredientList";
+import {Button} from "@mui/material";
 
 const ShoppingList = () => {
 
@@ -11,6 +12,22 @@ const ShoppingList = () => {
     const [shoppingList, setShoppingList] = useState([])
 
     const [ingredients, setIngredients] = useState([])
+
+    const removeFromCart = (id) => {
+        const data = new FormData()
+        data.append("recipe", id)
+
+        fetch("http://localhost:8000/recipes/cart/remove/", {
+            method: "POST",
+            headers: {
+                "Authorization": "Bearer " + token
+            },
+            body: data
+        }).then(response => response.json()).then(json => console.log(json))
+
+    }
+
+
 
     useEffect(() => {
         if (token) {
@@ -58,9 +75,14 @@ const ShoppingList = () => {
             ))}
             <h1>My Items</h1>
             {shoppingList.map((recipe, index) => (
+                <>
                 <ShoppingCard key={index} recipe={recipe} shoppingList={shoppingList}
                               setShoppingList={setShoppingList} index={index}/>
+
+                <Button onClick={() => removeFromCart(recipe.id)}>Remove From Shopping List</Button>
+                </>
             ))}
+
         </div>
     )
 }
