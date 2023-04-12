@@ -5,6 +5,7 @@ import IngredientForm from "../IngredientForm/IngredientForm";
 import AccountContext from "../../../contexts/AccountContext";
 import StepForm from "../StepForm/StepForm";
 import {useNavigate} from "react-router-dom";
+import MediaForm from "../MediaForm/MediaForm";
 
 const RecipeForm = ({edit, recipeId}) => {
     const {token} = useContext(AccountContext)
@@ -21,6 +22,8 @@ const RecipeForm = ({edit, recipeId}) => {
     const [ingredients, setIngredients] = useState([])
 
     const [steps, setSteps] = useState([])
+
+    const [recipeMedia, setRecipeMedia] = useState([])
 
     useEffect(() => {
         if (edit) {
@@ -56,9 +59,35 @@ const RecipeForm = ({edit, recipeId}) => {
                 "Content-type": "application/json"
             },
             body: JSON.stringify(recipe)
-        }).then(response => response.json()).then(json => {
-            console.log(json)
-            // navigate("/recipe/" + json.id)
+        }).then(response => {
+            console.log("status", response.status)
+            if (response.status === 201 || response.status === 200) {
+                response.json().then(json => {
+                    sendRecipeMedia(json.id)
+                })
+            }
+        }).catch(errors => console.log(errors))
+    }
+
+    const sendRecipeMedia = (id) => {
+        const media_array = [...recipeMedia]
+        media_array?.map((file) => {
+            const data = new FormData()
+            data.append("media", file)
+            data.append("recipe", id)
+            fetch("http://localhost:8000/recipes/media/add/", {
+                method: "POST",
+                headers: {
+                    "Authorization": "Bearer " + token
+                },
+                body: data
+            }).then(response => {
+                if (response.status === 201) {
+                    console.log("Success")
+                } else {
+                    console.log(response.json())
+                }
+            }).catch(errors => console.log(errors))
         })
     }
 
@@ -83,6 +112,8 @@ const RecipeForm = ({edit, recipeId}) => {
                        onChange={e => setServings(e.target.value)}/>
             </label>
             <br/>
+
+            <MediaForm media={recipeMedia} setMedia={setRecipeMedia}/>
 
             <CuisineDietForm type={"cuisine"} items={cuisines} setItems={setCuisines}/>
             <br/>
