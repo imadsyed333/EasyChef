@@ -1,10 +1,17 @@
 import MenuBar from "../components/MenuBar/MenuBar";
 import RecipeList from "../components/Recipe/RecipeList";
 import {useEffect, useState} from "react";
+import Box from '@mui/material/Box';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Paper from '@mui/material/Paper';
 
 const HomePage = () => {
     const [topratedrecipes, setTopRatedRecipes] = useState([])
     const [mostfavouritedrecipes, setmostfavouritedrecipes] = useState([])
+
+    const [topRated, setTopRated] = useState(true)
+    const [mostFavourited, setMostFavourited] = useState(false)
 
     let [search, setSearch] = useState("")
     // var [cuisines, setCuisine] = useState(1)
@@ -18,7 +25,7 @@ const HomePage = () => {
         fetch("http://localhost:8000/recipes/mostfavourited/all/").then(response => response.json()).then(json => {
             setmostfavouritedrecipes(json.results)
         })])
-    }, [])
+    }, [topRated, mostFavourited])
 
     // useEffect(() => {
     //     fetch(`http://localhost:8000/recipes/find/?search=${search}`)
@@ -40,7 +47,6 @@ const HomePage = () => {
     // }
     // addCuisines()
 
-    
     // all_cuisines.forEach(t => console.log(t))
     // console.log(all_cuisines)
 
@@ -51,20 +57,39 @@ const HomePage = () => {
     //     </p>
     //   ))
     // console.log(c)
+
+
+    const showOverallRating = () => {
+        setMostFavourited(false)
+        setTopRated(true)    
+    }
+
+    const showMostFavourited = () => {
+        setTopRated(false)
+        setMostFavourited(true)
+    }
+
     return (
         <div>
-            <h1>Welcome to EasyChef</h1>
+            <h1 style={{display: "flex", justifyContent: "center"}}>Welcome to EasyChef</h1>
+            <Box sx={{ width: '100%', bgcolor: 'background.paper' }}>
+            <h3 style={{display: "flex", justifyContent: "center"}}>Popular Recipes</h3>
 
-            <h3>Popular Recipes</h3>
-            <div>
-                <h4>Highest Overall Rating: </h4>
-                <RecipeList recipes={topratedrecipes}/>
-            </div>
+                <Tabs centered>
+                    <Tab label="Top Rated" value={topRated} onClick={showOverallRating}/>
+                    <Tab label="Most Favourited" value={mostFavourited} onClick={showMostFavourited}/>
+                </Tabs>
 
-            <div>
-                <h4>Most Favourited: </h4>
-                <RecipeList recipes={mostfavouritedrecipes}/>
-            </div>
+                <Paper variant="outlined" >
+                    {mostFavourited?
+                        (<RecipeList recipes={mostfavouritedrecipes}/>):
+                        (<RecipeList recipes={topratedrecipes}/>)
+                    }
+                </Paper>
+
+            </Box>
+
+            
 
         </div>
     )
