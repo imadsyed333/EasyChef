@@ -4,6 +4,7 @@ import {createContext, useEffect, useState} from "react";
 export const useAccountContext = () => {
     const [token, setToken] = useState("")
     const [username, setUsername] = useState("User")
+    const [avatar, setAvatar] = useState('./icon.png')
 
     useEffect(() => {
         const stored_token = localStorage.getItem("token")
@@ -15,17 +16,20 @@ export const useAccountContext = () => {
     }, [])
 
     return {
-        username, token, setToken, setUsername
+        username, token, avatar, setToken, setUsername, setAvatar
     }
 }
 
 const AccountContext = createContext({
     username: "User",
     token: "",
+    avatar: "",
     setToken: () => {
     },
     setUsername: () => {
     },
+    setAvatar: () => {
+    }
 })
 
 export default AccountContext
