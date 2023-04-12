@@ -157,7 +157,7 @@ class MostLikedViewSet(viewsets.ModelViewSet):
 # code inspired from https://medium.com/swlh/searching-in-django-rest-framework-45aad62e7782
 # other resource used: https://www.django-rest-framework.org/api-guide/filtering/
 class SearchAPIView(generics.ListCreateAPIView):
-    queryset = Recipe.objects.all().order_by('-overall_rating', '-total_favourites')
+    queryset = Recipe.objects.all().order_by('-overall_rating', '-total_favourites').values()
     filter_backends = (filters.SearchFilter, DjangoFilterBackend)
     search_fields = ['name', 'ingredients__name', 'creator__email']
     filterset_fields = ['cuisines', 'diets', 'cooking_time']
