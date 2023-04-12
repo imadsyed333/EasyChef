@@ -31,7 +31,7 @@ const RecipeDetailsPage = () => {
     const [totallikes, setTotalLikes] = useState(0)
     // const [comments, setComments] = useState([])
     const [allusers, setAllUsers] = useState([])
-    
+
     useEffect(() => {
         fetchRecipeDetails()
         // fetchAllComments()
@@ -65,7 +65,7 @@ const RecipeDetailsPage = () => {
 
 
     const fetchAllUsers = () => {
-            fetch("http://localhost:8000/accounts/profiles/all/")
+        fetch("http://localhost:8000/accounts/profiles/all/")
             .then(response => response.json())
             .then(json => {
                 console.log("Users: ", json.results)
@@ -76,16 +76,15 @@ const RecipeDetailsPage = () => {
 
     const fetchTotalLikes = () => {
         fetch("http://localhost:8000/recipes/totallikes/")
-        .then(response => response.json())
-        .then(json => json.find(item => item.id === parseInt(id)))
-        .then(curr_recipe => {
-            console.log("FETCH THIS RECIPE'S LIKES", curr_recipe)
-            console.log("TOTAL LIKES", curr_recipe.total_likes)
-            setTotalLikes(curr_recipe.total_likes)
-        })
+            .then(response => response.json())
+            .then(json => json.find(item => item.id === parseInt(id)))
+            .then(curr_recipe => {
+                console.log("FETCH THIS RECIPE'S LIKES", curr_recipe)
+                console.log("TOTAL LIKES", curr_recipe.total_likes)
+                setTotalLikes(curr_recipe.total_likes)
+            })
     }
 
-    
 
     // fetch all rating objects of this user
     // if the user has a rating object for this current recipe, 
@@ -93,23 +92,24 @@ const RecipeDetailsPage = () => {
     // if user does not have rating object for this current recipe,
     //     
     const fetchRating = () => {
-        fetch("http://localhost:8000/recipes/ratings/", {method: "GET",
-        headers: {
-            "Content-type": "application/json",
-            "Authorization": "Bearer " + token
-        }})
-        .then(response => response.json())
-        .then(json => json.find(item => item.recipe === parseInt(id)))
-        .then(curr_recipe => {
-            console.log("THIS USER'S INFO FOR THIS RECIPE: ", curr_recipe)
-            if(curr_recipe){
-                console.log("USER'S RATING FOR THIS RECIPE: ", curr_recipe.value)
-                setRating(curr_recipe.value)
+        fetch("http://localhost:8000/recipes/ratings/", {
+            method: "GET",
+            headers: {
+                "Content-type": "application/json",
+                "Authorization": "Bearer " + token
             }
-            else{
-                console.log("USER'S DOESN'T HAVE RATING FOR THIS RECIPE")
-            }        
         })
+            .then(response => response.json())
+            .then(json => json.find(item => item.recipe === parseInt(id)))
+            .then(curr_recipe => {
+                console.log("THIS USER'S INFO FOR THIS RECIPE: ", curr_recipe)
+                if (curr_recipe) {
+                    console.log("USER'S RATING FOR THIS RECIPE: ", curr_recipe.value)
+                    setRating(curr_recipe.value)
+                } else {
+                    console.log("USER'S DOESN'T HAVE RATING FOR THIS RECIPE")
+                }
+            })
 
     }
 
@@ -137,7 +137,7 @@ const RecipeDetailsPage = () => {
             setRating(newValue)
             sendRating(newValue)
         }
-      };
+    };
 
     const sendRating = (newVal) => {
         console.log(`Sending new rating to server: ${newVal}`);
@@ -146,12 +146,17 @@ const RecipeDetailsPage = () => {
             value: newVal,
             recipe: parseInt(id)
         }
-        fetch("http://localhost:8000/recipes/ratings/add/", {method: "POST",
-        headers: {
-            "Content-type": "application/json",
-            "Authorization": "Bearer " + token
-        }, body: JSON.stringify(data)}).then(response => response.json()).then(data => {console.log("yeye:", data)
-        fetchRecipeDetails(); fetchOverallRating()}).catch(error => {
+        fetch("http://localhost:8000/recipes/ratings/add/", {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json",
+                "Authorization": "Bearer " + token
+            }, body: JSON.stringify(data)
+        }).then(response => response.json()).then(data => {
+            console.log("yeye:", data)
+            fetchRecipeDetails();
+            fetchOverallRating()
+        }).catch(error => {
             console.error("Error:", error)
         })
     }
@@ -159,24 +164,25 @@ const RecipeDetailsPage = () => {
     const isLiked = () => {
 
         const url = "http://localhost:8000/recipes/likes/"
-        
-        fetch(url, {method: "GET",
-        headers: {
-            "Content-type": "application/json",
-            "Authorization": "Bearer " + token
-        }}).then(response => response.json())
-        .then(json => json.find(item => item.id === parseInt(id)))
-        .then(c => {
-            console.log("LIKE EXISTS? ", c)
-            if(c){
-                console.log("LIKED")
-                setLiked(true)
+
+        fetch(url, {
+            method: "GET",
+            headers: {
+                "Content-type": "application/json",
+                "Authorization": "Bearer " + token
             }
-            else{
-                console.log("NOT LIKED")
-                setLiked(false)
-            }
-        })
+        }).then(response => response.json())
+            .then(json => json.find(item => item.id === parseInt(id)))
+            .then(c => {
+                console.log("LIKE EXISTS? ", c)
+                if (c) {
+                    console.log("LIKED")
+                    setLiked(true)
+                } else {
+                    console.log("NOT LIKED")
+                    setLiked(false)
+                }
+            })
     }
 
     const addLike = () => {
@@ -187,15 +193,17 @@ const RecipeDetailsPage = () => {
             recipe: parseInt(id)
         }
 
-        fetch("http://localhost:8000/recipes/likes/add/", {method: "POST",
-        headers: {
-            "Content-type": "application/json",
-            "Authorization": "Bearer " + token
-        }, body: JSON.stringify(data)}).then(response => response.json()).then(data => {
-                console.log("added like:", data); 
-                isLiked();
-                fetchTotalLikes();
-            }).catch(error => {
+        fetch("http://localhost:8000/recipes/likes/add/", {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json",
+                "Authorization": "Bearer " + token
+            }, body: JSON.stringify(data)
+        }).then(response => response.json()).then(data => {
+            console.log("added like:", data);
+            isLiked();
+            fetchTotalLikes();
+        }).catch(error => {
             console.error("Error:", error)
         })
     }
@@ -208,15 +216,17 @@ const RecipeDetailsPage = () => {
             recipe: parseInt(id)
         }
 
-        fetch("http://localhost:8000/recipes/likes/add/", {method: "POST",
-        headers: {
-            "Content-type": "application/json",
-            "Authorization": "Bearer " + token
-        }, body: JSON.stringify(data)}).then(response => response.json()).then(data => {
+        fetch("http://localhost:8000/recipes/likes/add/", {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json",
+                "Authorization": "Bearer " + token
+            }, body: JSON.stringify(data)
+        }).then(response => response.json()).then(data => {
             console.log("removed like:", data)
             isLiked();
             fetchTotalLikes();
-            }).catch(error => {
+        }).catch(error => {
             console.error("Error:", error)
         })
     }
@@ -226,24 +236,25 @@ const RecipeDetailsPage = () => {
         // get all favourite objects
         // find this recipe+user. if doesnt exist, it is not favourited. if found, check if favourited
         const url = "http://localhost:8000/recipes/favourites/"
-        
-        fetch(url, {method: "GET",
-        headers: {
-            "Content-type": "application/json",
-            "Authorization": "Bearer " + token
-        }}).then(response => response.json())
-        .then(json => json.find(item => item.id === parseInt(id)))
-        .then(c => {
-            console.log("FAVOURITE EXISTS? ", c)
-            if(c){
-                console.log("FAVOURITED")
-                setFavourited(true)
+
+        fetch(url, {
+            method: "GET",
+            headers: {
+                "Content-type": "application/json",
+                "Authorization": "Bearer " + token
             }
-            else{
-                console.log("NOT FAVOURITED")
-                setFavourited(false)
-            }
-        })
+        }).then(response => response.json())
+            .then(json => json.find(item => item.id === parseInt(id)))
+            .then(c => {
+                console.log("FAVOURITE EXISTS? ", c)
+                if (c) {
+                    console.log("FAVOURITED")
+                    setFavourited(true)
+                } else {
+                    console.log("NOT FAVOURITED")
+                    setFavourited(false)
+                }
+            })
     }
 
     // FAVOURITES THIS RECIPE
@@ -255,14 +266,16 @@ const RecipeDetailsPage = () => {
             recipe: parseInt(id)
         }
 
-        fetch("http://localhost:8000/recipes/favourites/add/", {method: "POST",
-        headers: {
-            "Content-type": "application/json",
-            "Authorization": "Bearer " + token
-        }, body: JSON.stringify(data)}).then(response => response.json()).then(data => {
-                console.log("added favorite:", data); 
-                isFavourited();
-            }).catch(error => {
+        fetch("http://localhost:8000/recipes/favourites/add/", {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json",
+                "Authorization": "Bearer " + token
+            }, body: JSON.stringify(data)
+        }).then(response => response.json()).then(data => {
+            console.log("added favorite:", data);
+            isFavourited();
+        }).catch(error => {
             console.error("Error:", error)
         })
     }
@@ -275,14 +288,16 @@ const RecipeDetailsPage = () => {
             recipe: parseInt(id)
         }
 
-        fetch("http://localhost:8000/recipes/favourites/add/", {method: "POST",
-        headers: {
-            "Content-type": "application/json",
-            "Authorization": "Bearer " + token
-        }, body: JSON.stringify(data)}).then(response => response.json()).then(data => {
+        fetch("http://localhost:8000/recipes/favourites/add/", {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json",
+                "Authorization": "Bearer " + token
+            }, body: JSON.stringify(data)
+        }).then(response => response.json()).then(data => {
             console.log("removed favorite:", data)
             isFavourited();
-            }).catch(error => {
+        }).catch(error => {
             console.error("Error:", error)
         })
     }
@@ -297,7 +312,7 @@ const RecipeDetailsPage = () => {
     //     })
 
     // }
-    
+
 
     const sendComment = () => {
 
@@ -322,10 +337,10 @@ const RecipeDetailsPage = () => {
         }).then(response => response.json()).then(data => {
             console.log("Success:", data)
 
-            if(comm_media){
+            if (comm_media) {
                 sendCommentMedia(comm_media, data.id);
             }
-    
+
             fetchRecipeDetails()
         }).catch(error => {
             console.error("Error:", error)
@@ -337,7 +352,7 @@ const RecipeDetailsPage = () => {
     const sendCommentMedia = (comment_med, comm_id) => {
         console.log("MEDIA TO SEND TO RECIPE " + parseInt(id) + ": ", comment_med, " total media items: ", comment_med.length)
         console.log("COMMENT ID: ", comm_id)
-        
+
         // loop through each item, and send it one by one to the server
 
         // convert filelist to array
@@ -349,7 +364,7 @@ const RecipeDetailsPage = () => {
 
             formData.append('media', curr_comm_media);
             formData.append("comment", comm_id);
-            
+
             fetch('http://localhost:8000/recipes/comments/media/add/', {
                 method: "POST",
                 headers: {
@@ -357,36 +372,47 @@ const RecipeDetailsPage = () => {
                 },
                 body: formData
             }).then(response => response.json())
-            .then(data => {
-                console.log("Success:", data)
-                fetchRecipeDetails()
-            }).catch(error => {
+                .then(data => {
+                    console.log("Success:", data)
+                    fetchRecipeDetails()
+                }).catch(error => {
                 console.error("Error:", error)
             })
 
         })
-
-
     }
 
+    const addToCart = () => {
+        const data = new FormData()
+        data.append("recipe", id)
+        fetch("http://localhost:8000/recipes/cart/add/", {
+            method: "POST",
+            headers: {
+                "Authorization": "Bearer " + token
+            },
+            body: data
+        }).then(response => response.json()).then(json => console.log(json))
+    }
 
 
     return (
         <div>
             <h1>{recipe.name}</h1>
-            {recipe.media?.map(img => (<embed src={img.media} width="130px"></embed>))}
+            {
+                recipe.media?.map(img => (<embed src={img.media} width="130px"></embed>))}
+            <Button onClick={addToCart}>Add to Shopping List</Button>
 
             <ReactStars {...newRating} />
 
 
             {/* if rating exists, display it. otherwise, display 'no rating exists' */}
-            <div>Current Rating: {rating? (rating):("no rating yet")}</div>
+            <div>Current Rating: {rating ? (rating) : ("no rating yet")}</div>
 
-            <div>Overall Rating: {overallrating? (overallrating):("no overall rating yet")}</div>
+            <div>Overall Rating: {overallrating ? (overallrating) : ("no overall rating yet")}</div>
 
-            {favourited? (
-            <div>MY FAVOURITE</div>
-            ): (
+            {favourited ? (
+                <div>MY FAVOURITE</div>
+            ) : (
                 <div>NOT MY FAVOURITE</div>
             )}
 
@@ -400,9 +426,9 @@ const RecipeDetailsPage = () => {
             <div>TOTAL LIKES: {totallikes}</div>
 
 
-            {liked? (
-            <div>LIKED</div>
-            ): (
+            {liked ? (
+                <div>LIKED</div>
+            ) : (
                 <div>NOT LIKED</div>
             )}
 
@@ -434,7 +460,7 @@ const RecipeDetailsPage = () => {
             <h2>Steps</h2>
             <ol>
                 {recipe.steps?.map(step => (
-                    
+
                     <div key={step.id}>
                         {console.log("step " + step.id + " media: ", step.media)}
                         {step.media?.map(img => (<embed src={img.media} width="130px"></embed>))}
@@ -451,10 +477,11 @@ const RecipeDetailsPage = () => {
                 <input type="text" value={comment} onChange={(e) => setComment(e.target.value)}/>
 
                 <input type="file" accept="image/*,video/*" multiple onChange={(e) => {
-                    console.log("ALL FILES: ", e.target.files); 
-                    setCommentMedia(e.target.files); 
-                    console.log(comm_media)}}/>
-            
+                    console.log("ALL FILES: ", e.target.files);
+                    setCommentMedia(e.target.files);
+                    console.log(comm_media)
+                }}/>
+
                 <Button onClick={sendComment}>comment</Button>
 
             </form>
@@ -465,26 +492,28 @@ const RecipeDetailsPage = () => {
             {recipe.comments?.slice(0).reverse().map(comment => (
                 <div key={comment.id}>
 
-                    <div>{allusers.find(item => item.id === parseInt(comment.poster))?.avatar?(<img src={allusers.find(item => item.id === parseInt(comment.poster))?.avatar} width="75px"></img> ):("")}</div>
+                    <div>{allusers.find(item => item.id === parseInt(comment.poster))?.avatar ? (
+                        <img src={allusers.find(item => item.id === parseInt(comment.poster))?.avatar}
+                             width="75px"></img>) : ("")}</div>
                     <div>{"Commenter: " + allusers.find(item => item.id === parseInt(comment.poster))?.email}</div>
                     {/* {console.log("NEW COMMENT: ", comment)} */}
                     <div>{"Comment: " + comment.content}</div>
 
                     {/* Conditional rendering: if media is video, render as video. otherwise, render as image. */}
-                    {comment.media?.map(comment_media => 
-                        ((comment_media?.media?.split(".")[1] === "mp4") || 
-                        (comment_media?.media?.split(".")[1] === "avi") ||
-                        (comment_media?.media?.split(".")[1] === "MOV") ||
-                        (comment_media?.media?.split(".")[1] === "webm")  )? 
-                            (<video width="150" controls >
-                                <source src={comment_media.media} />
-                            </video>):
-                            (<embed src={comment_media.media} width="130px"></embed>) )}
+                    {comment.media?.map(comment_media =>
+                        ((comment_media?.media?.split(".")[1] === "mp4") ||
+                            (comment_media?.media?.split(".")[1] === "avi") ||
+                            (comment_media?.media?.split(".")[1] === "MOV") ||
+                            (comment_media?.media?.split(".")[1] === "webm")) ?
+                            (<video width="150" controls>
+                                <source src={comment_media.media}/>
+                            </video>) :
+                            (<embed src={comment_media.media} width="130px"></embed>))}
 
                     <hr></hr>
 
                 </div>
-            
+
             ))}
 
             {/* might not need this */}
