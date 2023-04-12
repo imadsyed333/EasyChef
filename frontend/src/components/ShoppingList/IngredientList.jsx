@@ -4,7 +4,7 @@ import AccountContext from "../../contexts/AccountContext";
 
 const IngredientList = () => {
     const {token} = useContext(AccountContext)
-    const [list, setList] = useState({})
+    const [ingredients, setIngredients] = useState({})
 
 
     useEffect(() => {
@@ -17,19 +17,20 @@ const IngredientList = () => {
                         "Authorization": "Bearer " + token
                     }
 
-                })
-                .then(data => data.json())
-                .then(d => {
-                    setList(Object.assign(list, d))
-                })
-
+                }).then(response => {
+                if (response.status === 200) {
+                    response.json().then(json => setIngredients(json))
+                } else {
+                    console.log(response.json())
+                }
+            }).catch(errors => console.log(errors))
         }
     }, [token])
 
 
     return (
         <div>
-            {Object.keys(list)} : {list[Object.keys(list)[0]]}
+           
         </div>
     )
 

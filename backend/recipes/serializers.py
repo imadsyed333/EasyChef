@@ -497,3 +497,12 @@ class LikeSerializer(serializers.ModelSerializer):
             print('-likers: ', liked_recipe.likers.all())
 
         return like
+
+
+class ShoppingItemSerializer(serializers.ModelSerializer):
+    ingredients = IngredientSerializer(many=True)
+    media = RecipeMediaSerializer(many=True)
+
+    class Meta:
+        model = Recipe
+        fields = ['id', 'name', 'ingredients', 'media', 'servings']
