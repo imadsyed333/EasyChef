@@ -6,14 +6,14 @@ const StepForm = ({steps, setSteps}) => {
     const [content, setContent] = useState("")
     const [prepTime, setPrepTime] = useState(0)
     const [cookingTime, setCookingTime] = useState(0)
-    const [media, setMedia] = useState([])
+    const [stepMedia, setStepMedia] = useState([])
 
     const handleAdd = () => {
         const step = {
             content: content,
             prep_time: prepTime,
             cooking_time: cookingTime,
-            media: media
+            media: stepMedia
         }
 
         setSteps([...steps, step])
