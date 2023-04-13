@@ -18,6 +18,7 @@ urlpatterns = [
     path('<int:pk>/update/', NewRecipeViewSet.as_view({'put': 'update'})),
 
     path('diets/add/', DietViewSet.as_view({'post': 'create'})),
+    path('diets/all/', DietViewSet.as_view({'get': 'list'})),
     path('diets/<int:pk>/view/', DietViewSet.as_view({'get': 'retrieve'})),
     path('ingredients/add/', IngredientViewSet.as_view({'post': 'create'})),
     path('cuisines/add/', CuisineViewSet.as_view({'post': 'create'})),

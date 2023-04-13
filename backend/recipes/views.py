@@ -52,7 +52,13 @@ class CommentMediaViewSet(viewsets.ModelViewSet):
 class DietViewSet(viewsets.ModelViewSet):
     queryset = Diet.objects.all()
     serializer_class = DietSerializer
-    permission_classes = [IsAuthenticated]
+
+    def get_permissions(self):
+        if self.action not in ['list', 'retrieve']:
+            permission_classes = [IsAuthenticated]
+        else:
+            permission_classes = [AllowAny]
+        return [permission() for permission in permission_classes]
 
 
 class CuisineViewSet(viewsets.ModelViewSet):
