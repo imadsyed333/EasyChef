@@ -421,7 +421,16 @@ const RecipeDetailsPage = () => {
         <div>
             <h1>{recipe.name}</h1>
             {
-                recipe.media?.map(img => (<embed src={img.media} width="130px"></embed>))}
+                recipe.media?.map(recipe_media => 
+                    ((recipe_media?.media?.split(".")[1] === "mp4") ||
+                    (recipe_media?.media?.split(".")[1] === "avi") ||
+                    (recipe_media?.media?.split(".")[1] === "MOV") ||
+                    (recipe_media?.media?.split(".")[1] === "webm")) ?
+                    (<video width="150" controls>
+                        <source src={recipe_media.media}/>
+                    </video>) :
+                    (<embed src={recipe_media.media} width="130px"></embed>))}
+
             <Button onClick={addToCart}>Add to Shopping List</Button>
             <Button onClick={removeFromCart}> Remove from Shopping List </Button>
 
