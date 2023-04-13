@@ -67,6 +67,7 @@ const LoginPage = () => {
 
     return (
         //Inspired by https://react-bootstrap.github.io/forms/overview/
+        // https://reactgo.com/react-center-component-horizontally-vertically/
         <div style={{display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
