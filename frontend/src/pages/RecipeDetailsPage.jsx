@@ -427,10 +427,10 @@ const RecipeDetailsPage = () => {
                         (recipe_media?.media?.split(".")[1] === "avi") ||
                         (recipe_media?.media?.split(".")[1] === "MOV") ||
                         (recipe_media?.media?.split(".")[1] === "webm")) ?
-                        (<video width="150" controls>
+                        (<video width="200" controls>
                             <source src={recipe_media.media}/>
                         </video>) :
-                        (<embed src={recipe_media.media} width="130px"></embed>))}
+                        (<embed src={recipe_media.media} width="180px"></embed>))}
 
                 <br></br>
                 {token?(<Button onClick={addToCart}>Add to Shopping List</Button>):<></>}
@@ -456,6 +456,7 @@ const RecipeDetailsPage = () => {
                 {/* if rating exists, display it. otherwise, display 'no rating exists' */}
                 {token?(<div>My Current Rating: {rating ? (rating) : ("no rating yet")}</div>):(<div></div>)}
 
+                <br></br>
 
 
                 {token?
@@ -463,9 +464,10 @@ const RecipeDetailsPage = () => {
                         (<div>MY FAVOURITE</div>):(<div>NOT MY FAVOURITE</div>)):
                         (<div></div>)}
 
-                {token?(<Button onClick={addFavourite}>Favourite</Button>):(<div></div>)}
-                {token?(<Button onClick={removeFavourite}>UnFavourite</Button>):(<div></div>)}
+                {token?(<Button style={{ background: '#FBB900' }} onClick={addFavourite}>Favourite</Button>):(<div></div>)}
+                {token?(<Button style={{ background: 'red' }}  onClick={removeFavourite}>X</Button>):(<div></div>)}
 
+                <br></br>
                 <br></br>
 
 
@@ -476,7 +478,7 @@ const RecipeDetailsPage = () => {
 
                 {token?(<Button onClick={addLike}>Like</Button>):(<div></div>)}
                     
-                {token?(<Button onClick={removeLike}>UnLike</Button>):(<div></div>)}
+                {token?(<Button style={{ background: 'red' }} onClick={removeLike}>X</Button>):(<div></div>)}
 
 
                 {recipe?.diets?.length?(<h2>Diets</h2>):(<></>)}
@@ -507,6 +509,8 @@ const RecipeDetailsPage = () => {
                     {recipe.steps?.map(step => (
 
                         <div key={step.id}>
+                            <li>{step.content}</li>
+                            <br></br>
                             {console.log("step " + step.id + " media: ", step.media)}
                             {step.media?.map(step_media => 
                                 
@@ -514,13 +518,11 @@ const RecipeDetailsPage = () => {
                                 (step_media?.media?.split(".")[1] === "avi") ||
                                 (step_media?.media?.split(".")[1] === "MOV") ||
                                 (step_media?.media?.split(".")[1] === "webm")) ?
-                                (<video width="150" controls>
+                                (<video width="180" controls>
                                     <source src={step_media.media}/>
                                 </video>) :
-                                (<embed src={step_media.media} width="130px"></embed>))}
+                                (<embed src={step_media.media} width="150px"></embed>))}
 
-                            <br></br>
-                            <li>{step.content}</li>
                         </div>
 
                     ))}
@@ -562,10 +564,10 @@ const RecipeDetailsPage = () => {
                                 (comment_media?.media?.split(".")[1] === "avi") ||
                                 (comment_media?.media?.split(".")[1] === "MOV") ||
                                 (comment_media?.media?.split(".")[1] === "webm")) ?
-                                (<video width="150" controls>
+                                (<video width="200" controls>
                                     <source src={comment_media.media}/>
                                 </video>) :
-                                (<embed src={comment_media.media} width="130px"></embed>))}
+                                (<embed src={comment_media.media} width="150px"></embed>))}
 
                         <hr></hr>
 
