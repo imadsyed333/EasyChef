@@ -503,7 +503,17 @@ const RecipeDetailsPage = () => {
 
                     <div key={step.id}>
                         {console.log("step " + step.id + " media: ", step.media)}
-                        {step.media?.map(img => (<embed src={img.media} width="130px"></embed>))}
+                        {step.media?.map(step_media => 
+                            
+                            ((step_media?.media?.split(".")[1] === "mp4") ||
+                            (step_media?.media?.split(".")[1] === "avi") ||
+                            (step_media?.media?.split(".")[1] === "MOV") ||
+                            (step_media?.media?.split(".")[1] === "webm")) ?
+                            (<video width="150" controls>
+                                <source src={step_media.media}/>
+                            </video>) :
+                            (<embed src={step_media.media} width="130px"></embed>))}
+
                         <br></br>
                         <li>{step.content}</li>
                     </div>
