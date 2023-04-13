@@ -479,7 +479,7 @@ const RecipeDetailsPage = () => {
                 {token?(<Button onClick={removeLike}>UnLike</Button>):(<div></div>)}
 
 
-                <h2>Diets</h2>
+                {recipe?.diets?.length?(<h2>Diets</h2>):(<></>)}
                 <ul>
 
                     {recipe.diets?.map(diet => (
@@ -487,19 +487,22 @@ const RecipeDetailsPage = () => {
                         )
                     )}
                 </ul>
-                <h2>Cuisines</h2>
+                
+                {recipe?.cuisines?.length?(<h2>Cuisines</h2>):(<></>)}
                 <ul>
                     {recipe.cuisines?.map(cuisine => (
                         <li key={cuisine.id}>{cuisine.name}</li>
                     ))}
                 </ul>
-                <h2>Ingredients</h2>
+
+                {recipe?.ingredients?.length?(<h2>Ingredients</h2>):(<></>)}
                 <ul>
                     {recipe.ingredients?.map((ingredient, i) => (
                         <li key={i}>{ingredient.amount} of {ingredient.name}</li>
                     ))}
                 </ul>
-                <h2>Steps</h2>
+
+                {recipe?.steps?.length?(<h2>Steps</h2>):(<></>)}
                 <ol>
                     {recipe.steps?.map(step => (
 
