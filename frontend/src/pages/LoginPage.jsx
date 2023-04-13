@@ -3,6 +3,10 @@ import {useContext, useState} from "react";
 import Button from "react-bootstrap/Button";
 import {useNavigate} from "react-router-dom";
 import Form from 'react-bootstrap/Form';
+import {Image} from "react-bootstrap";
+
+
+
 
 const LoginPage = () => {
     const {setToken} = useContext(AccountContext);
@@ -62,34 +66,72 @@ const LoginPage = () => {
     };
 
     return (
-        <div>
-            Login here <br/>
+        //Inspired by https://react-bootstrap.github.io/forms/overview/
+        <div style={{display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: '70vh',
+            }}>
             <Form>
-            <label>
-                Email:
-                <input
-                    type={"email"}
+                 <img src={require('./EasyChefLogo.png')} alt={""} style={{height: 300, width: 300}}/>
+      <Form.Group className="mb-3" controlId="formBasicEmail">
+        <Form.Label >
+                Email address
+        </Form.Label>
+        <Form.Control type={"email"}
                     name={"email"}
                     value={email}
-                    onChange={(event) => setEmail(event.target.value)}
-                />
-            </label>
-            {emailErrors()}
-            <label>
-                Password:
-                <input
-                    type={"password"}
+                    onChange={(event) => setEmail(event.target.value)} />
+        <Form.Text className="text-muted">
+          We'll never share your email with anyone else.
+        </Form.Text>
+          {emailErrors()}
+      </Form.Group>
+
+      <Form.Group className="mb-3" controlId="formBasicPassword">
+        <Form.Label >
+            Password
+        </Form.Label>
+        <Form.Control type={"password"}
                     name={"password"}
                     value={password}
-                    onChange={(event) => setPassword(event.target.value)}
-                />
-            </label>
-            {passwordErrors()}
-            <Button onClick={handleLogin}>Login</Button>
-            </Form>
-            {authErrors()}
+                    onChange={(event) => setPassword(event.target.value)} />
+         {authErrors()}
+          {passwordErrors()}
+      </Form.Group>
+
+      <Button onClick={handleLogin}>Login</Button>
+
+    </Form>
+
         </div>
     );
 };
 
 export default LoginPage;
+
+ // Login here <br/>
+ //            <Form>
+ //            <label>
+ //                Email:
+ //                <input
+ //                    type={"email"}
+ //                    name={"email"}
+ //                    value={email}
+ //                    onChange={(event) => setEmail(event.target.value)}
+ //                />
+ //            </label>
+ //            {emailErrors()}
+ //            <label>
+ //                Password:
+ //                <input
+ //                    type={"password"}
+ //                    name={"password"}
+ //                    value={password}
+ //                    onChange={(event) => setPassword(event.target.value)}
+ //                />
+ //            </label>
+ //            {passwordErrors()}
+ //            <Button onClick={handleLogin}>Login</Button>
+ //            </Form>
+ //            {authErrors()}
