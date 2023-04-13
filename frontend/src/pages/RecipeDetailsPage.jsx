@@ -432,15 +432,17 @@ const RecipeDetailsPage = () => {
                         </video>) :
                         (<embed src={recipe_media.media} width="180px"></embed>))}
 
-                <br></br>
+                <hr></hr>
                 {token?(<Button onClick={addToCart}>Add to Shopping List</Button>):<></>}
                 {token?(<Button onClick={removeFromCart}> Remove from Shopping List </Button>):<></>}
+                <hr></hr>
 
                 <div> Original Overall Rating: 
                     {overallrating ? 
                     (<ReactStars {...initialOverallRating}/> ):
                     ("no overall rating yet")}</div>
 
+                <hr></hr>
 
                 <div>Overall Rating:  
                     {overallrating ? 
@@ -448,6 +450,7 @@ const RecipeDetailsPage = () => {
                     ("no overall rating yet")}</div>
 
                 <div>Total Likes: {totallikes}</div>
+                <hr></hr>
 
 
                 {token?(<ReactStars {...newRating} />):(<div></div>)}
@@ -480,6 +483,7 @@ const RecipeDetailsPage = () => {
                     
                 {token?(<Button style={{ background: 'red' }} onClick={removeLike}>X</Button>):(<div></div>)}
 
+                <hr></hr>
 
                 {recipe?.diets?.length?(<h2>Diets</h2>):(<></>)}
                 <ul>
