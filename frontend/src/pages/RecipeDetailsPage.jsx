@@ -425,13 +425,13 @@ const RecipeDetailsPage = () => {
             <Button onClick={addToCart}>Add to Shopping List</Button>
             <Button onClick={removeFromCart}> Remove from Shopping List </Button>
 
-            <div> Initial Overall Rating: 
+            <div> Original Overall Rating: 
                 {overallrating ? 
                 (<ReactStars {...initialOverallRating}/> ):
                 ("no overall rating yet")}</div>
 
 
-            <div>Current Overall Rating:  
+            <div>Overall Rating:  
                 {overallrating ? 
                 (overallrating):
                 ("no overall rating yet")}</div>
