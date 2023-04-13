@@ -14,11 +14,13 @@ const HomePage = () => {
 
     let [cuisines, setCuisines] = useState([])
     let [diets, setDiets] = useState([])
+    let [cookingTimes, setCookingTimes] = useState([])
 
     useEffect(() => {
         searchRecipes()
         fetchCuisines()
         fetchDiets()
+        fetchCookingTimes()
         // console.log('OUR RECIPES: ', recipes[1])
         console.log('OUR CUISINES: ', cuisines)
 
@@ -55,6 +57,18 @@ const HomePage = () => {
             })
     }
 
+    const fetchCookingTimes = () => {
+        fetch(`http://localhost:8000/recipes/find/?cooking_time=`)
+            .then(response => response.json())
+            .then(json => {
+                console.log(" DIETSS ", json.results)
+                setCookingTimes(json.results)
+            })
+    }
+
+
+
+
 
     const handleCuisineSelect = (cui_id) => {
 
@@ -74,6 +88,20 @@ const HomePage = () => {
 
         console.log('CURR DIET: ', diet_id)
         fetch(`http://localhost:8000/recipes/find/?diets=${diet_id}`)
+        .then(response => response.json())
+        .then(json => {
+            console.log('FRESHH', json.results)
+            setRecipes(json.results)
+        })
+        
+    }
+
+
+
+    const handleTimeSelect = (ct) => {
+
+        console.log('CURR DIET: ', ct)
+        fetch(`http://localhost:8000/recipes/find/?cooking_time=${ct}`)
         .then(response => response.json())
         .then(json => {
             console.log('FRESHH', json.results)
@@ -114,6 +142,26 @@ const HomePage = () => {
                         {diets?.map(diet => (<Button key={diet.id} value={diet.id} onClick={() => {
                             console.log(diet.id, " DIET")
                             handleDietSelect(diet.id)}}>{diet.name}</Button>))}
+                    </div>
+                
+                </div>
+
+                <br></br>
+
+
+                <div style={{display: "flex", justifyContent: "center"}}>
+
+                    <h4>Cooking Time Filters:</h4>
+                    <br></br>
+                    <div>
+                        {cookingTimes?.map(ct => 
+                        
+                        ct.cooking_time!=null?(<Button key={ct.id} value={ct.id} 
+                                onClick={() => {console.log(ct.cooking_time, " COOK"); handleTimeSelect(ct.cooking_time)}}>
+                                {ct.cooking_time + " Minutes"}
+                            </Button>):(<></>)
+                        
+                        )}
                     </div>
                 
                 </div>
