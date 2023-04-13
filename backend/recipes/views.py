@@ -52,7 +52,13 @@ class CommentMediaViewSet(viewsets.ModelViewSet):
 class DietViewSet(viewsets.ModelViewSet):
     queryset = Diet.objects.all()
     serializer_class = DietSerializer
-    permission_classes = [IsAuthenticated]
+
+    def get_permissions(self):
+        if self.action not in ['list', 'retrieve']:
+            permission_classes = [IsAuthenticated]
+        else:
+            permission_classes = [AllowAny]
+        return [permission() for permission in permission_classes]
 
 
 class CuisineViewSet(viewsets.ModelViewSet):
@@ -108,6 +114,7 @@ class RatingViewSet(viewsets.ModelViewSet):
 
 
 class OverallRatingViewSet(viewsets.ModelViewSet):
+
     queryset = Recipe.objects.all().filter().order_by('-overall_rating')
     serializer_class = OverallRatingSerializer
 
@@ -124,6 +131,13 @@ class FavouriteViewSet(viewsets.ModelViewSet):
     queryset = Favourite.objects.all().filter(favourite=True)
     serializer_class = FavouriteSerializer
 
+    def get_permissions(self):
+        if self.action not in ['list', 'retrieve']:
+            permission_classes = [IsAuthenticated]
+        else:
+            permission_classes = [AllowAny]
+        return [permission() for permission in permission_classes]
+
 
 class MostFavouritedViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all().exclude(total_favourites=0).order_by('-total_favourites').values()
@@ -133,6 +147,12 @@ class MostFavouritedViewSet(viewsets.ModelViewSet):
 class LikeViewSet(viewsets.ModelViewSet):
     queryset = Like.objects.all().filter(like=True)
     serializer_class = LikeSerializer
+    def get_permissions(self):
+        if self.action not in ['list', 'retrieve']:
+            permission_classes = [IsAuthenticated]
+        else:
+            permission_classes = [AllowAny]
+        return [permission() for permission in permission_classes]
 
 
 class MostLikedViewSet(viewsets.ModelViewSet):
@@ -143,7 +163,7 @@ class MostLikedViewSet(viewsets.ModelViewSet):
 # code inspired from https://medium.com/swlh/searching-in-django-rest-framework-45aad62e7782
 # other resource used: https://www.django-rest-framework.org/api-guide/filtering/
 class SearchAPIView(generics.ListCreateAPIView):
-    queryset = Recipe.objects.all().order_by('overall_rating', 'total_favourites')
+    queryset = Recipe.objects.all().order_by('-overall_rating', '-total_favourites').values()
     filter_backends = (filters.SearchFilter, DjangoFilterBackend)
     search_fields = ['name', 'ingredients__name', 'creator__email']
     filterset_fields = ['cuisines', 'diets', 'cooking_time']
@@ -171,6 +191,28 @@ class MyRecipesView(ListAPIView):
         account = request.user
         queryset = account.recipes.all()
         serializer = RecipeSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+
+class MyLikesView(ListAPIView):
+    def list(self, request, *args, **kwargs):
+        account = request.user
+        queryset = account.likes.all()
+        serializer = RecipeSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+class TotalLikesView(ListAPIView):
+    def list(self, request, *args, **kwargs):
+        # account = request.user
+        queryset = Recipe.objects.all().order_by("-total_likes")
+        serializer = RecipeSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+class MyRatingsView(ListAPIView):
+    def list(self, request, *args, **kwargs):
+        account = request.user
+        queryset = account.ratings.all()
+        serializer = RatingSerializer(queryset, many=True)
         return Response(serializer.data)
 
 class AddToCart(APIView):

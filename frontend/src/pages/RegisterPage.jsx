@@ -9,7 +9,8 @@ const RegisterPage = () => {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [phone, setPhone] = useState("");
-    const [avatar, setAvatar] = useState("");
+
+    const [image, setImage] = useState()
 
     const navigate = useNavigate()
 
@@ -21,7 +22,7 @@ const RegisterPage = () => {
         formData.append("first_name", firstName)
         formData.append("last_name", lastName)
         formData.append("phone_number", phone)
-        formData.append("avatar", avatar)
+        formData.append("avatar", image)
         fetch("http://localhost:8000/accounts/signup/", {
             method: "POST",
             body: formData
@@ -74,6 +75,16 @@ const RegisterPage = () => {
             <label>
                 Phone Number:
                 <input type={"tel"} name={"phone_number"} value={phone} onChange={e => setPhone(e.target.value)}/>
+            </label>
+            <br/>
+            <label>Avatar:
+                <input type={"file"} name={"avatar"}
+                       onChange={(event) => {
+                           console.log(event.target.files)
+                           setImage(event.target.files[0])
+                       }
+                       }>
+                </input>
             </label>
             <br/>
             <Button onClick={handleSubmit}>Register</Button>

@@ -1,75 +1,183 @@
 import MenuBar from "../components/MenuBar/MenuBar";
 import RecipeList from "../components/Recipe/RecipeList";
 import {useEffect, useState} from "react";
+import Box from '@mui/material/Box';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Paper from '@mui/material/Paper';
+import Button from "react-bootstrap/Button";
 
 const HomePage = () => {
     const [recipes, setRecipes] = useState([])
 
     let [search, setSearch] = useState("")
-    // var [cuisines, setCuisine] = useState(1)
-    // var [diets, setDiet] = useState('')
-    // var [cooking_time, setCookingTime] = useState('')
+
+    let [cuisines, setCuisines] = useState([])
+    let [diets, setDiets] = useState([])
+    let [cookingTimes, setCookingTimes] = useState([])
 
     useEffect(() => {
-        fetch(`http://localhost:8000/recipes/all/`).then(response => response.json()).then(json => {
-            setRecipes(json.results)
-        })
-    }, [])
+        searchRecipes()
+        fetchCuisines()
+        fetchDiets()
+        fetchCookingTimes()
+        // console.log('OUR RECIPES: ', recipes[1])
+        console.log('OUR CUISINES: ', cuisines)
 
-    useEffect(() => {
+    }, [search])
+    
+    const searchRecipes = () => {
         fetch(`http://localhost:8000/recipes/find/?search=${search}`)
                     .then(response => response.json())
                     .then(json => {
                         // console.log(json.results)
                         setRecipes(json.results)
                     })
-        // console.log(result)
-    }, [search])
-    
-    // let all_cuisines = []
-    // const addCuisines = () => {
-    //     fetch(`http://localhost:8000/recipes/cuisines/all/`)
-    //         .then(response => response.json())
-    //         .then(json => json.results.forEach(function(result){
-    //             all_cuisines.push(result)
-    //         }))
-    // }
-    // addCuisines()
+    }
+    // http://localhost:8000/recipes/find/?cuisines={}&diets={}&cooking_time={}
 
-    
-    // all_cuisines.forEach(t => console.log(t))
-    // console.log(all_cuisines)
 
-    // map((key, i) => (
-    //     <p key={i}>
-    //       <span>Key Name: {key}</span>
-    //       <span>Value: {sampleJSON[key]}</span>
-    //     </p>
-    //   ))
-    // console.log(c)
+    // all_cuisines stores all recipe cuisines that currently exist.
+    // use these for the cuisine filter
+    const fetchCuisines = () => {
+        fetch(`http://localhost:8000/recipes/cuisines/all/`)
+            .then(response => response.json())
+            .then(json => {
+                setCuisines(json.results)
+            })
+    }
+
+
+    const fetchDiets = () => {
+        fetch(`http://localhost:8000/recipes/diets/all/`)
+            .then(response => response.json())
+            .then(json => {
+                console.log(" DIETSS ", json.results)
+                setDiets(json.results)
+            })
+    }
+
+    const fetchCookingTimes = () => {
+        fetch(`http://localhost:8000/recipes/find/?cooking_time=`)
+            .then(response => response.json())
+            .then(json => {
+                console.log(" DIETSS ", json.results)
+                setCookingTimes(json.results)
+            })
+    }
+
+
+
+
+
+    const handleCuisineSelect = (cui_id) => {
+
+        console.log('CURR CUISINE: ', cui_id)
+        fetch(`http://localhost:8000/recipes/find/?cuisines=${cui_id}`)
+        .then(response => response.json())
+        .then(json => {
+            console.log('FRESHH', json.results)
+            setRecipes(json.results)
+        })
+        
+    }
+
+
+
+    const handleDietSelect = (diet_id) => {
+
+        console.log('CURR DIET: ', diet_id)
+        fetch(`http://localhost:8000/recipes/find/?diets=${diet_id}`)
+        .then(response => response.json())
+        .then(json => {
+            console.log('FRESHH', json.results)
+            setRecipes(json.results)
+        })
+        
+    }
+
+
+
+    const handleTimeSelect = (ct) => {
+
+        console.log('CURR DIET: ', ct)
+        fetch(`http://localhost:8000/recipes/find/?cooking_time=${ct}`)
+        .then(response => response.json())
+        .then(json => {
+            console.log('FRESHH', json.results)
+            setRecipes(json.results)
+        })
+        
+    }
+
+
+
+
     return (
-        <>
-            <div>
-                <h1>Welcome to EasyChef</h1>
-                {/* <ul>
-                    {addCuisines()}
-                </ul> */}
-                <input type="text" value={search} onChange={(e) => setSearch(e.target.value)}/>
+        <div>
+            <h1 style={{display: "flex", justifyContent: "center"}}>Welcome to EasyChef</h1>
+            <Box sx={{ width: '100%', bgcolor: 'background.paper' }}>
+               
+                <h3 style={{display: "flex", justifyContent: "center"}}>Search Recipes</h3>
 
-                {/* <select name="Cuisines">
-                    {all_cuisines.map((id, name) => {
-                        // console.log("AAAAAAAA", id, name)
-                        <option value={id}>{name}</option>
-                    })}
-                </select> */}
+                <div style={{display: "flex", justifyContent: "center"}}>
 
-                {/* <button onClick={(e) => setCuisine(0)}>All</button> */}
+                    <h4>Cuisine Filters:</h4>
+                    <br></br>
+                    <div>
+                        {cuisines?.map(cui => (<Button key={cui.id} value={cui.id} onClick={() => {
+                            console.log(cui.id, "CUISINE")
+                            handleCuisineSelect(cui.id)}}>{cui.name}</Button>))}
+                    </div>
 
-                <RecipeList recipes={recipes}/>
+                </div>
 
-            </div>
-        </>
+                <br></br>
 
+                <div style={{display: "flex", justifyContent: "center"}}>
+
+                    <h4>Diet Filters:</h4>
+                    <br></br>
+                    <div>
+                        {diets?.map(diet => (<Button key={diet.id} value={diet.id} onClick={() => {
+                            console.log(diet.id, " DIET")
+                            handleDietSelect(diet.id)}}>{diet.name}</Button>))}
+                    </div>
+                
+                </div>
+
+                <br></br>
+
+
+                <div style={{display: "flex", justifyContent: "center"}}>
+
+                    <h4>Cooking Time Filters:</h4>
+                    <br></br>
+                    <div>
+                        {cookingTimes?.map(ct => 
+                        
+                        ct.cooking_time!=null?(<Button key={ct.id} value={ct.id} 
+                                onClick={() => {console.log(ct.cooking_time, " COOK"); handleTimeSelect(ct.cooking_time)}}>
+                                {ct.cooking_time + " Minutes"}
+                            </Button>):(<></>)
+                        
+                        )}
+                    </div>
+                
+                </div>
+
+                <br></br>
+
+                <input style={{display: "flex", textAlign: "center", width: "100%"}}
+                 type="text" value={search} onChange={(e) => setSearch(e.target.value)}/>
+
+                {recipes.length?(<RecipeList recipes={recipes}/>):<div>No Recipes</div>}
+
+            </Box>
+
+            
+
+        </div>
     )
 }
 
