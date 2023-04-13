@@ -408,6 +408,15 @@ const RecipeDetailsPage = () => {
     }
 
 
+    let initialOverallRating = {
+        size: 30,
+        value: overallrating,
+        edit: false,
+        isHalf: true
+    };
+      
+
+
     return (
         <div>
             <h1>{recipe.name}</h1>
@@ -416,39 +425,47 @@ const RecipeDetailsPage = () => {
             <Button onClick={addToCart}>Add to Shopping List</Button>
             <Button onClick={removeFromCart}> Remove from Shopping List </Button>
 
-            <ReactStars {...newRating} />
+            <div> Initial Overall Rating: 
+                {overallrating ? 
+                (<ReactStars {...initialOverallRating}/> ):
+                ("no overall rating yet")}</div>
+
+
+            <div>Current Overall Rating:  
+                {overallrating ? 
+                (overallrating):
+                ("no overall rating yet")}</div>
+
+            <div>Total Likes: {totallikes}</div>
+
+
+            {token?(<ReactStars {...newRating} />):(<div></div>)}
 
 
             {/* if rating exists, display it. otherwise, display 'no rating exists' */}
-            <div>Current Rating: {rating ? (rating) : ("no rating yet")}</div>
+            {token?(<div>My Current Rating: {rating ? (rating) : ("no rating yet")}</div>):(<div></div>)}
 
-            <div>Overall Rating: {overallrating ? (overallrating) : ("no overall rating yet")}</div>
 
-            {favourited ? (
-                <div>MY FAVOURITE</div>
-            ) : (
-                <div>NOT MY FAVOURITE</div>
-            )}
 
-            <button onClick={addFavourite}>Favourite</button>
+            {token?
+                (favourited ? 
+                    (<div>MY FAVOURITE</div>):(<div>NOT MY FAVOURITE</div>)):
+                    (<div></div>)}
 
-            <button onClick={removeFavourite}>UnFavourite</button>
+            {token?(<button onClick={addFavourite}>Favourite</button>):(<div></div>)}
+            {token?(<button onClick={removeFavourite}>UnFavourite</button>):(<div></div>)}
 
             <br></br>
 
 
-            <div>TOTAL LIKES: {totallikes}</div>
+            {token?
+                (liked?
+                    (<div>LIKED</div>):(<div>NOT LIKED</div>)):
+                    (<div></div>)}
 
-
-            {liked ? (
-                <div>LIKED</div>
-            ) : (
-                <div>NOT LIKED</div>
-            )}
-
-            <button onClick={addLike}>Like</button>
-
-            <button onClick={removeLike}>UnLike</button>
+            {token?(<button onClick={addLike}>Like</button>):(<div></div>)}
+                
+            {token?(<button onClick={removeLike}>UnLike</button>):(<div></div>)}
 
 
             <h2>Diets</h2>
@@ -487,6 +504,8 @@ const RecipeDetailsPage = () => {
             <h2>Comments Section</h2>
             <hr></hr>
 
+            
+            {token?(
             <form>
                 <input type="text" value={comment} onChange={(e) => setComment(e.target.value)}/>
 
@@ -498,7 +517,7 @@ const RecipeDetailsPage = () => {
 
                 <Button onClick={sendComment}>comment</Button>
 
-            </form>
+            </form>):(<div></div>)}
 
 
             <hr></hr>
