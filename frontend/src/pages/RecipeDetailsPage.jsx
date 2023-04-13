@@ -433,8 +433,8 @@ const RecipeDetailsPage = () => {
                         (<embed src={recipe_media.media} width="130px"></embed>))}
 
                 <br></br>
-                <Button onClick={addToCart}>Add to Shopping List</Button>
-                <Button onClick={removeFromCart}> Remove from Shopping List </Button>
+                {token?(<Button onClick={addToCart}>Add to Shopping List</Button>):<></>}
+                {token?(<Button onClick={removeFromCart}> Remove from Shopping List </Button>):<></>}
 
                 <div> Original Overall Rating: 
                     {overallrating ? 
