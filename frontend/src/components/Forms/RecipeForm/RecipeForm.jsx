@@ -6,6 +6,7 @@ import AccountContext from "../../../contexts/AccountContext";
 import StepForm from "../StepForm/StepForm";
 import {useNavigate} from "react-router-dom";
 import MediaForm from "../MediaForm/MediaForm";
+import Form from "react-bootstrap/Form";
 
 const RecipeForm = ({edit, recipeId}) => {
     const {token} = useContext(AccountContext)
@@ -92,38 +93,47 @@ const RecipeForm = ({edit, recipeId}) => {
     }
 
     return (
-        <div style={{width: "50%"}}>
-            <label>Name:
-                <input type={"text"} name={"name"} value={name} onChange={e => setName(e.target.value)}/>
-            </label>
-            <br/>
-            <label>Prep Time:
-                <input type={"number"} min={"0"} name={"prep_time"} value={prepTime}
-                       onChange={e => setPrepTime(e.target.value)}/>
-            </label>
-            <br/>
-            <label>Cooking Time:
-                <input type={"number"} min={"0"} name={"cooking_time"} value={cookingTime}
-                       onChange={e => setCookingTime(e.target.value)}/>
-            </label>
-            <br/>
-            <label>Servings:
-                <input type={"number"} min={"1"} name={"servings"} value={servings}
-                       onChange={e => setServings(e.target.value)}/>
-            </label>
-            <br/>
+        <div style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+        }}>
+            <Form>
+                <h1>{edit ? "Edit Recipe" : "Add Recipe"}</h1>
+                <Form.Group>
+                    <Form.Label>
+                        Name:
+                    </Form.Label>
+                    <Form.Control type={"text"} name={"name"} value={name} onChange={e => setName(e.target.value)}/>
+                </Form.Group>
+                <Form.Label>
+                    Prep Time:
+                </Form.Label>
+                <Form.Control type={"number"} min={"0"} name={"prep_time"} value={prepTime}
+                              onChange={e => setPrepTime(e.target.value)}/>
+                <Form.Label>
+                    Cooking Time:
+                </Form.Label>
+                <Form.Control type={"number"} min={"0"} name={"cooking_time"} value={cookingTime}
+                              onChange={e => setCookingTime(e.target.value)}/>
+                <Form.Label>
+                    Servings:
+                </Form.Label>
+                <Form.Control type={"number"} min={"1"} name={"servings"} value={servings}
+                              onChange={e => setServings(e.target.value)}/>
 
-            <MediaForm media={recipeMedia} setMedia={setRecipeMedia}/>
+                <MediaForm media={recipeMedia} setMedia={setRecipeMedia}/>
 
-            <CuisineDietForm type={"cuisine"} items={cuisines} setItems={setCuisines}/>
-            <br/>
-            <CuisineDietForm type={"diets"} items={diets} setItems={setDiets}/>
-            <br/>
-            <IngredientForm ingredients={ingredients} setIngredients={setIngredients}/>
-            <br/>
-            <StepForm steps={steps} setSteps={setSteps}/>
-            <br/>
-            <Button onClick={handleAction}>{edit ? "Save Changes" : "Add Recipe"}</Button>
+                <CuisineDietForm type={"cuisine"} items={cuisines} setItems={setCuisines}/>
+                <br/>
+                <CuisineDietForm type={"diets"} items={diets} setItems={setDiets}/>
+                <br/>
+                <IngredientForm ingredients={ingredients} setIngredients={setIngredients}/>
+                <br/>
+                <StepForm steps={steps} setSteps={setSteps}/>
+                <br/>
+                <Button onClick={handleAction}>{edit ? "Save Changes" : "Add Recipe"}</Button>
+            </Form>
         </div>
     )
 
