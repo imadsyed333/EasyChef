@@ -418,142 +418,166 @@ const RecipeDetailsPage = () => {
 
 
     return (
-        <div>
-            <h1>{recipe.name}</h1>
-            {
-                recipe.media?.map(img => (<embed src={img.media} width="130px"></embed>))}
-            <Button onClick={addToCart}>Add to Shopping List</Button>
-            <Button onClick={removeFromCart}> Remove from Shopping List </Button>
+        <div style={{display: "flex", justifyContent: "center"}}>
+            <div>
+                <h1>{recipe.name}</h1>
+                {
+                    recipe.media?.map(recipe_media => 
+                        ((recipe_media?.media?.split(".")[1] === "mp4") ||
+                        (recipe_media?.media?.split(".")[1] === "avi") ||
+                        (recipe_media?.media?.split(".")[1] === "MOV") ||
+                        (recipe_media?.media?.split(".")[1] === "webm")) ?
+                        (<video width="150" controls>
+                            <source src={recipe_media.media}/>
+                        </video>) :
+                        (<embed src={recipe_media.media} width="130px"></embed>))}
 
-            <div> Original Overall Rating: 
-                {overallrating ? 
-                (<ReactStars {...initialOverallRating}/> ):
-                ("no overall rating yet")}</div>
+                <br></br>
+                {token?(<Button onClick={addToCart}>Add to Shopping List</Button>):<></>}
+                {token?(<Button onClick={removeFromCart}> Remove from Shopping List </Button>):<></>}
 
-
-            <div>Overall Rating:  
-                {overallrating ? 
-                (overallrating):
-                ("no overall rating yet")}</div>
-
-            <div>Total Likes: {totallikes}</div>
-
-
-            {token?(<ReactStars {...newRating} />):(<div></div>)}
-
-
-            {/* if rating exists, display it. otherwise, display 'no rating exists' */}
-            {token?(<div>My Current Rating: {rating ? (rating) : ("no rating yet")}</div>):(<div></div>)}
+                <div> Original Overall Rating: 
+                    {overallrating ? 
+                    (<ReactStars {...initialOverallRating}/> ):
+                    ("no overall rating yet")}</div>
 
 
+                <div>Overall Rating:  
+                    {overallrating ? 
+                    (overallrating):
+                    ("no overall rating yet")}</div>
 
-            {token?
-                (favourited ? 
-                    (<div>MY FAVOURITE</div>):(<div>NOT MY FAVOURITE</div>)):
-                    (<div></div>)}
-
-            {token?(<button onClick={addFavourite}>Favourite</button>):(<div></div>)}
-            {token?(<button onClick={removeFavourite}>UnFavourite</button>):(<div></div>)}
-
-            <br></br>
+                <div>Total Likes: {totallikes}</div>
 
 
-            {token?
-                (liked?
-                    (<div>LIKED</div>):(<div>NOT LIKED</div>)):
-                    (<div></div>)}
+                {token?(<ReactStars {...newRating} />):(<div></div>)}
 
-            {token?(<button onClick={addLike}>Like</button>):(<div></div>)}
+
+                {/* if rating exists, display it. otherwise, display 'no rating exists' */}
+                {token?(<div>My Current Rating: {rating ? (rating) : ("no rating yet")}</div>):(<div></div>)}
+
+
+
+                {token?
+                    (favourited ? 
+                        (<div>MY FAVOURITE</div>):(<div>NOT MY FAVOURITE</div>)):
+                        (<div></div>)}
+
+                {token?(<Button onClick={addFavourite}>Favourite</Button>):(<div></div>)}
+                {token?(<Button onClick={removeFavourite}>UnFavourite</Button>):(<div></div>)}
+
+                <br></br>
+
+
+                {token?
+                    (liked?
+                        (<div>LIKED</div>):(<div>NOT LIKED</div>)):
+                        (<div></div>)}
+
+                {token?(<Button onClick={addLike}>Like</Button>):(<div></div>)}
+                    
+                {token?(<Button onClick={removeLike}>UnLike</Button>):(<div></div>)}
+
+
+                {recipe?.diets?.length?(<h2>Diets</h2>):(<></>)}
+                <ul>
+
+                    {recipe.diets?.map(diet => (
+                            <li key={diet.id}>{diet.name}</li>
+                        )
+                    )}
+                </ul>
                 
-            {token?(<button onClick={removeLike}>UnLike</button>):(<div></div>)}
+                {recipe?.cuisines?.length?(<h2>Cuisines</h2>):(<></>)}
+                <ul>
+                    {recipe.cuisines?.map(cuisine => (
+                        <li key={cuisine.id}>{cuisine.name}</li>
+                    ))}
+                </ul>
+
+                {recipe?.ingredients?.length?(<h2>Ingredients</h2>):(<></>)}
+                <ul>
+                    {recipe.ingredients?.map((ingredient, i) => (
+                        <li key={i}>{ingredient.amount} of {ingredient.name}</li>
+                    ))}
+                </ul>
+
+                {recipe?.steps?.length?(<h2>Steps</h2>):(<></>)}
+                <ol>
+                    {recipe.steps?.map(step => (
+
+                        <div key={step.id}>
+                            {console.log("step " + step.id + " media: ", step.media)}
+                            {step.media?.map(step_media => 
+                                
+                                ((step_media?.media?.split(".")[1] === "mp4") ||
+                                (step_media?.media?.split(".")[1] === "avi") ||
+                                (step_media?.media?.split(".")[1] === "MOV") ||
+                                (step_media?.media?.split(".")[1] === "webm")) ?
+                                (<video width="150" controls>
+                                    <source src={step_media.media}/>
+                                </video>) :
+                                (<embed src={step_media.media} width="130px"></embed>))}
+
+                            <br></br>
+                            <li>{step.content}</li>
+                        </div>
+
+                    ))}
+                </ol>
+                <h2>Comments Section</h2>
+                <hr></hr>
+
+                
+                {token?(
+                <form>
+                    <input type="text" value={comment} onChange={(e) => setComment(e.target.value)}/>
+
+                    <input type="file" accept="image/*,video/*" multiple onChange={(e) => {
+                        console.log("ALL FILES: ", e.target.files);
+                        setCommentMedia(e.target.files);
+                        console.log(comm_media)
+                    }}/>
+
+                    <Button onClick={sendComment}>comment</Button>
+
+                </form>):(<div></div>)}
 
 
-            <h2>Diets</h2>
-            <ul>
+                <hr></hr>
 
-                {recipe.diets?.map(diet => (
-                        <li key={diet.id}>{diet.name}</li>
-                    )
-                )}
-            </ul>
-            <h2>Cuisines</h2>
-            <ul>
-                {recipe.cuisines?.map(cuisine => (
-                    <li key={cuisine.id}>{cuisine.name}</li>
-                ))}
-            </ul>
-            <h2>Ingredients</h2>
-            <ul>
-                {recipe.ingredients?.map((ingredient, i) => (
-                    <li key={i}>{ingredient.amount} of {ingredient.name}</li>
-                ))}
-            </ul>
-            <h2>Steps</h2>
-            <ol>
-                {recipe.steps?.map(step => (
+                {recipe.comments?.slice(0).reverse().map(comment => (
+                    <div key={comment.id}>
 
-                    <div key={step.id}>
-                        {console.log("step " + step.id + " media: ", step.media)}
-                        {step.media?.map(img => (<embed src={img.media} width="130px"></embed>))}
-                        <br></br>
-                        <li>{step.content}</li>
+                        <div>{allusers.find(item => item.id === parseInt(comment.poster))?.avatar ? (
+                            <img src={allusers.find(item => item.id === parseInt(comment.poster))?.avatar}
+                                width="75px"></img>) : ("")}</div>
+                        <div>{"Commenter: " + allusers.find(item => item.id === parseInt(comment.poster))?.email}</div>
+                        {/* {console.log("NEW COMMENT: ", comment)} */}
+                        <div>{"Comment: " + comment.content}</div>
+
+                        {/* Conditional rendering: if media is video, render as video. otherwise, render as image. */}
+                        {comment.media?.map(comment_media =>
+                            ((comment_media?.media?.split(".")[1] === "mp4") ||
+                                (comment_media?.media?.split(".")[1] === "avi") ||
+                                (comment_media?.media?.split(".")[1] === "MOV") ||
+                                (comment_media?.media?.split(".")[1] === "webm")) ?
+                                (<video width="150" controls>
+                                    <source src={comment_media.media}/>
+                                </video>) :
+                                (<embed src={comment_media.media} width="130px"></embed>))}
+
+                        <hr></hr>
+
                     </div>
 
                 ))}
-            </ol>
-            <h2>Comments Section</h2>
-            <hr></hr>
 
-            
-            {token?(
-            <form>
-                <input type="text" value={comment} onChange={(e) => setComment(e.target.value)}/>
+                {/* might not need this */}
+                {/* <div>{(comments !== [])?(comments[0].content):('no comments yet')}</div> */}
 
-                <input type="file" accept="image/*,video/*" multiple onChange={(e) => {
-                    console.log("ALL FILES: ", e.target.files);
-                    setCommentMedia(e.target.files);
-                    console.log(comm_media)
-                }}/>
-
-                <Button onClick={sendComment}>comment</Button>
-
-            </form>):(<div></div>)}
-
-
-            <hr></hr>
-
-            {recipe.comments?.slice(0).reverse().map(comment => (
-                <div key={comment.id}>
-
-                    <div>{allusers.find(item => item.id === parseInt(comment.poster))?.avatar ? (
-                        <img src={allusers.find(item => item.id === parseInt(comment.poster))?.avatar}
-                             width="75px"></img>) : ("")}</div>
-                    <div>{"Commenter: " + allusers.find(item => item.id === parseInt(comment.poster))?.email}</div>
-                    {/* {console.log("NEW COMMENT: ", comment)} */}
-                    <div>{"Comment: " + comment.content}</div>
-
-                    {/* Conditional rendering: if media is video, render as video. otherwise, render as image. */}
-                    {comment.media?.map(comment_media =>
-                        ((comment_media?.media?.split(".")[1] === "mp4") ||
-                            (comment_media?.media?.split(".")[1] === "avi") ||
-                            (comment_media?.media?.split(".")[1] === "MOV") ||
-                            (comment_media?.media?.split(".")[1] === "webm")) ?
-                            (<video width="150" controls>
-                                <source src={comment_media.media}/>
-                            </video>) :
-                            (<embed src={comment_media.media} width="130px"></embed>))}
-
-                    <hr></hr>
-
-                </div>
-
-            ))}
-
-            {/* might not need this */}
-            {/* <div>{(comments !== [])?(comments[0].content):('no comments yet')}</div> */}
-
+            </div>
         </div>
-        // </>
 
     )
 }
