@@ -79,6 +79,7 @@ const RegisterPage = () => {
             <br/>
             <label>Avatar:
                 <input type={"file"} name={"avatar"}
+                       accept={"image/*"}
                        onChange={(event) => {
                            console.log(event.target.files)
                            setImage(event.target.files[0])
