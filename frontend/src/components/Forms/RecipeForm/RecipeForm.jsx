@@ -26,6 +26,8 @@ const RecipeForm = ({edit, recipeId}) => {
 
     const [recipeMedia, setRecipeMedia] = useState([])
 
+    const [stepMedia, setStepMedia] = useState()
+
     useEffect(() => {
         if (edit) {
             fetch("http://localhost:8000/recipes/" + recipeId + "/view/").then(response => response.json()).then(json => {
@@ -37,11 +39,22 @@ const RecipeForm = ({edit, recipeId}) => {
                 setCuisines(json.cuisines)
                 setIngredients(json.ingredients)
                 setSteps(json.steps)
+                console.log("steps, coming in", json.steps)
             })
         }
     }, [])
 
     const handleAction = () => {
+        let bare_steps = []
+        for (let i = 0; i < steps.length; i++) {
+            let step = steps[i]
+            bare_steps.push({
+                content: step.content,
+                prep_time: step.prep_time,
+                cooking_time: step.cooking_time
+            })
+        }
+        console.log("steps", steps)
         const recipe = {
             name: name,
             prep_time: prepTime,
@@ -50,7 +63,7 @@ const RecipeForm = ({edit, recipeId}) => {
             ingredients: ingredients,
             cooking_time: cookingTime,
             servings: servings,
-            steps: steps
+            steps: bare_steps
         }
         console.log(recipe)
         fetch(edit ? "http://localhost:8000/recipes/" + recipeId + "/update/" : "http://localhost:8000/recipes/create/", {
@@ -65,9 +78,42 @@ const RecipeForm = ({edit, recipeId}) => {
             if (response.status === 201 || response.status === 200) {
                 response.json().then(json => {
                     sendRecipeMedia(json.id)
+                    sendStepMedia(json.steps)
+                    navigate("/recipe/" + json.id)
                 })
+            } else {
+                console.log(response.json())
             }
         }).catch(errors => console.log(errors))
+    }
+    const sendStepMedia = (virtualSteps) => {
+        console.log("steps in media", steps)
+        console.log("virutalSteps", virtualSteps)
+        steps.map((step, index) => {
+            let media_array = []
+            if (step.media) {
+                media_array = [...step.media]
+            }
+            const virtualStep = virtualSteps[index]
+            media_array?.map((file) => {
+                const data = new FormData()
+                data.append("media", file)
+                data.append("step", virtualStep.id)
+                fetch("http://localhost:8000/recipes/steps/media/add/", {
+                    method: "POST",
+                    headers: {
+                        "Authorization": "Bearer " + token
+                    },
+                    body: data
+                }).then(response => {
+                    if (response.status === 201) {
+                        console.log("Success, imadge created")
+                    } else {
+                        console.log(response.json())
+                    }
+                }).catch(errors => console.log(errors))
+            })
+        })
     }
 
     const sendRecipeMedia = (id) => {
