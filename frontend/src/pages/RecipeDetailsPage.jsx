@@ -459,7 +459,7 @@ const RecipeDetailsPage = () => {
                 {/* if rating exists, display it. otherwise, display 'no rating exists' */}
                 {token?(<div>My Current Rating: {rating ? (rating) : ("no rating yet")}</div>):(<div></div>)}
 
-                <br></br>
+                {token?(<br></br>):(<></>)}
 
 
                 {token?
@@ -470,8 +470,8 @@ const RecipeDetailsPage = () => {
                 {token?(<Button style={{ background: '#FBB900' }} onClick={addFavourite}>Favourite</Button>):(<div></div>)}
                 {token?(<Button style={{ background: 'red' }}  onClick={removeFavourite}>X</Button>):(<div></div>)}
 
-                <br></br>
-                <br></br>
+                {token?(<br></br>):(<></>)}
+                {token?(<br></br>):(<></>)}
 
 
                 {token?
