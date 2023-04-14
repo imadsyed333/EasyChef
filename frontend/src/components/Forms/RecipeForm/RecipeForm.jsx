@@ -8,7 +8,7 @@ import {useNavigate} from "react-router-dom";
 import MediaForm from "../MediaForm/MediaForm";
 import Form from "react-bootstrap/Form";
 
-const RecipeForm = ({edit, recipeId}) => {
+const RecipeForm = ({edit, recipeId, base}) => {
     const {token} = useContext(AccountContext)
 
     const navigate = useNavigate()
@@ -29,7 +29,7 @@ const RecipeForm = ({edit, recipeId}) => {
     const [stepMedia, setStepMedia] = useState()
 
     useEffect(() => {
-        if (edit) {
+        if (edit || base) {
             fetch("http://localhost:8000/recipes/" + recipeId + "/view/").then(response => response.json()).then(json => {
                 setName(json.name)
                 setPrepTime(json.prep_time)

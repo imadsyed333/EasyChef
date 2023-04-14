@@ -15,6 +15,7 @@ import RegisterPage from "./pages/RegisterPage";
 import RecipeForm from "./components/Forms/RecipeForm/RecipeForm";
 import AddRecipePage from "./pages/AddRecipePage";
 import EditRecipePage from "./pages/EditRecipePage";
+import BaseRecipePage from "./pages/BaseRecipePage";
 
 function App() {
     return (
@@ -26,6 +27,9 @@ function App() {
                             <Route path={":id"} element={<RecipeDetailsPage/>}/>
                             <Route path={"edit/"}>
                                 <Route path={":id"} element={<EditRecipePage/>}/>
+                            </Route>
+                            <Route path={"base/"}>
+                                <Route path={":id"} element={<BaseRecipePage/>}/>
                             </Route>
                             <Route path={"add"} element={<AddRecipePage/>}/>
                         </Route>
@@ -42,7 +46,6 @@ function App() {
         </BrowserRouter>
     );
 }
-
 
 
 // const root = ReactDOM.createRoot(document.getElementById('root'))
