@@ -19,7 +19,7 @@ import BaseRecipePage from "./pages/BaseRecipePage";
 
 function App() {
     return (
-        <BrowserRouter>
+        <BrowserRouter basename={window.location.pathname || ""}>
             <AccountContext.Provider value={useAccountContext()}>
                 <Routes>
                     <Route path="/" element={<MenuBar/>}>
