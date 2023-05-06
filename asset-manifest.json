@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.css": "/EasyChef/static/css/main.756af292.css",
+    "main.js": "/EasyChef/static/js/main.efc05bb1.js",
+    "static/js/787.cda612ba.chunk.js": "/EasyChef/static/js/787.cda612ba.chunk.js",
+    "static/media/logo.png": "/EasyChef/static/media/logo.f21d1380d69604451c0c.png",
+    "static/media/EasyChefLogo.png": "/EasyChef/static/media/EasyChefLogo.c30b5db4fb888be438b0.png",
+    "index.html": "/EasyChef/index.html",
+    "main.756af292.css.map": "/EasyChef/static/css/main.756af292.css.map",
+    "main.efc05bb1.js.map": "/EasyChef/static/js/main.efc05bb1.js.map",
+    "787.cda612ba.chunk.js.map": "/EasyChef/static/js/787.cda612ba.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.756af292.css",
+    "static/js/main.efc05bb1.js"
+  ]
+}
