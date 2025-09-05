@@ -22,9 +22,9 @@
 - HTML5, CSS3  
 
 **Backend**  
-- Python (Flask/Django/FastAPI → confirm which one you used)  
+- Python (Django)  
 - REST APIs for recipes, users, and comments  
-- Database (SQLite/PostgreSQL/MySQL → whichever you configured)  
+- Database (PostgreSQL)  
 
 **Other Tools**  
 - Git & GitHub for version control  
@@ -63,10 +63,10 @@ chmod +x run.sh
 - Backend: `http://localhost:5000`  
 - Frontend: `http://localhost:3000`  
 
-Note: It is recommended to run this in a Docker container as certain version libraries are need to run this code properly.
+Note: It is recommended to run this in a Docker container as certain library versions are need to run this code properly.
 ---
 
 ## 👨‍💻 Author  
 
-Developed by [Sachin Chhikara, Imad Syed and Ajamjot Saini](https://github.com/imadsyed333)  
+Developed by [Sachin Chhikara](https://github.com/SachinChhikara), [Imad Syed](https://github.com/imadsyed333) and [Ajamjot Saini](https://github.com/agamjot-saini)
  
